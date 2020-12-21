@@ -20,10 +20,3 @@ Following things are planned to be added to this bot:
 + The management of the servers stock market
 + A gambling-raffle
 + SPAAAAAAAAACE
-
-This Read-Me was created to make at least one (1) collaborator happy.
-
-Sate the VonPech. - Zecca
-Meow - Miniwa
-Thus began Zarathustra's down-going. - Nietzsche
-hoi i'm noobly - Noobly
