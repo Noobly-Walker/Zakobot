@@ -1,0 +1,39 @@
+{
+    "bad users": [
+        0,
+        3
+    ],
+    "counting": true,
+    "crafting": true,
+    "current count": [
+        0.0,
+        0
+    ],
+    "dedicated_portal": -1,
+    "dice": true,
+    "economy": true,
+    "id": "722621788093284402",
+    "levels": true,
+    "lv_msg": true,
+    "name": "Medium Size Village",
+    "network data": {
+        "acronym": "MSV",
+        "allow ads": true,
+        "category": "Gaming",
+        "description": "Medium-sized Village is a server that's been around for five months. It is a small PvE-oriented server that encourages users to trade, build together, and have fun. If you are looking to join a small, tight-knit community, this is the place might be for you!\nVersion: JE 1.17 (20w46a)\nRules and IP can be found on our discord server.\nServer is whitelist-only. Fill out an application on the discord to join.",
+        "server link": "N63KNNbAWt"
+    },
+    "portal": true,
+    "potion": true,
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    },
+    "prefix": "z!",
+    "show hints": false,
+    "users": 17
+}

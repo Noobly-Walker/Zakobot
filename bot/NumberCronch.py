@@ -274,8 +274,11 @@ def number_cronch(inp, userid, *inpk):
     if len(userid) == 0 or userid == None:
         notation = 0
     else:
-        data = FileHandler.get_user_data(userid[0])
-        notation = data.notation()
+        try:
+            data = FileHandler.get_user_data(userid[0])
+            notation = data.notation()
+        except Exception:
+            notation = 0
     if len(inpk) == 0 or inpk == None:
         inpk = 0
     else:

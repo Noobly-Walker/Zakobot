@@ -8,7 +8,7 @@ class Config:
                         try:
                                 self.config = config = self.read_config('config.txt')
                         except Exception:
-                                self.config = config = self.read_config('E:\\B\\zako\\config.txt')
+                                self.config = config = self.read_config('C:\\B\\zako\\config.txt')
                         self.dev_info = config['dev_info']
                         self.bot_info = config['bot_info']
                         self.devmode = config['devmode']
@@ -25,7 +25,7 @@ class Config:
                 return None
 
         def write_config(self, filename:str):
-                with open(filename, 'w') as f:
+                with open(filename, 'w+') as f:
                         f.write(json.dumps(self.config, indent=4))
 
         def default_config(self):
@@ -37,7 +37,7 @@ class Config:
                 version = self.dev_info['version']
                 self.bot_info = {
                         'desc': f"OmniCore's bot boi v{version}, proudly serving OmniCore, BLZK, InfinityReverb, and Foxxo's RP Mansion since UNIX48!",
-                        'prefix': 'z!'
+                        'prefix': 'z/'
                 }
                 self.devmode = {
                         0: '0',

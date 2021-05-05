@@ -1,0 +1,39 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "counting": true,
+    "crafting": false,
+    "current count": [
+        0.0,
+        0
+    ],
+    "dedicated_portal": -1,
+    "dice": true,
+    "economy": false,
+    "id": "736028454641860618",
+    "levels": false,
+    "lv_msg": true,
+    "name": "RP sesh",
+    "network data": {
+        "acronym": "",
+        "allow ads": false,
+        "category": "General",
+        "description": "",
+        "server link": ""
+    },
+    "portal": true,
+    "potion": true,
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    },
+    "prefix": "z!",
+    "show hints": false,
+    "users": 4
+}

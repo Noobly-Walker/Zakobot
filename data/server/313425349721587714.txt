@@ -1,0 +1,20 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "crafting": true,
+    "dice": true,
+    "economy": true,
+    "id": "313425349721587714",
+    "levels": true,
+    "name": "ATB693-3",
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    }
+}

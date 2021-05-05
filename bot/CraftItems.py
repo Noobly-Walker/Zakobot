@@ -11,7 +11,7 @@ def load_craft_items():
         with open('.\\data\\item_list.txt', 'r') as file:
             shop_item_list = json.loads(file.read())
     except Exception:
-        with open('E:\\B\\zako\\data\\item_list.txt', 'r') as file:
+        with open('C:\\B\\zako\\data\\item_list.txt', 'r') as file:
             shop_item_list = json.loads(file.read())
 
     #Os, Ir, and Pt are often found together!

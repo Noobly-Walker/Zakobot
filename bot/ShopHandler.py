@@ -1,5 +1,5 @@
 from bot.UserData import UserData
-from bot.ToolUtil import *
+from bot.util.ToolUtil import *
 
 
 class ShopItem:

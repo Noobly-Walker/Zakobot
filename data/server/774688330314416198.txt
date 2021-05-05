@@ -1,0 +1,37 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "counting": true,
+    "crafting": true,
+    "current count": [
+        0.0,
+        0
+    ],
+    "dedicated_portal": -1,
+    "dice": true,
+    "economy": true,
+    "id": "774688330314416198",
+    "levels": true,
+    "lv_msg": true,
+    "name": "Tsumiki Miniwa's server",
+    "network data": {
+        "acronym": "",
+        "allow ads": false,
+        "category": "General",
+        "description": "",
+        "server link": ""
+    },
+    "portal": true,
+    "potion": true,
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    },
+    "prefix": "z!"
+}

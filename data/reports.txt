@@ -1,5 +1,5 @@
 //[000000 - REQUEST FIXED] Add z!restart so that I don't have to do z!debug restart all the time
-[000001 - BUG] Fix userdata not creating a new file when it can't find a valid file.
+//[000001 - BUG FIXED] Fix userdata not creating a new file when it can't find a valid file.
 [000002 - BUG] z!lootcrate seems extremely slow, and should be looked into for speed improvements and code efficiency.
 [000003 - TWEAK] Nerf clover fields
 //[000004 - BUG FIXED] Stone appears as float instead of int
@@ -13,7 +13,7 @@
 [000012 - BUG] z!calc expon switches to the tier 2 NumberCronch at k45 instead of k1000002
 [000013 - REQUEST] Add z!hint, which looks at a player's data, and tells them what they should do next. No wood? "Do z!chop to obtain wood!" No stone? "Do z!mine to find stone and ores!" Over Lv50? "Do z!prestige to prestige and gain some sweet bonuses!" Will also remind people to z!rate and z!report on occasion.
 //[000014 - BUG FIXED] Buildings or objects that take buildings as ingredients are uncraftable
-//[000015 - BUG] "Max Land" appears to be 10% of what it should be
+//[000015 - BUG FIXED] "Max Land" appears to be 10% of what it should be
 //[000016 - BUG FIXED] scan() can't seem to pick up user pings if the escape character \ is used.
 [000017 - REQUEST] Buildings should be upgradable, in case someone makes too many of a low-tier building.
 //[000018 - BUG FIXED] Whitelist Billon Ingot, Electrum Ingot, Sandia Ingot, Caltinum Ingot, Stone Multiplier Rune, Copper Multiplier Rune, Billon Multiplier Rune, Silver Multiplier Rune, Electrum Multiplier Rune, Gold Multiplier Rune, Sandia Multiplier Rune, Platinum Multiplier Rune, Caltinum Multiplier Rune, Californium Multiplier Rune, Diamond Multiplier Rune, Carmeltazite Multiplier Rune, and Tourmaline Multiplier Rune, so UserData.py quits throwing errors
@@ -36,3 +36,10 @@
 10 Stone => Compressed Stone
 10 Compressed Stone => Double Compressed Stone
 10 Double Compressed Stone => Triple Compressed Stone
+[000035 - BUG] Storage sheds don't seem to work at the moment.
+[000036 - REQUEST] Bank for storing money and obtaining interest.
+[000037 - REQUEST] Crafting mineral blocks directly from ore.
+[000038 - TWEAK] Limit number of reports to 3 per person per day to prevent spam
+[000039 - TWEAK] Move runes to page 3 of profile.
+[000040 - BUG] Pluot symbol displays as Pu instead of Py
+[000041 - BUG] Stone Bricks can only be crafted in the maximum volume of a given sawmill

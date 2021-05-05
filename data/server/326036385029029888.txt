@@ -1,0 +1,20 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "crafting": true,
+    "dice": true,
+    "economy": true,
+    "id": "326036385029029888",
+    "levels": true,
+    "name": "TLK135 'Taula'",
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    }
+}

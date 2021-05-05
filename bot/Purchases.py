@@ -3,7 +3,7 @@ from bot.ShopHandler import *
 from bot.UserData import *
 from bot.ResourceParse import *
 from data.FileHandler import *
-from bot.ToolUtil import *
+from bot.util.ToolUtil import *
 import discord
 from discord.ext import commands
 

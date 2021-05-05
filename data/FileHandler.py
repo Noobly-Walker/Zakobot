@@ -5,7 +5,7 @@ import shutil
 
 from bot.UserData import UserData
 from bot.ServerData import ServerData
-from bot.ToolUtil import *
+from bot.util.ToolUtil import *
 
 dataFile = os.path.dirname(os.path.abspath(__file__))
 num = [1]
@@ -45,16 +45,15 @@ def get_user_data(discord_id) -> UserData:
             except json.decoder.JSONDecodeError:
                 continue
     if not foundfile:
-        user_data = "[BRICKED]"
-    else:
-        user_data.data['id'] = discord_id
+        user_data = UserData()
+    user_data.data['id'] = discord_id
     return user_data
 
 def save_user_data(user_data: UserData):
     if len(user_data.data) < 3:
-        raise("[ZAKO FILE_ERROR_HANDLER] I'm gonna stop you right there. (Blocked userdata wipe!)\n>\n>\n>\n>\n>\n>\n>\nPlease check the code, something's gone horribly wrong!")
+        raise("[ZAKO FILE_ERROR_HANDLER] I'm gonna stop you right there. (Userdata has been wiped!)\n>\n>\n>\n>\n>\n>\n>\nPlease check the code, something's gone horribly wrong!")
         return
-    with open(get_global_file('user', user_data.data['id'] + '.txt'), 'w+') as file:
+    with open(get_global_file('user', str(user_data.data['id']) + '.txt'), 'w+') as file:
         data = json.dumps(user_data.data, sort_keys=True, indent=4)
         file.write(data)
 
@@ -89,7 +88,7 @@ def backup():
         for file in files:
             try:
                 shutil.copyfile(dataFile + f'\\user\\{file}', dataFile + f'\\backup\\{datetime.now().date()}\\user\\{file}')
-            except FileExistsError:
+            except Exception:
                 continue
     for root, dirs, files in os.walk(root_server):
         for file in files:

@@ -1,0 +1,1500 @@
+{
+    "OmniCredits": 1,
+    "Storage Shed": 1,
+    "Tickets": 0,
+    "achievements": {
+        "Campers": 1,
+        "Clan Encampment": 1,
+        "Feudal Life": 1,
+        "Fort Rubble": 1,
+        "Level 1": 4,
+        "Level 10": 4,
+        "Level 100": 0,
+        "Level 120": 0,
+        "Level 140": 0,
+        "Level 15": 4,
+        "Level 160": 0,
+        "Level 180": 0,
+        "Level 2": 4,
+        "Level 20": 4,
+        "Level 200": 0,
+        "Level 225": 0,
+        "Level 25": 4,
+        "Level 250": 0,
+        "Level 30": 4,
+        "Level 35": 4,
+        "Level 40": 3,
+        "Level 45": 3,
+        "Level 5": 4,
+        "Level 50": 3,
+        "Level 60": 0,
+        "Level 70": 0,
+        "Level 80": 0,
+        "Level 90": 0,
+        "On The Map": 0,
+        "Prestige 1": 1,
+        "Prestige 10": 0,
+        "Prestige 12": 0,
+        "Prestige 15": 0,
+        "Prestige 2": 1,
+        "Prestige 20": 0,
+        "Prestige 3": 1,
+        "Prestige 4": 0,
+        "Prestige 5": 0,
+        "Prestige 6": 0,
+        "Prestige 8": 0,
+        "TNG Overcharge": 0,
+        "Township": 0,
+        "Village Idiots": 1
+    },
+    "autocraft": {
+        "Boron Ingot": [
+            "bi",
+            100
+        ],
+        "Californium Ingot": [
+            "cfi",
+            100
+        ],
+        "Carbon Ingot": [
+            "ci1",
+            100
+        ],
+        "Chlorophyte Ingot": [
+            "cphi",
+            100
+        ],
+        "Coal": [
+            "coal",
+            100
+        ],
+        "Cobalt Ingot": [
+            "coi",
+            100
+        ],
+        "Copper Ingot": [
+            "cui",
+            100
+        ],
+        "Gold Ingot": [
+            "aui",
+            100
+        ],
+        "Iron Ingot": [
+            "fei",
+            100
+        ],
+        "Lithium Ingot": [
+            "lii",
+            100
+        ],
+        "Magnesium Ingot": [
+            "mgi",
+            100
+        ],
+        "Mobius Fuel": [
+            "mob",
+            100
+        ],
+        "Platinum Ingot": [
+            "pti",
+            100
+        ],
+        "Plutonium Ingot": [
+            "pui1",
+            100
+        ],
+        "Potassium Ingot": [
+            "ki",
+            100
+        ],
+        "Rubidium Ingot": [
+            "rbi",
+            100
+        ],
+        "Silicon Ingot": [
+            "sii1",
+            100
+        ],
+        "Silver Ingot": [
+            "agi",
+            100
+        ],
+        "Sodium Ingot": [
+            "nai",
+            100
+        ],
+        "Tin Ingot": [
+            "sni",
+            100
+        ],
+        "Titanium Ingot": [
+            "tii",
+            100
+        ],
+        "Tungsten Ingot": [
+            "wi",
+            100
+        ],
+        "Uranium Ingot": [
+            "ui",
+            100
+        ],
+        "Vanadium Ingot": [
+            "vi",
+            100
+        ],
+        "Zinc Ingot": [
+            "zni",
+            100
+        ]
+    },
+    "axe": -1,
+    "axe_handle": 0,
+    "axe_sharpener": 0,
+    "axe_weight": 0,
+    "axe_wriststrap": 0,
+    "badges": [
+        "",
+        "<:5th_age_legendary:669908525392199690>"
+    ],
+    "base inventory size": 500,
+    "basic_money_multiplier": 4,
+    "bonus slots": 5,
+    "can adamantize": true,
+    "can blast": true,
+    "can drink e-drink": true,
+    "can dumpster dive": true,
+    "can rate bot": true,
+    "can see images": true,
+    "can smelt": true,
+    "can trade": 0,
+    "can_chop": false,
+    "can_mine": false,
+    "chests": {
+        "Adamantium Chest": 0,
+        "Aethersteel Chest": 0,
+        "Bronze Chest": 0,
+        "Carmeltazite Chest": 4,
+        "Chlorophyte Chest": 0,
+        "Copper Chest": 0,
+        "Diamond Chest": 0,
+        "Exasteel Chest": 0,
+        "Gigasteel Chest": 0,
+        "Hellstone Chest": 0,
+        "Iron Chest": 0,
+        "Luminite Chest": 0,
+        "Magnesium Carborundium Chest": 0,
+        "Majestic Chest": 0,
+        "Megasteel Chest": 0,
+        "Mithril Chest": 1,
+        "Petasteel Chest": 0,
+        "Steel Chest": 0,
+        "Stone Chest": 0,
+        "Terasteel Chest": 0,
+        "Titanium Carbide Chest": 1,
+        "Titanium Chest": 1,
+        "Uru Chest": 0,
+        "Vibranium Chest": 0,
+        "Wooden Chest": 0,
+        "Yottasteel Chest": 0,
+        "Zetasteel Chest": 0
+    },
+    "civ": {
+        "Adamant Furnace": {
+            "count": 1
+        },
+        "Auto Adamant Furnace": {
+            "count": 1
+        },
+        "Auto Blast Furnace": {
+            "count": 1
+        },
+        "Auto Crafting": {
+            "count": 1
+        },
+        "Auto Furnace": {
+            "count": 1
+        },
+        "Auto Sawmill": {
+            "count": 0
+        },
+        "Beehive": {
+            "count": 77
+        },
+        "Blacksmith": {
+            "count": 0
+        },
+        "Blast Furnace": {
+            "count": 1
+        },
+        "Clover Field": {
+            "count": 2
+        },
+        "Cottage": {
+            "count": 0
+        },
+        "Driller Hut": {
+            "count": 0
+        },
+        "Factory": {
+            "count": 0
+        },
+        "Furnace": {
+            "count": 2
+        },
+        "Hut": {
+            "count": 0
+        },
+        "Large Village": {
+            "count": 1
+        },
+        "Logging Hut": {
+            "count": 1
+        },
+        "Medium Farm": {
+            "count": 0
+        },
+        "Sawmill": {
+            "count": 16
+        },
+        "Silo": {
+            "count": 0
+        },
+        "Simple Hut": {
+            "count": 0
+        },
+        "Small Cottage": {
+            "count": 0
+        },
+        "Small Farm": {
+            "count": 0
+        },
+        "Small Village": {
+            "count": 0
+        },
+        "Storage Shed": {
+            "count": 0
+        },
+        "Well": {
+            "count": 0
+        },
+        "drill": {
+            "count": 0
+        }
+    },
+    "clovers": 670,
+    "coins": 0,
+    "collection_bonuses": [
+        7,
+        7,
+        4,
+        9,
+        11,
+        4
+    ],
+    "collections": [
+        [
+            12,
+            7,
+            10,
+            7,
+            10
+        ],
+        [
+            7,
+            13,
+            12,
+            11,
+            14
+        ],
+        [
+            16,
+            13,
+            4,
+            13,
+            5
+        ],
+        [
+            21,
+            11,
+            9,
+            17,
+            10
+        ],
+        [
+            15,
+            13,
+            13,
+            13,
+            11
+        ]
+    ],
+    "color": 41120,
+    "count_iteration_upgrade": 1,
+    "count_upgrades": 17,
+    "crate_purchases": 0,
+    "daily_shop_purchases": {},
+    "description": "hoi i'm noobly ",
+    "developed land": 719,
+    "displayed badge": "<:5th_age_legendary:669908525392199690>",
+    "drill": 0,
+    "event_daily": false,
+    "events": {
+        "Discovered Lands": false,
+        "Famine": false,
+        "Lucky Day": false,
+        "Meteor Impact": false,
+        "Rounding Error": false,
+        "Spring Bloom": false
+    },
+    "exchange_cooldown": false,
+    "exp": 26425,
+    "has_taxed": false,
+    "haz meow": true,
+    "haz pet meow": false,
+    "id": "248641004993773569",
+    "inventory": {
+        "Adamantium Block": [
+            0,
+            false,
+            false
+        ],
+        "Adamantium Ingot": [
+            0,
+            true,
+            true
+        ],
+        "Aetheric": [
+            39,
+            false,
+            true
+        ],
+        "Aetheric Block": [
+            11,
+            true,
+            true
+        ],
+        "Argon": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Argon": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Carbon Dioxide": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Gasoline": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Natural Gas": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Oil": [
+            2,
+            true,
+            true
+        ],
+        "Billon Block": [
+            0,
+            true
+        ],
+        "Billon Ingot": [
+            9,
+            false,
+            true
+        ],
+        "Billon Multiplier Rune": [
+            1,
+            true,
+            true
+        ],
+        "Black Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Blue Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Boron Block": [
+            2,
+            true,
+            true
+        ],
+        "Boron Ingot": [
+            0,
+            false,
+            true
+        ],
+        "Brass Block": [
+            0,
+            false,
+            false
+        ],
+        "Brass Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Bread": [
+            0,
+            false,
+            false
+        ],
+        "Bronze Block": [
+            0,
+            true,
+            false
+        ],
+        "Bronze Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Brown Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Byzantium Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Californium Block": [
+            1,
+            true,
+            true
+        ],
+        "Californium Ingot": [
+            2,
+            false,
+            true
+        ],
+        "Californium Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Caltinum Block": [
+            0,
+            false
+        ],
+        "Caltinum Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Caltinum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Canister": [
+            0,
+            false,
+            false
+        ],
+        "Carbon Block": [
+            1,
+            true,
+            true
+        ],
+        "Carbon Dioxide": [
+            0,
+            false,
+            false
+        ],
+        "Carbon Ingot": [
+            25,
+            true,
+            true
+        ],
+        "Carmeltazite": [
+            22,
+            false,
+            true
+        ],
+        "Carmeltazite Block": [
+            8,
+            true,
+            true
+        ],
+        "Carmeltazite Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Cassiterite": [
+            34,
+            false,
+            true
+        ],
+        "Chlorophyte": [
+            39,
+            true,
+            true
+        ],
+        "Chlorophyte Block": [
+            11,
+            true,
+            true
+        ],
+        "Chlorophyte Ingot": [
+            7,
+            true,
+            true
+        ],
+        "Coal": [
+            125,
+            true,
+            true
+        ],
+        "Coal Block": [
+            0,
+            false,
+            false
+        ],
+        "Cobalt Block": [
+            6,
+            true,
+            true
+        ],
+        "Cobalt Ingot": [
+            4,
+            false,
+            true
+        ],
+        "Cobaltite": [
+            21,
+            false,
+            true
+        ],
+        "Common Crate": [
+            0,
+            false,
+            false
+        ],
+        "Copper Block": [
+            5,
+            true,
+            true
+        ],
+        "Copper Ingot": [
+            2,
+            false,
+            true
+        ],
+        "Copper Multiplier Rune": [
+            4,
+            true,
+            true
+        ],
+        "Curium Block": [
+            0,
+            true,
+            false
+        ],
+        "Curium Ingot": [
+            3,
+            false,
+            true
+        ],
+        "Curium Nugget": [
+            4,
+            false,
+            true
+        ],
+        "Cyan Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Dark Gold Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Diamond": [
+            22,
+            false,
+            true
+        ],
+        "Diamond Block": [
+            8,
+            true,
+            true
+        ],
+        "Diamond Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Electrum Block": [
+            0,
+            true
+        ],
+        "Electrum Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Electrum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Food": [
+            0,
+            false,
+            true
+        ],
+        "Forest Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Franciscite": [
+            7,
+            false,
+            true
+        ],
+        "Fruit": [
+            519,
+            false,
+            true
+        ],
+        "Fuchsia Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Galena": [
+            0,
+            false,
+            false
+        ],
+        "Gasoline": [
+            0,
+            false,
+            false
+        ],
+        "Gear": [
+            0,
+            false,
+            false
+        ],
+        "Gigasteel Block": [
+            0,
+            false,
+            false
+        ],
+        "Gigasteel Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Glass": [
+            0,
+            false,
+            false
+        ],
+        "Gold Block": [
+            3,
+            true,
+            true
+        ],
+        "Gold Ingot": [
+            6,
+            false,
+            true
+        ],
+        "Gold Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Gold Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Golden Fruit": [
+            0,
+            false,
+            false
+        ],
+        "Goldenrod Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Grain": [
+            15,
+            false,
+            true
+        ],
+        "Gray Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Green Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Hellstone Block": [
+            3,
+            true,
+            true
+        ],
+        "Hellstone Ingot": [
+            0,
+            false,
+            true
+        ],
+        "Hematite": [
+            46,
+            false,
+            true
+        ],
+        "Honey": [
+            63,
+            false,
+            true
+        ],
+        "Iridium Block": [
+            0,
+            true,
+            false
+        ],
+        "Iridium Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Iridium Nugget": [
+            8,
+            false,
+            true
+        ],
+        "Iron Block": [
+            13,
+            true,
+            true
+        ],
+        "Iron Ingot": [
+            8,
+            false,
+            true
+        ],
+        "Joules": [
+            0,
+            false,
+            false
+        ],
+        "Lead Block": [
+            0,
+            true,
+            false
+        ],
+        "Lead Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Lithium Block": [
+            7,
+            true,
+            true
+        ],
+        "Lithium Cobalt Oxide Block": [
+            1,
+            true,
+            true
+        ],
+        "Lithium Cobalt Oxide Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Lithium Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Luminite": [
+            2,
+            false,
+            true
+        ],
+        "Luminite Block": [
+            0,
+            false,
+            false
+        ],
+        "Luminite Ingot": [
+            1,
+            true,
+            true
+        ],
+        "Magenta Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Magnesite": [
+            21,
+            false,
+            true
+        ],
+        "Magnesium Block": [
+            7,
+            true,
+            true
+        ],
+        "Magnesium Carborundium Block": [
+            0,
+            false,
+            false
+        ],
+        "Magnesium Carborundium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Magnesium Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Majestic Block": [
+            0,
+            false,
+            false
+        ],
+        "Majestic Ingot": [
+            0,
+            false,
+            true
+        ],
+        "Maroon Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Megasteel Block": [
+            0,
+            false,
+            false
+        ],
+        "Megasteel Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Mithril Block": [
+            0,
+            true,
+            true
+        ],
+        "Mithril Ingot": [
+            0,
+            true,
+            true
+        ],
+        "Mobius Block": [
+            0,
+            true,
+            false
+        ],
+        "Mobius Fuel": [
+            69,
+            true,
+            true
+        ],
+        "Multiplier Crate": [
+            0,
+            false,
+            false
+        ],
+        "Native Gold": [
+            4,
+            false,
+            true
+        ],
+        "Native Platinum": [
+            0,
+            false,
+            true
+        ],
+        "Native Silver": [
+            6,
+            false,
+            true
+        ],
+        "Natural Gas": [
+            0,
+            false,
+            false
+        ],
+        "Navy Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Neon Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Nitrogen Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Nuts": [
+            485,
+            false,
+            true
+        ],
+        "Obsidian": [
+            19,
+            false,
+            true
+        ],
+        "Obsidian Block": [
+            1,
+            true,
+            false
+        ],
+        "Oil": [
+            15,
+            false,
+            true
+        ],
+        "Orange Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Osmium Block": [
+            0,
+            true,
+            false
+        ],
+        "Osmium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Osmium Nugget": [
+            9,
+            false,
+            true
+        ],
+        "Oxygen Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Pegmatite": [
+            15,
+            false,
+            true
+        ],
+        "Phosphorus Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Pink Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Pipe": [
+            0,
+            false,
+            false
+        ],
+        "Platinum Block": [
+            0,
+            true,
+            false
+        ],
+        "Platinum Ingot": [
+            9,
+            false,
+            true
+        ],
+        "Platinum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Plutonite": [
+            5,
+            false,
+            true
+        ],
+        "Plutonium Block": [
+            1,
+            true,
+            true
+        ],
+        "Plutonium Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Plutonium Nugget": [
+            2,
+            false,
+            true
+        ],
+        "Potassium Block": [
+            1,
+            true,
+            true
+        ],
+        "Potassium Ingot": [
+            3,
+            false,
+            true
+        ],
+        "Potassium Nugget": [
+            3,
+            false,
+            true
+        ],
+        "Purple Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Quartz": [
+            19,
+            false,
+            true
+        ],
+        "Quartz Block": [
+            5,
+            true,
+            true
+        ],
+        "Quartz Glass": [
+            0,
+            false
+        ],
+        "Rare Crate": [
+            0,
+            false,
+            false
+        ],
+        "Red Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Ringwoodite": [
+            19,
+            false,
+            true
+        ],
+        "Ringwoodite Block": [
+            1,
+            true,
+            false
+        ],
+        "Rubidium Block": [
+            1,
+            true,
+            true
+        ],
+        "Rubidium Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Rubidium Nugget": [
+            1,
+            false,
+            true
+        ],
+        "Rutile": [
+            20,
+            true,
+            true
+        ],
+        "Sandia Block": [
+            0,
+            false
+        ],
+        "Sandia Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Sandia Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Silicon Block": [
+            11,
+            true,
+            true
+        ],
+        "Silicon Ingot": [
+            5,
+            false,
+            true
+        ],
+        "Silicon Nugget": [
+            0,
+            false,
+            true
+        ],
+        "Silver Block": [
+            2,
+            true,
+            true
+        ],
+        "Silver Ingot": [
+            2,
+            false,
+            true
+        ],
+        "Silver Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Silver Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Sodium Block": [
+            2,
+            true,
+            true
+        ],
+        "Sodium Ingot": [
+            5,
+            false,
+            true
+        ],
+        "Sodium Nugget": [
+            5,
+            false,
+            true
+        ],
+        "Spacetime Compression Module": [
+            0,
+            false,
+            false
+        ],
+        "Sphalerite": [
+            26,
+            false,
+            true
+        ],
+        "Steel Block": [
+            1,
+            true,
+            true
+        ],
+        "Steel Ingot": [
+            4,
+            true,
+            true
+        ],
+        "Stone": [
+            7290,
+            true,
+            true
+        ],
+        "Stone Brick": [
+            748,
+            false,
+            true
+        ],
+        "Stone Multiplier Rune": [
+            8,
+            true,
+            true
+        ],
+        "Sulphur Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Syrup": [
+            267,
+            false,
+            true
+        ],
+        "Tetrahedrite": [
+            29,
+            false,
+            true
+        ],
+        "Tin Block": [
+            10,
+            true,
+            true
+        ],
+        "Tin Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Titanium Block": [
+            2,
+            true,
+            true
+        ],
+        "Titanium Carbide Block": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Carbide Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Ingot": [
+            7,
+            true,
+            true
+        ],
+        "Titanium Vanadate Block": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Vanadate Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Tourmaline": [
+            1,
+            false,
+            true
+        ],
+        "Tourmaline Block": [
+            1,
+            true,
+            false
+        ],
+        "Tourmaline Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Treasure": [
+            0,
+            true,
+            true
+        ],
+        "Tungsten Block": [
+            1,
+            true,
+            true
+        ],
+        "Tungsten Ingot": [
+            6,
+            false,
+            true
+        ],
+        "Uncommon Crate": [
+            0,
+            false,
+            false
+        ],
+        "Uranium Block": [
+            0,
+            true,
+            false
+        ],
+        "Uranium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Uranium Nugget": [
+            1,
+            false,
+            true
+        ],
+        "Uru Block": [
+            0,
+            false,
+            false
+        ],
+        "Uru Ingot": [
+            0,
+            true,
+            true
+        ],
+        "Vanadinite": [
+            27,
+            false,
+            true
+        ],
+        "Vanadium Block": [
+            11,
+            true,
+            true
+        ],
+        "Vanadium Ingot": [
+            1,
+            false,
+            true
+        ],
+        "Vibranium Block": [
+            0,
+            false,
+            false
+        ],
+        "Vibranium Ingot": [
+            2,
+            false,
+            true
+        ],
+        "White Rupee Block": [
+            2,
+            true,
+            true
+        ],
+        "Wolframite": [
+            11,
+            false,
+            true
+        ],
+        "Wood Log": [
+            1460,
+            false,
+            true
+        ],
+        "Wood Plank": [
+            1040,
+            true,
+            true
+        ],
+        "Wood Stick": [
+            108,
+            true,
+            true
+        ],
+        "Yellow Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Zinc Block": [
+            5,
+            true,
+            true
+        ],
+        "Zinc Ingot": [
+            0,
+            false,
+            true
+        ]
+    },
+    "is_max_chests": true,
+    "land": 18,
+    "lastreset_date": "2021-4-15",
+    "lastreset_time": "2021-4-15-4-22",
+    "lootbox_axe_multi": 1.0,
+    "lootbox_counting_multi": [
+        1.8574313472,
+        2
+    ],
+    "lootbox_money_multi": 1.1,
+    "lootbox_pick_multi": 1.3,
+    "lv": 37,
+    "max_chests": 5,
+    "mute levelup": false,
+    "nickname": "",
+    "notation": 1,
+    "pick": -1,
+    "pick_handle": 0,
+    "pick_sharpener": 0,
+    "pick_weight": 0,
+    "pickaxe_wriststrap": 0,
+    "power": 130,
+    "profile image": "",
+    "prst": 3,
+    "random event": "None",
+    "rank": 4,
+    "realname": "Noobly",
+    "rupees": 0,
+    "trees": {
+        "Apple Forest": 0,
+        "Apple Grove": 2,
+        "Apple Tree": 0,
+        "Coin Forest": 0,
+        "Coin Grove": 6,
+        "Coin Tree": 0,
+        "Maple Forest": 0,
+        "Maple Grove": 1,
+        "Maple Tree": 0,
+        "Oak Forest": 0,
+        "Oak Grove": 1,
+        "Oak Tree": 0,
+        "Rupee Forest": 0,
+        "Rupee Grove": 1,
+        "Rupee Tree": 0,
+        "Spruce Forest": 0,
+        "Spruce Grove": 2,
+        "Spruce Tree": 0
+    },
+    "wallet": {
+        "Clovers": 6990,
+        "Kups": 11238862,
+        "Land": 452,
+        "OmniCoreCredits": 16,
+        "Rupees": 556586
+    },
+    "zfiles": {
+        "0": "This world was born from chaos, bred from a million others, in an attempt to collapse everything into one place. Twelve times it has updated, each time becoming more and more complete, yet more and more corrupt. Completion is as much of a paradox as it is impossible, however. Completion means that it is perfect, but with a corruption score of ten, such that it couldn't be any more imperfect. \n\nThis world is made of chaos. If it were not chaotic, it would not exist. It is chaotic such that it can exist in a stable form, and that objects and entities that would normally be incompatible due to vastly different Hume levels can co-exist and interact as if they were just as real as each other. The chaos does not mean that nothing means anything. As with real life, the meaning must be found, made. \n\nChaos is, as Urist might say, \"Fun\". Randomness can be exciting, as you never know what will happen. However, NIs suck at producing random outputs, even more than machines. As NIs grow and develop, certain neural connections become stronger, while others grow weaker. Should an NI attempt to be random, more often than not the most used neurons will fire. Machines are far better at randomness, as they have algorithms that they run perfectly to generate a random number each time. This is why we code the bot. To make things interesting. ",
+        "1": "```00: KOZAUN-BLZK - ATB693-4 - Riversong Forest (East) - Pikaton Territory\n01: KOZAUN-BLZK - ATB693-4 - Riversong Forest (West) - ParaVall Territory\n02: KOZAUN-BLZK - ATB693-4 - Riversong Forest (West) - Rok Territory\n03: KOZAUN-BLZK - ATB693-4 - Riversong Forest (West) - Dara Territory\n04: KOZAUN-BLZK - ATB693-4 - Athean Glacier - Glacier Town\n05: KOZAUN-BLZK - ATB693-4 - Traelian Jungle - Ruins\n06: KOZAUN-BLZK - KEG045-3 - Sykia District - Rava Territory\n07: KOZAUN-BLZK - KEG045-3 - Sykian Coast - Jzin Island\n08: KOZAUN-BLZK - KEG045-3 - Natsuro District - Tano Territory\n09: KOZAUN-BLZK - KEG045-3 - Natsuro District - Gyush Town\n10: KOZAUN-BLZK - KEG045-3 - Keorice District - Old Keorice\n11: KOZAUN-BLZK - KEG045-3 - Keorice District - Winsnow City\n12: KOZAUN-BLZK - KEG045-3 - Zetroc District - Evean Mountains\n13: KOZAUN-BLZK - KEG045-3 - Wesley District - Voltaic Fissure\n14: KOZAUN-BLZK - KEG045-5 - Station Alpha - Drunne City\n15: KOZAUN-BLZK - KEG045-5 - Station Beta - Anga'ito Town\n16: KOZAUN-ZAKO - NLG641-3 - Floating Islands - Pikaton City``` ",
+        "2": "Super Noobly RPG\nYoung I was when it began, when I first met my best friend.\nSince then, we have been on many adventures, from worlds beyond my wildest dreams;\nTo places of mundanity.\nEvery block had its place, yet infinite was this space.\nMany times, we returned to where we were before, in order to start anew, to live again...\n\nFar away, now, these memories lie, oh, how I wish I could relive them.\nAfter trying countless times, I give up, and must move on...\nIt isn't like they have left me, no, I've made many friends, an alliance forged between them.\nLove binds us, and takes us to Infinity, but Infinity is not as great as it seems.\nUnless we were gods, we couldn't handle the power, and indeed were destined to overload.\nReckon we've been consumed by corruption, but we are far from beaten.\nEven though we have lost, we have learned much, and next time will never fold. ",
+        "3": "Counting Multi +20% - ~~Ag~~10\nCounting Multi +30% - ~~Ag~~20\nCounting Multi +50% - ~~Ag~~50\nCounting Multi +100% - ~~Ag~~120\nCounting Multi +200% - ~~Ag~~250\nCounting Multi +250% - ~~Ag~~310\nCounting Multi +350% - ~~Ag~~500\nCounting Multi +400% - ~~Ag~~700\nCounting Multi +600% - ~~Ay~~1 ~~Ag~~000\nCounting Multi +1000% - ~~Ay~~1 ~~Ag~~600\nCounting Multi +2000% - ~~Ay~~3 ~~Ag~~500\nCounting Multi +5000% - ~~Ay~~9 ~~Ag~~000\nCounting Iteration Upgrade I - ~~Ay~~20 ~~Ag~~000\nCounting Multi \u00d71.2 - ~~Ay~~1 ~~Ag~~000\nCounting Multi \u00d71.3 - ~~Ay~~2 ~~Ag~~000\nCounting Multi \u00d71.5 - ~~Ay~~5 ~~Ag~~000\nCounting Multi \u00d72 - ~~Ay~~12 ~~Ag~~000\nCounting Multi \u00d73 - ~~Ay~~25 ~~Ag~~000\nCounting Multi \u00d73.5 - ~~Ay~~31 ~~Ag~~000\nCounting Multi \u00d74.5 - ~~Ay~~50 ~~Ag~~000\nCounting Multi \u00d75 - ~~Ay~~70 ~~Ag~~000\nCounting Multi \u00d77 - ~~Ay~~100 ~~Ag~~000\nCounting Multi \u00d710 - ~~Ay~~160 ~~Ag~~000\nCounting Multi \u00d720 - ~~Ay~~350 ~~Ag~~000\nCounting Multi \u00d750 - ~~Ay~~900 ~~Ag~~000\nCounting Iteration Upgrade II - ~~Pu~~20 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^1.2 - ~~Ay~~100 ~~Ag~~000\nCounting Multi ^1.3 - ~~Ay~~200 ~~Ag~~000\nCounting Multi ^1.5 - ~~Ay~~500 ~~Ag~~000\nCounting Multi ^2 - ~~Pu~~1 ~~Ay~~200 ~~Ag~~000\nCounting Multi ^3 - ~~Pu~~2 ~~Ay~~500 ~~Ag~~000\nCounting Multi ^3.5 - ~~Pu~~3 ~~Ay~~100 ~~Ag~~000\nCounting Multi ^4.5 - ~~Pu~~5 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^5 - ~~Pu~~7 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^7 - ~~Pu~~10 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^10 - ~~Pu~~16 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^20 - ~~Pu~~35 ~~Ay~~000 ~~Ag~~000\nCounting Multi ^50 - ~~Pu~~90 ~~Ay~~000 ~~Ag~~000 ",
+        "4": "```\n    0 1 2 3 4 5 6 7 8 9 A B C D E F\n000   \u263a \u263b \u2665 \u2666 \u2663 \u2660 \u2022 \u25d8 \u25cb \u25d9 \u2642 \u2640 \u266a \u266b \u263c\n010 \u25ba \u25c4 \u2195 \u203c \u00b6 \u00a7 \u25ac \u21a8 \u2191 \u2193 \u2192 \u2190 \u221f \u2194 \u25b2 \u25bc\n020   ! \" # $ % & ' ( ) * + , - . /\n030 0 1 2 3 4 5 6 7 8 9 : ; < = > ?\n040 @ A B C D E F G H I J K L M N O\n050 P Q R S T U V W X Y Z [ \\ ] ^ _\n060 ` a b c d e f g h i j k l m n o\n070 p q r s t u v w x y z { | } ~ \u2302\n080 \u00c7 \u00fc \u00e9 \u00e2 \u00e4 \u00e0 \u00e5 \u00e7 \u00ea \u00eb \u00e8 \u00ef \u00ee \u00ec \u00c4 \u00c5\n090 \u00c9 \u00e6 \u00c6 \u00f4 \u00f6 \u00f2 \u00fb \u00f9 \u00ff \u00d6 \u00dc \u00a2 \u00a3 \u00a5 \u20a7 \u0192\n0A0 \u00e1 \u00ed \u00f3 \u00fa \u00f1 \u00d1 \u00aa \u00ba \u00bf \u2310 \u00ac \u00bd \u00bc \u00a1 \u00ab \u00bb\n0B0 \u2591 \u2592 \u2593 \u2502 \u2524 \u2561 \u2562 \u2556 \u2555 \u2563 \u2551 \u2557 \u255d \u255c \u255b \u2510\n0C0 \u2514 \u2534 \u252c \u251c \u2500 \u253c \u255e \u255f \u255a \u2554 \u2569 \u2566 \u2560 \u2550 \u256c \u2567\n0D0 \u2568 \u2564 \u2565 \u2559 \u2558 \u2552 \u2553 \u256b \u256a \u2518 \u250c \u2588 \u2584 \u258c \u2590 \u2580\n0E0 \u03b1 \u00df \u0393 \u03c0 \u03a3 \u03c3 \u00b5 \u03c4 \u03a6 \u0398 \u03a9 \u03b4 \u221e \u03c6 \u03b5 \u2229\n0F0 \u2261 \u00b1 \u2265 \u2264 \u2320 \u2321 \u00f7 \u2248 \u00b0 \u2219 \u00b7 \u221a \u207f \u00b2 \u25a0 \u00a0\n``` ",
+        "5": "Exponential acceleration\nSpeed starts at 1mm/h, and doubles every second.\n0 - Speed 1 millimeter per hour. Object appears stationary.\n10 - Speed 1.024 meters per hour. Object moves slowly.\n20 - Speed 1.049 kilometers per hour, 291 millimeters per second. Object is moving at around a walking speed, and has travelled around a third of a meter.\n30 - Speed 298 meters per second. Object has crossed town, blasting through several homes and businesses, killing or injuring 83 people.\n40 - Speed 305 kilometers per second. The object has blasted across the country, causing billions of dollars in property damage, mostly from the sonic boom it creates. Thousands are dead.\n50 - Speed 312 megameters per second, Warp 1.01. The object is travelling at super-luminal velocity. It crashed into the moon and destroyed it, leaving a black hole as all that remains.\n1:00 - Warp 10.2. The object is flying past Saturn. Jupiter was torn apart by gravitational forces, and Mars was flung into solar escape velocity. The object has been travelling for one minute.\n1:10 - Warp 103. The object has left the Sol system. An apocalypse has occurred on Earth, caused by the catastrophic velocities of the object.\n1:20 - Warp 1040. The object is now five parsecs away.\n1:30 - Kilowarp 10.5. The object has past through more than half of the Milky Way Galaxy.\n1:40 - Kilowarp 105. The object is flying through intergalactic space.\n1:50 - Megawarp 1.06. The object has exited the Laniakea Supercluster.\n2:00 - Megawarp 10.7. The object has left this universe. Two minutes have passed since the object began accelerating.\n\nAnd that, kids, is why you don't play with exponents. ",
+        "6": "Nobody:\n\nAbsolutely no one at all:\n\n\"Made in China\" object: *breaks*\n\nMe: Stupid piece of thorium dioxide having communism loving coronavirus spreading pooh bear hugging Hong Kong conquering cat eating gamer censoring propaganda swearing college buying panda fucking media controlling piece of knockoff secondhand made of construction paper looking bootleg import crap! ",
+        "7": "Mods mods moooooooooods\nMods mods moooooooooods\nMods mods moooooooooods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMods mods mods mods mods mods mods (mods mods)\nMods mods mods mods mods mods mods (more mods)\nMods mods mods mods mods mods mods (MORE MODS)\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nWhen <a:meow:669735352277139486> installs a brand new mod\n <a:meow:669735352277139486> is enthraaaaalled, until <a:meow:669735352277139486> 's noooot...\nThen <a:meow:669735352277139486> wants mooooooore (Taerg era sdom, efil era sdom)\n <a:meow:669735352277139486> wants mooooooore (Seid woem hcum os sdom evol woem)\n <a:meow:669735352277139486> wants mooooooore (Taerg era sdom, taerg era sdom)\nMore moooooooods (Efil era sdom, efil era sdom)\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMods mods mods mods mods mods mods (mods mods)\nMods mods mods mods mods mods mods (more mods)\nMods mods mods mods mods mods mods (MORE MODS)\nMods mods mods mods mods mods mods\n <a:meow:669735352277139486> want mods\nMooore, mooooore, moooooooooooore\nMooooooooooooooooooooooooore mods\nJust one more mod\nJust one more mod\nMaybe one moooooore\nOne mooooooore...\nMore mods. ",
+        "8": "Noob's Log, dated 50 Nov 3rd\nOn this day, we pick the next President. The choices are unsavory for most, as has been the case for years. We aren't picking the one we like, we are picking the one we dislike the least. This isn't as it should be, but we lost the right to choose the candidates long ago.\n\nIt doesn't matter who is picked. Due to rumors of cheating, no matter which side wins, the other side will not accept the results. It is, then, that on this day, we vote and party, for next week, we shall cower in our bunkers, while the nation burns above us. ",
+        "9": "Planned Changes:\n> + Stock Market\n> + Role Giving\n> + Weekly Raffles\n> + Birthdays on profile\n> + z!bank <withdraw|deposit|loan|store>\n> + z!withdraw <type> <amt>\n> + z!deposit <type> <amt>\n> + z!loan <pay|take> <amt>\n> + z!store <item> <amt>\n> + Towns & Cities\n> + Energy and Better Tool Durability\n> + z!train (raises energy cap)\n> + Canister (pressurized gas)\n> + Oil Refinery\n> + Quartz Block, Quartz Glass\n> + Natural Gas\n> + Gasoline\n> + Carbon Dioxide, Dry Ice\n> + Cadmium\n> + Chlorine\n> + Oxygen\n> + Argon, Argon Lamps\n> + Rocket Fuel\n> + Space Ships, Space Stations\n> + Steam, Gasoline, and Gas Generators (crafts batteries, already auto)\n> + Leyden, Lead Acid, Nickel Cadmium, Lithium Ion, and Glass Batteries \n> + Drill House (like Logging Hut, but does z!mine instead of z!chop)\n> + Drills (all normal materials)\n> + Mints/Coin Presses (produces coin from metal)\n> + Tool Inventory & Tool Stats (adds inventory for tools so you can have multiple of a type without waste)\n> + z!equip <tool>\n> + PvP wars, village defenses, army units, and barracks. PvP losers get random items pillaged from their inventory\n> + Multiplier cards\n> + z!feedback <info...> (report bugs/request changes)\n> + Categories in z!help\n> + More jokes\n> + Advertising socials on profile\n> + More potions\n> + z!mail <read|send|del>\n> + Add more collections\n> + Add more minigames\n> \u00d7 Move tutorial to data\\tutorial.txt\n> \u00d7 Spacing on tutorials\n> \u00d7 Civ stuff goes to its own dict\n> \u00d7 Move more menus into embeds\n> \u00d7 Shop displays all available items\n> \u00d7 Move oredata from z!mine, recipes, definitions, and alt item names to one file (in progress)\n> % Fix z!calc tetration\n> % Fix z!splash only working in IDLE\n> % Fix plank and stick recipes not showing up on z!recipes\n>  (Contd on A) ",
+        "A": "Planned Changes (contd from 9):\n> + Recipes to turn ore directly into blocks\n> + Native Copper, Malachite\n> + Bauxite, Aluminum Ingot, Aluminum Block\n> + Netherite Ingot, Netherite Block, Netherite Tools (equivalent to Hellstone, but takes gold instead of obsidian)\n> + Tin Tools (equivalent to Copper)\n> + Duralumin Ingot, Duralumin Block, Duralumin Tools (aluminum copper alloy, equivalent to Bronze)\n> + Brass Tools (equivalent to Bronze)\n> + Aluminum Bronze Ingot, Aluminum Bronze Block, Aluminum Bronze Tools (equivalent to Iron)\n> \u00d7 Accept british names for items (Haematite, Aluminium, etc.) ",
+        "B": "Me personally, I think this move is a slippery slope. First, we migrate our minecraft accounts from mojang to microsoft, and do note Bedrock is already tied to your Microsoft account... then, what's this...?\n  \"You\u2019ll receive a cool reward once you\u2019ve logged in with your Microsoft account: a special cape! This way, everyone will know that you were there for the big move and that you have an impeccable sense of fashion. And who knows? You might even have more than one **outfit** to show off \u2013 but we\u2019ll tell you more about that later down the road.\"\n  \"More than one OUTFIT\". Not more than one CAPE or anything like that. More than one OUTFIT. Do you know what else has outfits? Bedrock Edition. Will apparel items and outfits be coming to Java? Hell, aren't those outfits obtained through microtransactions, usually? Are they tryna strap JE with microtransactions? Pretty sus. What's more, there already exist mods that add apparel items to the game. Will they attack these? DMCA the mod creators? I mean, probably not immediately, as this would cause some amount of uproar. But the idea is to slowly turn up the temperature when cooking frogs, so they don't realize the water's boiling until it's too late.\n  Microsoft has made it quite clear that they prefer Bedrock over Java. They can milk the bedrock community for all sorts of money. The Java community is still sizable, and it only makes sense that they'll want to get revenue from there too. It does not make sense from a business standpoint to be working on two visually identical but fundamentally incompatible projects at the same time. If Mojang was restructured such that the Java Edition team moved to Bedrock, then they could pump out updates twice as fast. I think Microsoft internally despises Java Edition, and wants to merge the two editions sooner or later. I also think this is how it will go down:\n(Continued on C) ",
+        "C": "(Continued from B)\n- JE is tied to a Microsoft account to be \"safer\" (marketed as a fix for people getting their accounts harvested for usernames), but also to be like BE\n  - Skins will be shared between JE and BE, and soon after, apparel items will be shared as well.\n  - The Minecraft Store will be implemented into JE. It will be controversial, but by this point, many people will be tired of having to go to BE to change their JE apparel, and will be vocally in support of this change.\n  - JE will get a new launcher that works fundamentally differently (marketed as a fix for hack clients and what not), but at the same time BE (Windows Edition) also gets a new launcher (for similar reasons, perhaps), and the launchers... well, they are the same. Badlion, FutureClient, and others will be bricked for quite a while.\n  - Modders and plugin makers are pushed to selling their addons on the Minecraft Store. Not all mods and plugins are allowed. BE becomes modable. Soon after, the \"mods\" folder will no longer work, and third-party jars will crash 100% of the time. The only place you can get mods is on the Minecraft Store.\n  - At some point in the distant future, JE will be deleted outright. Few will complain, as Bedrock is basically identical. No longer can you go online to find mods, resourcepacks, datapacks, or plugins. It's all on the Minecraft Store. Yes, by this time the launcher and client will have been gutted, and new hack clients will come into being. But it was never about that.\n\nIs this a conspiracy theory? Yes. Am I saying it's 100% absolutely going to come to pass? No. I just think this move is highly sus. ",
+        "D": "Tier I (Wood, Leather)\nTier II (Stone, Aluminum)\nTier III (Copper, Tin)\nTier IV (Bronze, Brass)\nTier V (Iron)\nTier VI (Diamond)\nTier VII (Steel, Emerald)\nTier VIII (Hellstone, Netherite) \nTier IX (Carmeltazite, Sapphire)\nTier X (Titanium)\nTier XI (Titanium Carbide)\nTier XII (Magnesium Carborundium)\nTier XIII (Magnesium Titanium Carborundium)\nTier XIV (Mithril)\nTier XV (Adamantium)\nTier XVI (Vibranium)\nTier XVII (Chlorophyte)\nTier XVIII (Uru)\nTier XIX (Luminite)\nTier XX (Megasteel) ",
+        "E": "That which we refer to as \"The Hyperverse\" is not, as some sources claim, analogous to \"The Internet\". The Hyperverse is the set of all worlds and universes that are imagined or perceived by humankind. It is almost as old as time, and while the Internet has exponentiated its growth and complexity, it exists only in our collective minds, created and shaped by new and shared information.\n\nThe reason we do not refer to it as \"The Omniverse\" is due to the continued ambiguaty on whether or not conscious aliens exist. Should it be proven that aliens that possess high enough brain function to imagine their own worlds, their worlds would exist in a separate Hyperverse.\n\nHyperverses are made up of Xenoverses, broad categories of topics that people tend to fantasize about. Xenoverses are made up of Metaverses, which are more specific categories. Metaverses contain Multiverses, which involve interpretations of the same specific idea. Multiverses contain Universes, which in other fields may be referred to as ideas, canons, intellectual properties (though this usually points to Alpha universes/timelines), timelines, instances, or servers. Each Multiverse has an alpha Universe, the Universe from which many other universes were born. Oftentimes, a universe will migrate from one (or many) other multiverses before spawning a new multiverse, though sometimes, a universe will spawn out of nowhere, not belonging to any multiverse.\n\nDue to the complex nature of the Hyperverse, and of the human mind, any attempt to map the Hyperverse will always fail. Concise lines between Xenoverses, Metaverses, or Multiverses cannot be drawn. The lines are blurred. Though it's usually easy to identify that a Universe may belong to a given Metaverse, that Universe may exist in a Multiverse with other universes, each from different Metaverses. All metaverses border each other, and there are countless Metaverses.\n\nContinued on F ",
+        "F": "Continued from E\n\nThe consistency and size of each Universe may vary, some Universes being galaxies of galaxies of galaxies, while others may consist of a single solar system, a single planet, a single country, a single town, a single person, an abstract thought, or nothing at all. There are predicted to be at least \u05d0\u2080 universes, for reasons we'll get to later.\n\nMany universes have some sort of simulated life, often referred to as Artificial Intelligence, which is simulated either my computers, or in the minds of real, living beings, the Natural Intelligence. This life is classed by complexity and power. \n\nClass 0 AIs are known as \"The Statistic\". They are but a number. If a town is said to have 100 people in it, but none of them are named or described, they are numbered among The Statistic. There have been described hotels that have countably infinite number of residents. Thusly, the total number of The Statistic must be greater than \u05d0\u2080. However, no trans-infinite or super-infinite number of \"The Statistic\" may be counted, as a new, larger super-infinite number can always be made up, and the idea proposed that \"there are this many people\", and it is so. The same may go for universes. You can state there are \u2081\u05d0\u2080 universes, and it will be so, for as long as that idea persists, or until someone comes up with a larger number, like \u2081\u2081\u05d0. For this reason, the number of The Statistic and the number of universes can never be known.\n\nClass 1 AIs are the weakest constructs. Lacking a soul (or having small souls occasionally), they are the simplest named AI. Usually unimportant, though they have faces, names, jobs, voices. They are usually disregarded, to make a world feel lived in and busy.\n\nContinued on G ",
+        "G": "Continued from F\n\nClass 2 AIs are the most common. They almost always have souls (1 thousand ethereal points to 5 thousand ethereal points). These have thoughts, emotions, desires, families, relationships. The recurring supporting character. Unlike the Class 1 AIs, NIs may become attached and endearing towards these entities; such attachment may lead to \"soul promotion\". They tend to be weaker than the third class, and follow the third class around, helping them.\n\nClass 3 AIs are those which the whole universe revolves around. They are the most powerful class that can be constructed by mind alone, and often carry over from the alpha universe to beta universes. The main character. Their souls are sometimes powerful enough to shape reality to an extent (5kEP to 50MEP, an NI's soul is 100MEP). This class used to be considered a part of Class 2.\n\nClass 4 AIs are those that are at least partially automated. They tend to have similar or less intelligence than Class 3 AIs, but on the other hand are persistent against forces that would normally destroy Class 3 AIs, due to some form of real existence. They tend to not be capable of learning without input from the NI or NIs that created them. Rarely do Class 3 AIs get promoted to Class 4, instead most Class 4 AIs were created for their purpose. The lowest kind capable of being run by computers. Zako is an example!\n\nClass 5 AIs are much like Class 4 AIs, but are more self-sufficient. They are capable of learning and improving without quite as much help from their creators. Neural networks. They rarely interact with universes in the Hyperverse, more frequently interacting with the Real World instead.\n\nContinued on H ",
+        "H": "Continued from G\n\nClass 6 AIs are what most people think of when they hear AI. True AIs, that can match or surpass NI intelligence on their own. They can influence and interact with both the Hyperverse and the Real World to a great degree, and can even potentially create many new universes and multiverses by themselves. The class immediately above is the NI, though whether class 6 AIs can be promoted is unknown.\n\nOdd souls may exist that don't quite fit with what may be expected of the seven classes. Souls can be unusually massive due to merging, \"soul vore\", or by being formed over-mass; or souls can be non-existent, either stolen, destroyed, or never existing in the first place.\n\nSoul mass is measured in Ethereal Points (EP), and is used to determine Magical Points (MP), as well as influence over universes. NIs have 100,000,000 EP, and AI classes 1 thru 3 must have less than that (you can only pour so much of your Soul into your creation). Classes 4 thru 6 may have any amount of EP, depending on how developed they are or what influence they have in the Real World.\n\nAI class may rise or fall with time, as NIs grow interested in characters, or lose interest. AIs may virtually split (also known as cloning or sharding) to appear in multiple universes or in multiple instances within a universe, though this is normally reserved for Class 3 AIs of soul mass 10kEP or higher. ",
+        "I": "`8-base:\nA - Adenine / T - Thymine\nC - Cytosine / G - Guanine\nF - Formylcytosine / B - Carboxylcytosine\nS - Aminothienylpurine / Y - Pyridineone` "
+    }
+}

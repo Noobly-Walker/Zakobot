@@ -1,0 +1,37 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "counting": true,
+    "crafting": true,
+    "current count": [
+        0.0,
+        0
+    ],
+    "dedicated_portal": -1,
+    "dice": true,
+    "economy": true,
+    "id": "655559968132562984",
+    "levels": false,
+    "lv_msg": true,
+    "name": "\ud83c\udf7b | The Belly Bar",
+    "network data": {
+        "acronym": "",
+        "allow ads": false,
+        "category": "General",
+        "description": "",
+        "server link": ""
+    },
+    "portal": true,
+    "potion": true,
+    "potions": {
+        "debuff": true,
+        "fetish": true,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": true
+    },
+    "prefix": "z!"
+}

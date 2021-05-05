@@ -32,8 +32,16 @@ print("\r> .\\bot\\ServerData.py" + " "*20, end="")
 from bot import ServerData
 print("\r> .\\bot\\NumberCronch.py\\*" + " "*20, end="")
 from bot.NumberCronch import *
-print("\r> .\\bot\\ToolUtil.py\\*" + " "*20, end="")
-from bot.ToolUtil import *
+print("\r> .\\bot\\Calc.py\\*" + " "*20, end="")
+from bot.Calc import *
+print("\r> .\\bot\\util\\ToolUtil.py\\*" + " "*20, end="")
+from bot.util.ToolUtil import *
+print("\r> .\\bot\\util\\UserUtil.py\\*" + " "*20, end="")
+from bot.util.UserUtil import *
+print("\r> .\\bot\\util\\TimeUtil.py\\*" + " "*20, end="")
+from bot.util.TimeUtil import *
+print("\r> .\\bot\\util\\finalize.py\\*" + " "*20, end="")
+from bot.util.finalize import *
 print("\r> .\\setup.py\\Config()" + " "*20, end="")
 from setup import Config
 print('\rReading config...' + " "*20)
@@ -54,7 +62,7 @@ botdata = get_user_data('405968021337669632')
 #######################
 #Config
 mining_clover_event = False #True allows three clovers to be used
-lootcrate_multi_event = True #True allows one Multi Crate to be opened per day
+lootcrate_multi_event = False #True allows one Multi Crate to be opened per day
 fast_stats = True #True replaces the Max Resources line in 'z!debug stats' with a pre-written string.
 experience_rate = 1 #1 is default
 global_event = "" #must be prefaced by newline if not blank
@@ -195,18 +203,6 @@ rank = {
     6 : 'Ulti',
     7 : 'Ult+',
     }
-alts = { # alt:main
-    346836668852207626 : 344990569556082718,
-    288105216413532161 : 205011703891623936,
-    563204853023899668 : 611217574864355328,
-    311558009061113858 : 248641004993773569,
-    313004537491226625 : 300416545744486400,
-    296430479043985408 : 300416545744486400,
-    427951719813742593 : 377121840373563395,
-    509006017644855297 : 272209285356716042,
-    576362922134208523 : 585811085030981645,
-    766798572673826826 : 205011703891623936
-    }
 lcd = {' ':ResourceParse.emojidata['0020'],'!':ResourceParse.emojidata['0021'],
        '"':ResourceParse.emojidata['0022'],'#':ResourceParse.emojidata['0023'],
        '$':ResourceParse.emojidata['0024'],'%':ResourceParse.emojidata['0025'],
@@ -310,67 +306,6 @@ dataFile = os.path.dirname(os.path.abspath(__file__))
 
 print('Fetching functions...')
 ## ----- Global Functions ----- ##
-
-def openfile(path, mode):
-    base = os.path.dirname(os.path.abspath(__file__))
-    file = open(base + "\\" + path, mode)
-    return file
-
-def bool_emoji(boolean):
-    if boolean == True:
-        return ':white_check_mark:'
-    elif boolean == False:
-        return ':x:'
-    else:
-        return ':grey_question:'
-
-def username(ctx, userid, *discord_data): #ctx = the unfiltered userdata, could be alt; userid = filtred user id
-    player_data = get_user_data(userid)
-    # find real name
-    if player_data.realname() == '':
-        try:
-            player_data.data['realname'] = user_name[int(userid)]
-        except Exception:
-            player_data.data['realname'] = ctx.name
-    realname = player_data.realname()
-    # find nickname
-    if player_data.nick() == '':
-        name = realname
-    else:
-        name = '\*' + player_data.nick() + '\*'
-    name = player_data.data['displayed badge'] + name
-    return name, realname
-
-def load_badges(player_data):
-    realname = player_data.realname()
-    if player_data.achievements()['TNG Overcharge'] > 0:
-        #Nitro boost achievement
-        player_data.add_badge(ResourceParse.emojidata['oc2_nitroboost'])
-    if realname == 'Noobly' or realname == 'MacGeek' or realname == 'Ariel':
-        #5th age legendaries
-        player_data.add_badge(ResourceParse.emojidata['oc2_5th_age_legendary'])
-    if realname == 'Bomboy' or realname == 'Pixel' or realname == 'Supernerd' or realname == 'Karma' or realname == 'Zecca' or realname == 'Minidragon':
-        #6th age legendaries
-        player_data.add_badge(ResourceParse.emojidata['oc2_6th_age_legendary'])
-    if realname == 'Om' or realname == 'Ace' or realname == 'Toyo' or realname == 'Ryan' or realname == 'Riverina' or realname == 'Alex' or realname == 'Maxx' or realname == 'Echo' or realname == 'Paw Lord' or realname == 'Silverwind' or realname == 'Eko' or realname == 'Mama' or realname == 'Shiny' or realname == 'Sparky' or realname == 'Caleb' or realname == 'Steph':
-        #7th age legendaries
-        player_data.add_badge(ResourceParse.emojidata['oc2_7th_age_legendary'])
-##    if name == '-----': # To be defined 51 Mar
-##        #8th age legendaries
-##        name = ResourceParse.emojidata['oc2_8th_age_legendary'] + name #Emoji doesn't exist.
-    return player_data
-    
-
-def lcd_translate(input_string, library):
-    lcditem = ''
-    libs = {'lcd':lcd,'lcdr':lcdr}
-    font = libs[library]
-    for letter in input_string:
-        try:
-            lcditem += font[letter]
-        except Exception:
-            lcditem += letter
-    return lcditem
 
 def scan(text):
     list = text.split(' ')
@@ -535,7 +470,10 @@ def get_item_prices(): #only done once.
     meta_inv = get_all_user_inv()
     item_ct = len(meta_inv)
     item_no = 0
-    percentage = int(item_no/item_ct*20)
+    try:
+        percentage = int(item_no/item_ct*20)
+    except ZeroDivisionError:
+        percentage = 0
     progress_bar = "[" + "\u2588"*percentage + " "*(20-percentage) + "]"
     minibar = [" ","\u258F","\u258E","\u258D","\u258C","\u258B","\u258A","\u2589",""]
     print(f"\r> {progress_bar} {item_no}/{item_ct}", end="")
@@ -563,8 +501,11 @@ def get_item_prices(): #only done once.
         #eta_txt = "{0}:{1:0>2}".format(eta//60, eta%60)
         print(f"\r> {progress_bar} Item {item_no} of {item_ct} - {percent: <5}% ({quant}×{item} @ {price}r per {qpr} items)" + " "*20, end="")
         botdata.data['prices'][item] = (quant, price, qpr)
-    botdata.data['inflation'] = base_price
-    save_user_data(botdata)
+    try:
+        botdata.data['inflation'] = base_price
+        save_user_data(botdata)
+    except Exception:
+        pass
 
 def add_items(userdata, dict_add: dict):
     base_price = botdata.data['inflation']
@@ -608,14 +549,6 @@ def isFinished(crates): # A function used to determine if there are any crates l
         if(crates[key] > 0):
             return False # There are more unopened crates, aka is NOT Finished
     return True # There are no more unopened crates, aka isFinished
-
-def testfor_alt(user):
-    user = int(user)
-    for key in alts.keys():
-        if key == user:
-            user = alts[key]
-    user = str(user)
-    return user
 
 def get_all_user_sum(variable_name, *key):
     root_user = get_global_file("user", "")
@@ -759,21 +692,6 @@ def check_land(ctx):
         return 'There are no deeds left! Invite more people to increase power and conquer more land!'
     else:
         return ''
-    
-def finalize(ctx, command, send, errorcode, *args):
-    time = current_time()
-    if errorcode == 'OK':
-        errormsg = 'Task completed successfully!'
-    else:
-        errormsg = errorcode
-    base = f'[{time}, {ctx.message.guild.name}:#{ctx.message.channel.name}] {prefix}{command}:\n\
- - {errormsg}\n - User {username(ctx.message.author, testfor_alt(ctx.message.author.id))[0]} did "{prefix}{command}'
-    if len(args) > 0:
-        print(base + ' ' + args[0] + '\"')
-    else:
-        print(base + '"')
-    if send != None:
-        return send
 
 def get_splash():
     file = openfile('data\\splash.txt', 'r')
@@ -782,88 +700,6 @@ def get_splash():
     string = splashstr[splashid]
     string = string[:-1]
     return string
-
-def get_time(datetime: datetime):
-    microsecond = datetime.microsecond
-    second = datetime.second
-    minute = datetime.minute
-    hour = datetime.hour
-    day = datetime.day
-    month = datetime.month
-    year = datetime.year
-    return [year, month, day, hour, minute, second, microsecond]
-
-def translate_time(dattime):
-    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    days = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th',
-            '11th','12th','13th','14th','15th','16th','17th','18th','19th','20th',
-            '21st', '22nd', '23rd', '24th', '25th', '26th', '27th', '28th', '29th', '30th', '31st']
-    if type(dattime) is str:
-        date, time = dattime.split(' ')
-        dt = date.split('-')
-        clock, ms = time.split('.')
-        dt.append(*clock.split(':'), ms)
-        dattime = dt
-    if type(dattime) is datetime:
-        dattime=list(dattime.timetuple())
-    if type(dattime) in [list, tuple]:
-        return [dattime[0]-1970, months[dattime[1]-1], days[dattime[2]-1], dattime[3], dattime[4], dattime[5], dattime[6]//1000, dattime[6]%1000]
-
-def current_time(tzoffset:int=0):
-    dt = get_time(datetime.now(timezone(timedelta(hours=tzoffset))))
-    ttime = translate_time(dt)
-    sign = ''
-    if tzoffset >= 0:
-        sign = '+'
-    return "UNIX {} {:0>2} {:0>2}, {:0>2}:{:0>2}:{:0>2}.{:0>3}'{:0>3} UTC".format(ttime[0], ttime[1], ttime[2], ttime[3], ttime[4], ttime[5], ttime[6], ttime[7]) + sign + str(tzoffset)
-
-def subtract_time(year, month, day, hour, minute, second):
-    current_time = get_time(datetime.utcnow())
-    current_y, current_mo, current_d, current_h, current_min, current_sec = current_time[0], current_time[1], current_time[2], current_time[3], current_time[4], current_time[5]
-    new_sec = second-current_sec
-    new_min = minute-current_min
-    new_h = hour-current_h
-    new_d = day-current_d
-    new_mo = month-current_mo
-    new_y = year-current_y
-    if new_sec < 0:
-        new_sec += 60
-        new_min -= 1
-    if new_min < 0:
-        new_min += 60
-        new_h -= 1
-    if new_h < 0:
-        new_h += 24
-        new_d -= 1
-    if new_d < 0:
-        new_d += 30
-        new_mo -= 1
-    if new_mo < 0:
-        new_mo += 12
-        new_y -= 1
-    if new_y < 0:
-        new_sec = current_sec-second
-        new_min = current_min-minute
-        new_h = current_h-hour
-        new_d = current_d-day
-        new_mo = current_mo-month
-        new_y = current_y-year
-        if new_sec < 0:
-            new_sec += 60
-            new_min -= 1
-        if new_min < 0:
-            new_min += 60
-            new_h -= 1
-        if new_h < 0:
-            new_h += 24
-            new_d -= 1
-        if new_d < 0:
-            new_d += 30
-            new_mo -= 1
-        if new_mo < 0:
-            new_mo += 12
-            new_y -= 1
-    return f"{new_y}yr {new_mo:0>2}mo {new_d:0>2}dy {new_h:0>2}:{new_min:0>2}:{new_sec:0>2}"
 
 def draw_rating(rating, raters):
     star = ':star:'
@@ -1031,10 +867,9 @@ async def stats(ctx, *arg):
         ln2 = 'Miniwa - Meow! Wrote the shop and crafting system!\n'
         ln3 = 'Nitsche - Inspired the lootcrate system.\n'
         ln4 = 'Zecca - Nagged Noobly to learn Python.\n'
-        ln5 = 'HyperCrafting - Helps with the tetration function\n'
-        ln6 = 'Kraterocratic - Drew current PFP.'
+        ln5 = 'Kraterocratic - Drew the current profile image.\n'
         ln7 = '\nLast page: ' + prefix + 'stats server | Page 4 of 5 | Next page: ' + prefix + 'stats changelog'
-        out = ln0 + ln1 + ln2 + ln3 + ln4 + ln5 + ln6 + ln7
+        out = ln0 + ln1 + ln2 + ln3 + ln4 + ln7
         message_return = finalize(ctx, 'stats', out, "OK", str(arg[0]))
     elif arg[0] == '5' or arg[0] == 'changelog':
         try:
@@ -1083,7 +918,8 @@ async def stats(ctx, *arg):
 @bot.command()
 async def invite(ctx):
     """Invite the bot to a server!"""
-    out = "Follow this link to add the bot to your server!\nhttps://discord.com/oauth2/authorize?client_id=405968021337669632&scope=bot&permissions=999999"
+    #out = "Follow this link to add the bot to your server!\nhttps://discord.com/oauth2/authorize?client_id=405968021337669632&scope=bot&permissions=999999"
+    out = "This bot cannot be invited to other servers."
     message_return = finalize(ctx, 'invite', out, "OK")
     await ctx.send(message_return)
 
@@ -2052,7 +1888,7 @@ async def debug(ctx, arg, *var):
             elif len(var) == 1:
                 out = f"{user_data.data[var[0]]}"
         if arg == 'restart':
-            if user_data.data['id'] == '248641004993773569':
+            if str(user_data.data['id']) == '248641004993773569':
                 if len(portals) > 0:
                     for portal in portals:
                         await portals[portal].send("Alert: Bot is restarting. Closing portal...")
@@ -2433,7 +2269,7 @@ Other options:
         message_return = finalize(ctx, 'sudo', out, out, text)
         await ctx.send(message_return)
 
-@bot.command(aliases=['dice']) # Bot **s X Y-sided dice. Not as nice as Tsumikibot's dice system, and that's okay.
+@bot.command(aliases=['dice']) # Bot rolls X Y-sided dice. Not as nice as Tsumikibot's dice system, and that's okay.
 async def roll(ctx, dice: str, *formating: str):
     """Rolls some dice.
     Example: /roll 2d6
@@ -2450,7 +2286,7 @@ async def roll(ctx, dice: str, *formating: str):
             out = 'Invalid dice! Proper syntax example: ' + prefix + 'roll 10d20'
             message_return = finalize(ctx, 'roll', out, "OK", dice)
             await ctx.send(message_return)
-            return
+            return 
         total = 0
         result = '('
         dieoutputs = {}
@@ -2478,11 +2314,10 @@ async def roll(ctx, dice: str, *formating: str):
         else:
             result += ')'
         message_return = finalize(ctx, 'roll', result, "OK", dice)
-        await ctx.send(message_return)
     except Exception as e:
         result = f"Error: {e}"
         message_return = finalize(ctx, 'roll', result, result, dice)
-        await ctx.send(message_return)
+    await ctx.send(message_return)
 
 @bot.command(aliases=['choice']) # Bot randomly chooses between the inputs.
 async def choose(ctx, *choices: str):
@@ -2915,6 +2750,51 @@ async def calc(ctx, x: int, funct: str, y: int):
     message_return = finalize(ctx, 'calc', out, "OK", str(x) + funct + str(y))
     await ctx.send(message_return)
     return
+	
+@bot.command(aliases=['betacalculate', 'betacalculator'])
+async def betacalc(ctx, *funct):
+    """Calculates equations.
+
+Operations:
+    Addition: +, [1]
+    Subtraction: -, [-1]
+    Multiplication: ×, x, *, [2]
+    Division: /, ÷, [-2]
+    Floor Div: //, floor, fdiv
+    Ceiling Div: ceiling, cdiv
+    Modulo: %, mod
+    Exponent: ^, **, [3], exp
+    Root: root, √, [-3]
+    Multiplication by ten raised to a power: E, ×10^
+    Multiplication by one thousand raised to a power: K, ×1000^
+
+Variables:
+    Golden Ratio: phi, φ, ϕ = 1.61803399
+    Euler's Number: e       = 2.71828183
+    Pi: pi, π               = 3.14159265
+    Tau: tau, τ             = 6.28318530
+
+Planned Operations:
+    Tetration: ^^, ***, [4]
+    Super Root: sr, √√, [-4]
+    Logarithm: log
+
+Planned Variables:
+    Imaginary: i            = 2√-1
+    Zero Fraction: zf       = 1/0
+    Infinity: inf, ∞        = Infinity"""
+    string = ""
+    for fn in funct:
+        string += fn
+    funct = string
+    out = Calc.calculate(funct)
+    if not isinstance(out, str):
+        if ResourceParse.is_infinite(out) and isinstance(out, float):
+            out = out + '>K+102 (Float ∞)'
+        result = number_cronch(out, testfor_alt(ctx.message.author.id))
+    message_return = finalize(ctx, 'calc', out, "OK", funct)
+    await ctx.send(message_return)
+    return
 
 @bot.command()
 async def report(ctx, report_type, *, content:str):
@@ -2930,7 +2810,7 @@ Tweak - Something is a bit overpowered or underpowered."""
 //[000028 - BUG DENIED] autocraft stil brok pls fix my inv is ful `(denied because duplicate of 000025)`\n\
 //[000029 - BUG DENIED] ac stil brok `(denied because duplicate of 000025)`\n\
 //[000030 - BUG DENIED] give me my autocraft back >:( `(denied because duplicate of 000025)`"
-    if str.upper(report_type) in ["BUG", "REQUEST", "TWEAK"] and content != "":
+    elif str.upper(report_type) in ["BUG", "REQUEST", "TWEAK"] and content != "":
         filename = os.path.dirname(os.path.abspath(__file__)) + "\\data\\reports.txt"
         print(filename)
         with open(filename, 'a') as file:
@@ -3405,8 +3285,6 @@ async def profile(ctx, *args):
             user = await converter.convert(ctx, ctx.message.author.name)
             identity = testfor_alt(ctx.message.author.id)
             user_data = get_user_data(identity)
-            if user_data == "[BRICKED]":
-                pass
             name, realname = username(ctx.message.author, identity, user)
             if user_data.nick() != '':
                 name += ' (' + user_data.realname() + ')'
@@ -3422,16 +3300,12 @@ async def profile(ctx, *args):
                 user = await converter.convert(ctx, args[0])
                 identity = testfor_alt(user.id)
                 user_data = get_user_data(identity)
-                if user_data == "[BRICKED]":
-                    pass
                 name, realname = username(user, identity, user)
                 if user_data.nick() != '':
                     name += ' (' + user_data.realname() + ')'
             except BadArgument:  # first arg wasn't a member, but actually a page num
                 identity = testfor_alt(ctx.message.author.id)
                 user_data = get_user_data(identity)
-                if user_data == "[BRICKED]":
-                    pass
                 page = int(args[0])
         get_user_data(identity).loadall()
         if page == 'None':
@@ -3441,39 +3315,11 @@ async def profile(ctx, *args):
             user = await converter.convert(ctx, inputID)
             identity = testfor_alt(user.id)
             user_data = get_user_data(identity)
-            if user_data == "[BRICKED]":
-                pass
             name, realname = username(ctx.message.author, identity)
         if inputID == 'None' and name == 'None':
             identity = testfor_alt(ctx.message.author.id)
             user_data = get_user_data(identity)
-            if user_data == "[BRICKED]":
-                pass
             name, realname = username(ctx.message.author, identity)
-        if user_data == "[BRICKED]":
-            out = """```_ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___ ___
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|_|                     |___|___|___|___|___|___|__
-_|___|___|___|___|___|    USER DATA HAS    |_|___|___|___|___|___|___|
-___|___|___|___|___|_|      BEEN FOUND     |___|___|___|___|___|___|__
-_|___|___|___|___|___|       BRICKED       |_|___|___|___|___|___|___|
-___|___|___|___|___|_|_____________________|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-_|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|
-___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|__
-Please contact Zako's administrator, Noobly Walker#4744```"""
-            message_return = finalize(ctx, 'profile', out, "Error: Found Bricked Profile")
-            await ctx.send(message_return)
-            return
         user_data.data['realname'] = realname
         if user_data.rank() > 7:
             rank_msg = str(rank[7]) + str(user_data.rank()-7)

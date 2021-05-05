@@ -170,44 +170,44 @@ def load_shop_items():
 
     ShopItem("rnk1").set_description("VIP")\
         .set_prereqs({"rank": 0})\
-        .set_money_cost({"Rupees": 500})\
-        .set_text_price(compress_rup_clov(500, 'rupee'))\
+        .set_money_cost({"Rupees": 50000})\
+        .set_text_price(compress_rup_clov(50000, 'rupee'))\
         .add_alt_id("VIP")\
         .set_action({"rank": 1})
     ShopItem("rnk2").set_description("VIP+")\
         .set_prereqs({"rank": 1})\
-        .set_money_cost({"Rupees": 5000})\
-        .set_text_price(compress_rup_clov(5000, 'rupee'))\
+        .set_money_cost({"Rupees": 500000})\
+        .set_text_price(compress_rup_clov(500000, 'rupee'))\
         .add_alt_id("VIP+")\
         .set_action({"rank": 2})
     ShopItem("rnk3").set_description("Premium")\
         .set_prereqs({"rank": 2})\
-        .set_money_cost({"Rupees": 50000})\
-        .set_text_price(compress_rup_clov(50000, 'rupee'))\
+        .set_money_cost({"Rupees": 5000000})\
+        .set_text_price(compress_rup_clov(5000000, 'rupee'))\
         .add_alt_id("Prem").add_alt_id("Premium")\
         .set_action({"rank": 3})
     ShopItem("rnk4").set_description("Elite")\
         .set_prereqs({"rank": 3})\
-        .set_money_cost({"Rupees": 500000})\
-        .set_text_price(compress_rup_clov(500000, 'rupee'))\
+        .set_money_cost({"Rupees": 50000000})\
+        .set_text_price(compress_rup_clov(50000000, 'rupee'))\
         .add_alt_id("Elit").add_alt_id("Elite")\
         .set_action({"rank": 4})
     ShopItem("rnk5").set_description("Supreme")\
         .set_prereqs({"rank": 4})\
-        .set_money_cost({"Rupees": 5000000})\
-        .set_text_price(compress_rup_clov(5000000, 'rupee'))\
+        .set_money_cost({"Rupees": 500000000})\
+        .set_text_price(compress_rup_clov(500000000, 'rupee'))\
         .add_alt_id("Supr").add_alt_id("Super").add_alt_id("Supreme")\
         .set_action({"rank": 5})
     ShopItem("rnk6").set_description("Ultimate")\
         .set_prereqs({"rank": 5})\
-        .set_money_cost({"Rupees": 50000000})\
-        .set_text_price(compress_rup_clov(50000000, 'rupee'))\
+        .set_money_cost({"Rupees": 5000000000})\
+        .set_text_price(compress_rup_clov(5000000000, 'rupee'))\
         .add_alt_id("Ultimate").add_alt_id("Ulti").add_alt_id("Ult")\
         .set_action({"rank": 6})
     ShopItem("rnk7").set_description("Ultimate+")\
         .set_prereqs({"rank": 6})\
-        .set_money_cost({"Rupees": 500000000})\
-        .set_text_price(compress_rup_clov(500000000, 'rupee'))\
+        .set_money_cost({"Rupees": 50000000000})\
+        .set_text_price(compress_rup_clov(50000000000, 'rupee'))\
         .add_alt_id("Ultimate+").add_alt_id("Ulti+").add_alt_id("Ult+")\
         .set_action({"rank": 7})
     

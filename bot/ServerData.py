@@ -17,7 +17,7 @@ class ServerData:
             'bad users': [0,1], #[alt, bot]
             'economy': True,
             'crafting': True,
-            'prefix': 'z!',
+            'prefix': 'z/',
             'potions': {
                 'debuff': True,
                 'tf': True,

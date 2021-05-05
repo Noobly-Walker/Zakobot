@@ -1,0 +1,2596 @@
+{
+    "OmniCredits": 0,
+    "Tickets": 0,
+    "achievements": {
+        "Level 1": 0,
+        "Level 10": 0,
+        "Level 100": 0,
+        "Level 120": 0,
+        "Level 140": 0,
+        "Level 15": 0,
+        "Level 160": 0,
+        "Level 180": 0,
+        "Level 2": 0,
+        "Level 20": 0,
+        "Level 200": 0,
+        "Level 225": 0,
+        "Level 25": 0,
+        "Level 250": 0,
+        "Level 30": 0,
+        "Level 35": 0,
+        "Level 40": 0,
+        "Level 45": 0,
+        "Level 5": 0,
+        "Level 50": 0,
+        "Level 60": 0,
+        "Level 70": 0,
+        "Level 80": 0,
+        "Level 90": 0,
+        "Prestige 1": 0,
+        "Prestige 10": 0,
+        "Prestige 12": 0,
+        "Prestige 15": 0,
+        "Prestige 2": 0,
+        "Prestige 20": 0,
+        "Prestige 3": 0,
+        "Prestige 4": 0,
+        "Prestige 5": 0,
+        "Prestige 6": 0,
+        "Prestige 8": 0,
+        "TNG Overcharge": 0
+    },
+    "adamant furnace": 0,
+    "auto adamant furnace": 0,
+    "auto blast furnace": 0,
+    "auto crafting": 0,
+    "auto furnace": 0,
+    "axe": -1,
+    "axe_handle": 0,
+    "axe_sharpener": 0,
+    "axe_weight": 0,
+    "axe_wriststrap": 0,
+    "badges": [
+        ""
+    ],
+    "base inventory size": 500,
+    "basic_money_multiplier": 1,
+    "beehives": 0,
+    "blast furnace": 0,
+    "bonus slots": 0,
+    "can adamantize": false,
+    "can blast": false,
+    "can drink e-drink": true,
+    "can dumpster dive": true,
+    "can rate bot": true,
+    "can see images": true,
+    "can smelt": false,
+    "can trade": 0,
+    "can_chop": true,
+    "can_mine": true,
+    "chests": {
+        "Adamantium Chest": 0,
+        "Aethersteel Chest": 25,
+        "Bronze Chest": 0,
+        "Carmeltazite Chest": 0,
+        "Chlorophyte Chest": 0,
+        "Copper Chest": 0,
+        "Diamond Chest": 0,
+        "Exasteel Chest": 0,
+        "Gigasteel Chest": 0,
+        "Hellstone Chest": 0,
+        "Iron Chest": 0,
+        "Luminite Chest": 0,
+        "Magnesium Carborundium Chest": 0,
+        "Majestic Chest": 0,
+        "Megasteel Chest": 0,
+        "Mithril Chest": 0,
+        "Petasteel Chest": 0,
+        "Steel Chest": 0,
+        "Stone Chest": 0,
+        "Terasteel Chest": 0,
+        "Titanium Carbide Chest": 0,
+        "Titanium Chest": 0,
+        "Uru Chest": 0,
+        "Vibranium Chest": 0,
+        "Wooden Chest": 0,
+        "Yottasteel Chest": 0,
+        "Zetasteel Chest": 0
+    },
+    "civ": {
+        "Adamant Furnace": 0,
+        "Auto Adamant Furnace": 0,
+        "Auto Blast Furnace": 0,
+        "Auto Furnace": 0,
+        "Auto Sawmill": 0,
+        "Beehive": 0,
+        "Blast Furnace": 0,
+        "Clover Field": 0,
+        "Cottage": 0,
+        "Driller Hut": 0,
+        "Furnace": 0,
+        "Hut": 0,
+        "Large Village": 0,
+        "Logging Hut": 0,
+        "Medium Farm": 0,
+        "Sawmill": 0,
+        "Silo": 0,
+        "Simple Hut": 0,
+        "Small Cottage": 0,
+        "Small Farm": 0,
+        "Small Village": 0,
+        "Well": 0
+    },
+    "clover field": 0,
+    "clovers": 0,
+    "coins": 36740,
+    "collections": [
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    ],
+    "color": 8388863,
+    "cottage": 0,
+    "count_iteration_upgrade": 0,
+    "count_upgrades": 0,
+    "counting highest exponent": 9,
+    "crate_purchases": 0,
+    "current count": [
+        6.510267583957012,
+        9
+    ],
+    "daily_shop_purchases": {},
+    "description": "OmniCore's bot boi, proudly serving OmniCore, BLZK, InfinityReverb, and Foxxo's RP Mansion since UNIX48!",
+    "developed land": 0,
+    "displayed badge": "",
+    "drill": 0,
+    "drill hut": 0,
+    "event_daily": false,
+    "events": {
+        "Discovered Lands": false,
+        "Famine": false,
+        "Lucky Day": false,
+        "Meteor Impact": false,
+        "Rounding Error": true,
+        "Spring Bloom": false
+    },
+    "exchange_cooldown": false,
+    "exp": 0,
+    "furnace": 0,
+    "has_taxed": false,
+    "haz meow": false,
+    "haz pet meow": false,
+    "hut": 0,
+    "hut_simple": 0,
+    "id": "405968021337669632",
+    "inflation": 10000,
+    "inventory": {
+        "Adamantium Block": [
+            0,
+            false,
+            false
+        ],
+        "Adamantium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Aetheric": [
+            0,
+            false,
+            false
+        ],
+        "Aetheric Block": [
+            0,
+            false,
+            false
+        ],
+        "Argon": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Argon": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Carbon Dioxide": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Gasoline": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Natural Gas": [
+            0,
+            false,
+            false
+        ],
+        "Barrel of Oil": [
+            0,
+            false,
+            false
+        ],
+        "Billon Block": [
+            0,
+            false
+        ],
+        "Billon Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Billon Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Black Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Blue Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Boron Block": [
+            0,
+            false,
+            false
+        ],
+        "Boron Ingot": [
+            147,
+            false,
+            false
+        ],
+        "Brass Block": [
+            0,
+            false,
+            false
+        ],
+        "Brass Ingot": [
+            10,
+            false,
+            false
+        ],
+        "Bread": [
+            17,
+            false,
+            false
+        ],
+        "Bronze Block": [
+            0,
+            false,
+            false
+        ],
+        "Bronze Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Brown Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Byzantium Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Californium Block": [
+            0,
+            false,
+            false
+        ],
+        "Californium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Californium Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Caltinum Block": [
+            0,
+            false
+        ],
+        "Caltinum Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Caltinum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Canister": [
+            0,
+            false,
+            false
+        ],
+        "Carbon Block": [
+            0,
+            false,
+            false
+        ],
+        "Carbon Dioxide": [
+            0,
+            false,
+            false
+        ],
+        "Carbon Ingot": [
+            79,
+            false,
+            false
+        ],
+        "Carmeltazite": [
+            171,
+            false,
+            false
+        ],
+        "Carmeltazite Block": [
+            11,
+            false,
+            false
+        ],
+        "Carmeltazite Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Cassiterite": [
+            771,
+            false,
+            false
+        ],
+        "Chlorophyte": [
+            0,
+            false,
+            false
+        ],
+        "Chlorophyte Block": [
+            0,
+            false,
+            false
+        ],
+        "Chlorophyte Ingot": [
+            40,
+            false,
+            false
+        ],
+        "Coal": [
+            454,
+            false,
+            false
+        ],
+        "Coal Block": [
+            25,
+            false,
+            false
+        ],
+        "Cobalt Block": [
+            0,
+            false,
+            false
+        ],
+        "Cobalt Ingot": [
+            155,
+            false,
+            false
+        ],
+        "Cobaltite": [
+            137,
+            false,
+            false
+        ],
+        "Common Crate": [
+            0,
+            false,
+            false
+        ],
+        "Copper Block": [
+            0,
+            false,
+            false
+        ],
+        "Copper Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Copper Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Curium Block": [
+            0,
+            false,
+            false
+        ],
+        "Curium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Curium Nugget": [
+            258,
+            false,
+            false
+        ],
+        "Cyan Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Dark Gold Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Diamond": [
+            438,
+            false,
+            false
+        ],
+        "Diamond Block": [
+            25,
+            false,
+            false
+        ],
+        "Diamond Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Electrum Block": [
+            0,
+            false
+        ],
+        "Electrum Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Electrum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Food": [
+            39743,
+            false,
+            false
+        ],
+        "Forest Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Franciscite": [
+            43,
+            false,
+            false
+        ],
+        "Fruit": [
+            12233,
+            false,
+            false
+        ],
+        "Fuchsia Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Galena": [
+            0,
+            false,
+            false
+        ],
+        "Gasoline": [
+            0,
+            false,
+            false
+        ],
+        "Gear": [
+            0,
+            false,
+            false
+        ],
+        "Gigasteel Block": [
+            0,
+            false,
+            false
+        ],
+        "Gigasteel Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Glass": [
+            0,
+            false,
+            false
+        ],
+        "Gold Block": [
+            0,
+            false,
+            false
+        ],
+        "Gold Ingot": [
+            52,
+            false,
+            false
+        ],
+        "Gold Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Gold Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Golden Fruit": [
+            0,
+            false,
+            false
+        ],
+        "Goldenrod Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Grain": [
+            77,
+            false,
+            false
+        ],
+        "Gray Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Green Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Hellstone Block": [
+            0,
+            false,
+            false
+        ],
+        "Hellstone Ingot": [
+            226,
+            false,
+            false
+        ],
+        "Hematite": [
+            1,
+            false,
+            false
+        ],
+        "Honey": [
+            1759,
+            false,
+            false
+        ],
+        "Iridium Block": [
+            0,
+            false,
+            false
+        ],
+        "Iridium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Iridium Nugget": [
+            112,
+            false,
+            false
+        ],
+        "Iron Block": [
+            0,
+            false,
+            false
+        ],
+        "Iron Ingot": [
+            23,
+            false,
+            false
+        ],
+        "Joules": [
+            0,
+            false,
+            false
+        ],
+        "Lead Block": [
+            0,
+            false,
+            false
+        ],
+        "Lead Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Lithium Block": [
+            0,
+            false,
+            false
+        ],
+        "Lithium Cobalt Oxide Block": [
+            0,
+            false,
+            false
+        ],
+        "Lithium Cobalt Oxide Ingot": [
+            426,
+            false,
+            false
+        ],
+        "Lithium Ingot": [
+            217,
+            false,
+            false
+        ],
+        "Luminite": [
+            0,
+            false,
+            false
+        ],
+        "Luminite Block": [
+            0,
+            false,
+            false
+        ],
+        "Luminite Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Magenta Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Magnesite": [
+            109,
+            false,
+            false
+        ],
+        "Magnesium Block": [
+            0,
+            false,
+            false
+        ],
+        "Magnesium Carborundium Block": [
+            0,
+            false,
+            false
+        ],
+        "Magnesium Carborundium Ingot": [
+            84,
+            false,
+            false
+        ],
+        "Magnesium Ingot": [
+            119,
+            false,
+            false
+        ],
+        "Majestic Block": [
+            0,
+            false,
+            false
+        ],
+        "Majestic Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Maroon Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Megasteel Block": [
+            0,
+            false,
+            false
+        ],
+        "Megasteel Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Mithril Block": [
+            0,
+            false,
+            false
+        ],
+        "Mithril Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Mobius Block": [
+            0,
+            false,
+            false
+        ],
+        "Mobius Fuel": [
+            0,
+            false,
+            false
+        ],
+        "Multiplier Crate": [
+            0,
+            false,
+            false
+        ],
+        "Native Gold": [
+            179,
+            false,
+            false
+        ],
+        "Native Platinum": [
+            48,
+            false,
+            false
+        ],
+        "Native Silver": [
+            157,
+            false,
+            false
+        ],
+        "Natural Gas": [
+            0,
+            false,
+            false
+        ],
+        "Navy Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Neon Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Nitrogen Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Nuts": [
+            11401,
+            false,
+            false
+        ],
+        "Obsidian": [
+            154,
+            false,
+            false
+        ],
+        "Obsidian Block": [
+            0,
+            false,
+            false
+        ],
+        "Oil": [
+            355,
+            false,
+            false
+        ],
+        "Orange Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Osmium Block": [
+            0,
+            false,
+            false
+        ],
+        "Osmium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Osmium Nugget": [
+            41,
+            false,
+            false
+        ],
+        "Oxygen Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Pegmatite": [
+            26,
+            false,
+            false
+        ],
+        "Phosphorus Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Pink Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Pipe": [
+            25,
+            false,
+            false
+        ],
+        "Platinum Block": [
+            0,
+            false,
+            false
+        ],
+        "Platinum Ingot": [
+            83,
+            false,
+            false
+        ],
+        "Platinum Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Plutonite": [
+            43,
+            false,
+            false
+        ],
+        "Plutonium Block": [
+            0,
+            false,
+            false
+        ],
+        "Plutonium Ingot": [
+            111,
+            false,
+            false
+        ],
+        "Plutonium Nugget": [
+            134,
+            false,
+            false
+        ],
+        "Potassium Block": [
+            0,
+            false,
+            false
+        ],
+        "Potassium Ingot": [
+            96,
+            false,
+            false
+        ],
+        "Potassium Nugget": [
+            160,
+            false,
+            false
+        ],
+        "Purple Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Quartz": [
+            273,
+            false,
+            false
+        ],
+        "Quartz Block": [
+            0,
+            false,
+            false
+        ],
+        "Quartz Glass": [
+            0,
+            false
+        ],
+        "Rare Crate": [
+            0,
+            false,
+            false
+        ],
+        "Red Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Ringwoodite": [
+            122,
+            false,
+            false
+        ],
+        "Ringwoodite Block": [
+            0,
+            false,
+            false
+        ],
+        "Rubidium Block": [
+            0,
+            false,
+            false
+        ],
+        "Rubidium Ingot": [
+            15,
+            false,
+            false
+        ],
+        "Rubidium Nugget": [
+            154,
+            false,
+            false
+        ],
+        "Rutile": [
+            0,
+            false,
+            false
+        ],
+        "Sandia Block": [
+            0,
+            false
+        ],
+        "Sandia Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Sandia Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Silicon Block": [
+            0,
+            false,
+            false
+        ],
+        "Silicon Ingot": [
+            174,
+            false,
+            false
+        ],
+        "Silicon Nugget": [
+            261,
+            false,
+            false
+        ],
+        "Silver Block": [
+            0,
+            false,
+            false
+        ],
+        "Silver Ingot": [
+            9,
+            false,
+            false
+        ],
+        "Silver Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Silver Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Sodium Block": [
+            0,
+            false,
+            false
+        ],
+        "Sodium Ingot": [
+            161,
+            false,
+            false
+        ],
+        "Sodium Nugget": [
+            210,
+            false,
+            false
+        ],
+        "Spacetime Compression Module": [
+            0,
+            false,
+            false
+        ],
+        "Sphalerite": [
+            735,
+            false,
+            false
+        ],
+        "Steel Block": [
+            0,
+            false,
+            false
+        ],
+        "Steel Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Stone": [
+            1074,
+            false,
+            false
+        ],
+        "Stone Brick": [
+            84,
+            false,
+            false
+        ],
+        "Stone Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Sulphur Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Syrup": [
+            23303,
+            false,
+            false
+        ],
+        "Tetrahedrite": [
+            23,
+            false,
+            false
+        ],
+        "Tin Block": [
+            0,
+            false,
+            false
+        ],
+        "Tin Ingot": [
+            274,
+            false,
+            false
+        ],
+        "Titanium Block": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Carbide Block": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Carbide Ingot": [
+            6,
+            false,
+            false
+        ],
+        "Titanium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Vanadate Block": [
+            0,
+            false,
+            false
+        ],
+        "Titanium Vanadate Ingot": [
+            8,
+            false,
+            false
+        ],
+        "Tourmaline": [
+            61,
+            false,
+            false
+        ],
+        "Tourmaline Block": [
+            0,
+            false,
+            false
+        ],
+        "Tourmaline Multiplier Rune": [
+            0,
+            false,
+            false
+        ],
+        "Treasure": [
+            0,
+            false,
+            false
+        ],
+        "Tungsten Block": [
+            0,
+            false,
+            false
+        ],
+        "Tungsten Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Uncommon Crate": [
+            0,
+            false,
+            false
+        ],
+        "Uranium Block": [
+            0,
+            false,
+            false
+        ],
+        "Uranium Ingot": [
+            1,
+            false,
+            false
+        ],
+        "Uranium Nugget": [
+            116,
+            false,
+            false
+        ],
+        "Uru Block": [
+            0,
+            false,
+            false
+        ],
+        "Uru Ingot": [
+            0,
+            false,
+            false
+        ],
+        "Vanadinite": [
+            97,
+            false,
+            false
+        ],
+        "Vanadium Block": [
+            0,
+            false,
+            false
+        ],
+        "Vanadium Ingot": [
+            27,
+            false,
+            false
+        ],
+        "Vibranium Block": [
+            0,
+            false,
+            false
+        ],
+        "Vibranium Ingot": [
+            0,
+            false,
+            false
+        ],
+        "White Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Wolframite": [
+            0,
+            false,
+            false
+        ],
+        "Wood Log": [
+            292415,
+            false,
+            false
+        ],
+        "Wood Plank": [
+            17495,
+            false,
+            false
+        ],
+        "Wood Stick": [
+            23344,
+            false,
+            false
+        ],
+        "Yellow Rupee Block": [
+            0,
+            false,
+            false
+        ],
+        "Zinc Block": [
+            4,
+            false,
+            false
+        ],
+        "Zinc Ingot": [
+            40,
+            false,
+            false
+        ]
+    },
+    "is_max_chests": false,
+    "land": 4,
+    "landfill": {
+        "Adamantium Block": 0,
+        "Adamantium Ingot": 1,
+        "Aetheric": 0,
+        "Aetheric Block": 0,
+        "Argon": 0,
+        "Barrel of Argon": 0,
+        "Barrel of Carbon Dioxide": 0,
+        "Barrel of Gasoline": 0,
+        "Barrel of Natural Gas": 0,
+        "Barrel of Oil": 0,
+        "Boron Block": 0,
+        "Boron Ingot": 0,
+        "Brass Block": 0,
+        "Brass Ingot": 0,
+        "Bread": 1,
+        "Bronze Block": 0,
+        "Bronze Ingot": 0,
+        "Californium Block": 0,
+        "Californium Ingot": 0,
+        "Canister": 0,
+        "Carbon Block": 0,
+        "Carbon Dioxide": 0,
+        "Carbon Ingot": 0,
+        "Carmeltazite": 6,
+        "Carmeltazite Block": 0,
+        "Cassiterite": 0,
+        "Chlorophyte": 10,
+        "Chlorophyte Block": 0,
+        "Chlorophyte Ingot": 0,
+        "Coal": 0,
+        "Coal Block": 0,
+        "Cobalt Block": 0,
+        "Cobalt Ingot": 0,
+        "Cobaltite": 0,
+        "Coke": 0,
+        "Coke Block": 0,
+        "Common Crate": 0,
+        "Copper Block": 0,
+        "Copper Ingot": 0,
+        "Curium Block": 0,
+        "Curium Ingot": 0,
+        "Curium Nugget": 0,
+        "Diamond": 0,
+        "Diamond Block": 0,
+        "Food": 0,
+        "Franciscite": 0,
+        "Fruit": 0,
+        "Gasoline": 0,
+        "Gear": 0,
+        "Gold Block": 0,
+        "Gold Ingot": 0,
+        "Golden Fruit": 0,
+        "Grain": 0,
+        "Hellstone Block": 0,
+        "Hellstone Ingot": 0,
+        "Hematite": 0,
+        "Honey": 1,
+        "Iridium Block": 0,
+        "Iridium Ingot": 0,
+        "Iridium Nugget": 0,
+        "Iron Block": 0,
+        "Iron Ingot": 4,
+        "Joules": 0,
+        "Lithium Block": 0,
+        "Lithium Cobalt Oxide Block": 0,
+        "Lithium Cobalt Oxide Ingot": 0,
+        "Lithium Ingot": 0,
+        "Luminite": 0,
+        "Luminite Block": 0,
+        "Luminite Ingot": 2,
+        "Magnesite": 0,
+        "Magnesium Block": 0,
+        "Magnesium Carborundium Block": 0,
+        "Magnesium Carborundium Ingot": 0,
+        "Magnesium Ingot": 0,
+        "Majestic Block": 0,
+        "Majestic Ingot": 1,
+        "Megasteel Block": 0,
+        "Megasteel Ingot": 0,
+        "Mithril Block": 0,
+        "Mithril Ingot": 2,
+        "Mobius Block": 0,
+        "Mobius Fuel": 0,
+        "Multiplier Crate": 0,
+        "Native Gold": 0,
+        "Native Platinum": 0,
+        "Native Silver": 0,
+        "Natural Gas": 0,
+        "Nuts": 35,
+        "Obsidian": 0,
+        "Oil": 0,
+        "Osmium Block": 0,
+        "Osmium Ingot": 0,
+        "Osmium Nugget": 0,
+        "Pegmatite": 0,
+        "Pipe": 0,
+        "Platinum Block": 0,
+        "Platinum Ingot": 0,
+        "Plutonite": 2,
+        "Plutonium Block": 0,
+        "Plutonium Ingot": 0,
+        "Plutonium Nugget": 0,
+        "Potassium Block": 0,
+        "Potassium Ingot": 0,
+        "Potassium Nugget": 0,
+        "Quartz": 0,
+        "Quartz Block": 0,
+        "Quartz Glass": 0,
+        "Rare Crate": 0,
+        "Ringwoodite": 0,
+        "Rubidium Block": 0,
+        "Rubidium Ingot": 0,
+        "Rubidium Nugget": 0,
+        "Rutile": 0,
+        "Silicon Block": 0,
+        "Silicon Ingot": 0,
+        "Silicon Nugget": 0,
+        "Silver Block": 0,
+        "Silver Ingot": 0,
+        "Sodium Block": 0,
+        "Sodium Ingot": 0,
+        "Sodium Nugget": 0,
+        "Spacetime Compression Module": 0,
+        "Sphalerite": 0,
+        "Steel Block": 0,
+        "Steel Ingot": 0,
+        "Stone": 0,
+        "Stone Brick": 0,
+        "Syrup": 26,
+        "Tetrahedrite": 0,
+        "Tin Block": 0,
+        "Tin Ingot": 0,
+        "Titanium Block": 0,
+        "Titanium Carbide Block": 0,
+        "Titanium Carbide Ingot": 0,
+        "Titanium Ingot": 0,
+        "Titanium Vanadate Block": 0,
+        "Titanium Vanadate Ingot": 0,
+        "Tourmaline": 0,
+        "Treasure": 0,
+        "Tungsten Block": 0,
+        "Tungsten Ingot": 0,
+        "Uncommon Crate": 0,
+        "Uranium Block": 0,
+        "Uranium Ingot": 0,
+        "Uranium Nugget": 0,
+        "Uru Block": 0,
+        "Uru Ingot": 0,
+        "Vanadinite": 0,
+        "Vanadium Block": 0,
+        "Vanadium Ingot": 0,
+        "Vibranium Block": 0,
+        "Vibranium Ingot": 1,
+        "Wolframite": 0,
+        "Wood Log": 5000,
+        "Wood Plank": 2922,
+        "Wood Stick": 108656,
+        "Zinc Block": 0,
+        "Zinc Ingot": 1
+    },
+    "large village": 0,
+    "lastreset_date": "2021-4-19",
+    "lastreset_time": "2021-4-19-1-19",
+    "logging hut": 0,
+    "lootbox_axe_multi": 1.0,
+    "lootbox_counting_multi": [
+        1.81,
+        1
+    ],
+    "lootbox_money_multi": 1,
+    "lootbox_pick_multi": 1.0,
+    "lv": 0,
+    "max_chests": 25,
+    "medium farm": 0,
+    "mute levelup": false,
+    "nickname": "",
+    "notation": 0,
+    "pick": -1,
+    "pick_handle": 0,
+    "pick_sharpener": 0,
+    "pick_weight": 0,
+    "pickaxe_wriststrap": 0,
+    "power": 100,
+    "prices": {
+        "": [
+            0,
+            10001,
+            1
+        ],
+        "Adamantium Block": [
+            2,
+            5000,
+            1
+        ],
+        "Adamantium Ingot": [
+            20,
+            500,
+            1
+        ],
+        "Aetheric": [
+            3520,
+            3,
+            1
+        ],
+        "Aetheric Block": [
+            44,
+            227,
+            1
+        ],
+        "Argon": [
+            0,
+            10001,
+            1
+        ],
+        "Barrel of Argon": [
+            0,
+            10001,
+            1
+        ],
+        "Barrel of Carbon Dioxide": [
+            0,
+            10001,
+            1
+        ],
+        "Barrel of Gasoline": [
+            0,
+            10001,
+            1
+        ],
+        "Barrel of Natural Gas": [
+            0,
+            10001,
+            1
+        ],
+        "Barrel of Oil": [
+            12,
+            833,
+            1
+        ],
+        "Billon Block": [
+            0,
+            10001,
+            1
+        ],
+        "Billon Ingot": [
+            54,
+            185,
+            1
+        ],
+        "Billon Multiplier Rune": [
+            4,
+            2500,
+            1
+        ],
+        "Black Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Blue Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Boron Block": [
+            8,
+            1250,
+            1
+        ],
+        "Boron Ingot": [
+            314,
+            32,
+            1
+        ],
+        "Brass Block": [
+            0,
+            10001,
+            1
+        ],
+        "Brass Ingot": [
+            220,
+            45,
+            1
+        ],
+        "Bread": [
+            136,
+            74,
+            1
+        ],
+        "Bronze Block": [
+            12,
+            833,
+            1
+        ],
+        "Bronze Ingot": [
+            72,
+            139,
+            1
+        ],
+        "Bronze Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Brown Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Byzantium Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Californium Block": [
+            50,
+            200,
+            1
+        ],
+        "Californium Ingot": [
+            64,
+            156,
+            1
+        ],
+        "Californium Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Caltinum Block": [
+            0,
+            10001,
+            1
+        ],
+        "Caltinum Ingot": [
+            0,
+            10001,
+            1
+        ],
+        "Caltinum Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Canister": [
+            0,
+            10001,
+            1
+        ],
+        "Carbon Block": [
+            4,
+            2500,
+            1
+        ],
+        "Carbon Dioxide": [
+            0,
+            10001,
+            1
+        ],
+        "Carbon Ingot": [
+            604,
+            17,
+            1
+        ],
+        "Carmeltazite": [
+            3598,
+            3,
+            1
+        ],
+        "Carmeltazite Block": [
+            108,
+            93,
+            1
+        ],
+        "Carmeltazite Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Cassiterite": [
+            3118,
+            3,
+            1
+        ],
+        "Chlorophyte": [
+            3050,
+            3,
+            1
+        ],
+        "Chlorophyte Block": [
+            48,
+            208,
+            1
+        ],
+        "Chlorophyte Ingot": [
+            760,
+            13,
+            1
+        ],
+        "Coal": [
+            2392,
+            4,
+            1
+        ],
+        "Coal Block": [
+            50,
+            200,
+            1
+        ],
+        "Cobalt Block": [
+            24,
+            417,
+            1
+        ],
+        "Cobalt Ingot": [
+            1276,
+            8,
+            1
+        ],
+        "Cobaltite": [
+            1158,
+            9,
+            1
+        ],
+        "Common Crate": [
+            0,
+            10001,
+            1
+        ],
+        "Copper Block": [
+            20,
+            500,
+            1
+        ],
+        "Copper Ingot": [
+            2094,
+            5,
+            1
+        ],
+        "Copper Multiplier Rune": [
+            16,
+            625,
+            1
+        ],
+        "Curium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Curium Ingot": [
+            18,
+            556,
+            1
+        ],
+        "Curium Nugget": [
+            720,
+            14,
+            1
+        ],
+        "Cyan Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Dark Gold Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Diamond": [
+            3302,
+            3,
+            1
+        ],
+        "Diamond Block": [
+            94,
+            106,
+            1
+        ],
+        "Diamond Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Electrum Block": [
+            0,
+            10001,
+            1
+        ],
+        "Electrum Ingot": [
+            0,
+            10001,
+            1
+        ],
+        "Electrum Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Food": [
+            103456,
+            1,
+            10
+        ],
+        "Forest Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Franciscite": [
+            1124,
+            9,
+            1
+        ],
+        "Fruit": [
+            38638,
+            1,
+            4
+        ],
+        "Fuchsia Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Galena": [
+            0,
+            10001,
+            1
+        ],
+        "Gasoline": [
+            0,
+            10001,
+            1
+        ],
+        "Gear": [
+            0,
+            10001,
+            1
+        ],
+        "Gigasteel Block": [
+            0,
+            10001,
+            1
+        ],
+        "Gigasteel Ingot": [
+            6,
+            1667,
+            1
+        ],
+        "Glass": [
+            0,
+            10001,
+            1
+        ],
+        "Gold Block": [
+            14,
+            714,
+            1
+        ],
+        "Gold Ingot": [
+            720,
+            14,
+            1
+        ],
+        "Gold Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Gold Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Golden Fruit": [
+            2,
+            5000,
+            1
+        ],
+        "Goldenrod Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Grain": [
+            4068,
+            2,
+            1
+        ],
+        "Gray Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Green Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Hellstone Block": [
+            18,
+            556,
+            1
+        ],
+        "Hellstone Ingot": [
+            718,
+            14,
+            1
+        ],
+        "Hematite": [
+            2730,
+            4,
+            1
+        ],
+        "Honey": [
+            7200,
+            1,
+            1
+        ],
+        "Iridium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Iridium Ingot": [
+            14,
+            714,
+            1
+        ],
+        "Iridium Nugget": [
+            256,
+            39,
+            1
+        ],
+        "Iron Block": [
+            52,
+            192,
+            1
+        ],
+        "Iron Ingot": [
+            2022,
+            5,
+            1
+        ],
+        "Joules": [
+            0,
+            10001,
+            1
+        ],
+        "Lead Block": [
+            0,
+            10001,
+            1
+        ],
+        "Lead Ingot": [
+            0,
+            10001,
+            1
+        ],
+        "Lithium Block": [
+            28,
+            357,
+            1
+        ],
+        "Lithium Cobalt Oxide Block": [
+            4,
+            2500,
+            1
+        ],
+        "Lithium Cobalt Oxide Ingot": [
+            864,
+            12,
+            1
+        ],
+        "Lithium Ingot": [
+            1546,
+            6,
+            1
+        ],
+        "Luminite": [
+            46,
+            217,
+            1
+        ],
+        "Luminite Block": [
+            0,
+            10001,
+            1
+        ],
+        "Luminite Ingot": [
+            140,
+            71,
+            1
+        ],
+        "Magenta Rupee Block": [
+            2,
+            5000,
+            1
+        ],
+        "Magnesite": [
+            1242,
+            8,
+            1
+        ],
+        "Magnesium Block": [
+            28,
+            357,
+            1
+        ],
+        "Magnesium Carborundium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Magnesium Carborundium Ingot": [
+            216,
+            46,
+            1
+        ],
+        "Magnesium Carborundium Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Magnesium Ingot": [
+            1346,
+            7,
+            1
+        ],
+        "Majestic Block": [
+            4,
+            2500,
+            1
+        ],
+        "Majestic Ingot": [
+            66,
+            152,
+            1
+        ],
+        "Majestic Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Maroon Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Megasteel Block": [
+            2,
+            5000,
+            1
+        ],
+        "Megasteel Ingot": [
+            10,
+            1000,
+            1
+        ],
+        "Mithril Block": [
+            8,
+            1250,
+            1
+        ],
+        "Mithril Ingot": [
+            66,
+            152,
+            1
+        ],
+        "Mithril Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Mobius Block": [
+            2,
+            5000,
+            1
+        ],
+        "Mobius Fuel": [
+            400,
+            25,
+            1
+        ],
+        "Multiplier Crate": [
+            0,
+            10001,
+            1
+        ],
+        "Native Gold": [
+            608,
+            16,
+            1
+        ],
+        "Native Platinum": [
+            1096,
+            9,
+            1
+        ],
+        "Native Silver": [
+            482,
+            21,
+            1
+        ],
+        "Natural Gas": [
+            0,
+            10001,
+            1
+        ],
+        "Navy Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Neon Ingot": [
+            4,
+            2500,
+            1
+        ],
+        "Nitrogen Ingot": [
+            0,
+            10001,
+            1
+        ],
+        "Nuts": [
+            68398,
+            1,
+            7
+        ],
+        "Obsidian": [
+            2180,
+            5,
+            1
+        ],
+        "Obsidian Block": [
+            4,
+            2500,
+            1
+        ],
+        "Oil": [
+            1406,
+            7,
+            1
+        ],
+        "Orange Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Osmium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Osmium Ingot": [
+            8,
+            1250,
+            1
+        ],
+        "Osmium Nugget": [
+            118,
+            85,
+            1
+        ],
+        "Oxygen Ingot": [
+            24,
+            417,
+            1
+        ],
+        "Pegmatite": [
+            1278,
+            8,
+            1
+        ],
+        "Phosphorus Ingot": [
+            26,
+            385,
+            1
+        ],
+        "Pink Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Pipe": [
+            50,
+            200,
+            1
+        ],
+        "Platinum Block": [
+            0,
+            10001,
+            1
+        ],
+        "Platinum Ingot": [
+            332,
+            30,
+            1
+        ],
+        "Platinum Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Plutonite": [
+            1046,
+            10,
+            1
+        ],
+        "Plutonium Block": [
+            4,
+            2500,
+            1
+        ],
+        "Plutonium Ingot": [
+            264,
+            38,
+            1
+        ],
+        "Plutonium Nugget": [
+            370,
+            27,
+            1
+        ],
+        "Potassium Block": [
+            4,
+            2500,
+            1
+        ],
+        "Potassium Ingot": [
+            536,
+            19,
+            1
+        ],
+        "Potassium Nugget": [
+            354,
+            28,
+            1
+        ],
+        "Purple Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Quartz": [
+            4658,
+            2,
+            1
+        ],
+        "Quartz Block": [
+            20,
+            500,
+            1
+        ],
+        "Quartz Glass": [
+            0,
+            10001,
+            1
+        ],
+        "Rare Crate": [
+            0,
+            10001,
+            1
+        ],
+        "Red Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Ringwoodite": [
+            2320,
+            4,
+            1
+        ],
+        "Ringwoodite Block": [
+            4,
+            2500,
+            1
+        ],
+        "Rubidium Block": [
+            4,
+            2500,
+            1
+        ],
+        "Rubidium Ingot": [
+            36,
+            278,
+            1
+        ],
+        "Rubidium Nugget": [
+            1406,
+            7,
+            1
+        ],
+        "Rutile": [
+            1338,
+            7,
+            1
+        ],
+        "Sandia Block": [
+            0,
+            10001,
+            1
+        ],
+        "Sandia Ingot": [
+            0,
+            10001,
+            1
+        ],
+        "Sandia Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Silicon Block": [
+            44,
+            227,
+            1
+        ],
+        "Silicon Ingot": [
+            572,
+            17,
+            1
+        ],
+        "Silicon Nugget": [
+            542,
+            18,
+            1
+        ],
+        "Silver Block": [
+            8,
+            1250,
+            1
+        ],
+        "Silver Ingot": [
+            378,
+            26,
+            1
+        ],
+        "Silver Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Silver Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Sodium Block": [
+            8,
+            1250,
+            1
+        ],
+        "Sodium Ingot": [
+            898,
+            11,
+            1
+        ],
+        "Sodium Nugget": [
+            450,
+            22,
+            1
+        ],
+        "Spacetime Compression Module": [
+            0,
+            10001,
+            1
+        ],
+        "Sphalerite": [
+            2932,
+            3,
+            1
+        ],
+        "Steel Block": [
+            6,
+            1667,
+            1
+        ],
+        "Steel Ingot": [
+            92,
+            109,
+            1
+        ],
+        "Steel Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Stone": [
+            96152,
+            1,
+            10
+        ],
+        "Stone Brick": [
+            14876,
+            1,
+            1
+        ],
+        "Stone Multiplier Rune": [
+            44,
+            227,
+            1
+        ],
+        "Sulphur Ingot": [
+            14,
+            714,
+            1
+        ],
+        "Syrup": [
+            94762,
+            1,
+            9
+        ],
+        "Tetrahedrite": [
+            1790,
+            6,
+            1
+        ],
+        "Tin Block": [
+            42,
+            238,
+            1
+        ],
+        "Tin Ingot": [
+            2000,
+            5,
+            1
+        ],
+        "Titanium Block": [
+            8,
+            1250,
+            1
+        ],
+        "Titanium Carbide Block": [
+            0,
+            10001,
+            1
+        ],
+        "Titanium Carbide Ingot": [
+            78,
+            128,
+            1
+        ],
+        "Titanium Carbide Mix": [
+            0,
+            10001,
+            1
+        ],
+        "Titanium Ingot": [
+            118,
+            85,
+            1
+        ],
+        "Titanium Vanadate Block": [
+            0,
+            10001,
+            1
+        ],
+        "Titanium Vanadate Ingot": [
+            52,
+            192,
+            1
+        ],
+        "Tourmaline": [
+            1218,
+            8,
+            1
+        ],
+        "Tourmaline Block": [
+            4,
+            2500,
+            1
+        ],
+        "Tourmaline Multiplier Rune": [
+            0,
+            10001,
+            1
+        ],
+        "Treasure": [
+            134,
+            75,
+            1
+        ],
+        "Tungsten Block": [
+            4,
+            2500,
+            1
+        ],
+        "Tungsten Ingot": [
+            120,
+            83,
+            1
+        ],
+        "Uncommon Crate": [
+            0,
+            10001,
+            1
+        ],
+        "Uranium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Uranium Ingot": [
+            2,
+            5000,
+            1
+        ],
+        "Uranium Nugget": [
+            260,
+            38,
+            1
+        ],
+        "Uru Block": [
+            0,
+            10001,
+            1
+        ],
+        "Uru Ingot": [
+            6,
+            1667,
+            1
+        ],
+        "Vanadinite": [
+            3470,
+            3,
+            1
+        ],
+        "Vanadium Block": [
+            44,
+            227,
+            1
+        ],
+        "Vanadium Ingot": [
+            514,
+            19,
+            1
+        ],
+        "Vibranium Block": [
+            0,
+            10001,
+            1
+        ],
+        "Vibranium Ingot": [
+            18,
+            556,
+            1
+        ],
+        "White Rupee Block": [
+            8,
+            1250,
+            1
+        ],
+        "Wolframite": [
+            628,
+            16,
+            1
+        ],
+        "Wood Log": [
+            665474,
+            1,
+            67
+        ],
+        "Wood Plank": [
+            62458,
+            1,
+            6
+        ],
+        "Wood Stick": [
+            68986,
+            1,
+            7
+        ],
+        "Yellow Rupee Block": [
+            0,
+            10001,
+            1
+        ],
+        "Zinc Block": [
+            74,
+            135,
+            1
+        ],
+        "Zinc Ingot": [
+            1758,
+            6,
+            1
+        ]
+    },
+    "profile image": "",
+    "prst": 0,
+    "random event": "Rounding Error",
+    "rank": 1,
+    "rating": [
+        125,
+        15
+    ],
+    "realname": "Zako Zaun",
+    "report ticket": 42,
+    "rupees": 479800,
+    "sawmill": 0,
+    "silo": 0,
+    "small farm": 0,
+    "small village": 0,
+    "small_cottage": 0,
+    "storage shed": 10,
+    "ticketlib": {},
+    "times to count": 30,
+    "wallet": {
+        "Clovers": 14001,
+        "Kups": 183000,
+        "Land": 0,
+        "OmniCoreCredits": 0,
+        "Rupees": 1920
+    },
+    "zfiles": {
+        "0": "",
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "6": "",
+        "7": "",
+        "8": "",
+        "9": ""
+    }
+}

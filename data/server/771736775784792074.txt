@@ -1,0 +1,39 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "counting": true,
+    "crafting": true,
+    "current count": [
+        2.3351714999999995,
+        5
+    ],
+    "dedicated_portal": -1,
+    "dice": true,
+    "economy": true,
+    "id": "771736775784792074",
+    "levels": true,
+    "lv_msg": true,
+    "name": "Snipe's Range",
+    "network data": {
+        "acronym": "",
+        "allow ads": false,
+        "category": "General",
+        "description": "",
+        "server link": ""
+    },
+    "portal": true,
+    "potion": true,
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    },
+    "prefix": "z!",
+    "show hints": true,
+    "users": 0
+}

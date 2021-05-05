@@ -1,0 +1,22 @@
+{
+    "bad users": [
+        0,
+        1
+    ],
+    "crafting": true,
+    "dice": true,
+    "economy": true,
+    "id": "431563561148612619",
+    "levels": true,
+    "lv_msg": true,
+    "name": "Foxxo's Fantastical Fun Role-play Mansion",
+    "potions": {
+        "debuff": true,
+        "fetish": false,
+        "gore": false,
+        "nsfw": false,
+        "tf": true,
+        "vore": false
+    },
+    "prefix": "z!"
+}

@@ -1,5 +1,5 @@
 from datetime import *
-from bot.ToolUtil import *
+from bot.util.ToolUtil import *
 from bot import ResourceParse
 from bot import NumberCronch
 import random
@@ -718,7 +718,7 @@ class UserData:
                     items.append(item)
 
     except Exception:
-        with open('E:\\B\\zako\\data\\item_list.txt', 'r') as file:
+        with open('C:\\B\\zako\\data\\item_list.txt', 'r') as file:
             itemlist = json.loads(file.read())
             for item in itemlist:
                 if item in items:
@@ -758,12 +758,7 @@ class UserData:
         return count
 
     def testfor_max_chests(self):
-        count = self.count_chests()
-        if count >= self.max_chests():
-            self.is_max_chests = True
-        else:
-            self.is_max_chests = False
-        return self.is_max_chests
+        return self.count_chests() >= self.max_chests()
 
     def chests_str(self):
         chests = self.chests()

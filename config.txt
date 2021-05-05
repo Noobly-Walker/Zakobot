@@ -1,0 +1,14 @@
+{
+    "dev_info": {
+        "developer_mode": "0",
+        "version": "\u03b12.17.0"
+    },
+    "bot_info": {
+        "desc": "OmniCore's bot boi v<update>! The third iteration of the Trans-Core Pipeline network is live!",
+        "prefix": "z!"
+    },
+    "devmode": {
+        "0": "0",
+        "1": "1"
+    }
+}
