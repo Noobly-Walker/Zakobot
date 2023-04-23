@@ -1,0 +1,8 @@
+{
+	"packS1": {
+		"price": 500,
+		"currency": "Args",
+		"description": "10 element-themed cards",
+		"payload": "global outFile, outText;quantity = 1;pack = generatePack();cards = AddCards(author, pack);getPack(pack);outText = 'Here\u005C's your cards! They went into your z/backpack.';outFile = '.\u005C\u005Ctemp\\pack.png'"
+	}
+}
