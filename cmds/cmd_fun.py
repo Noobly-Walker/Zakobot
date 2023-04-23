@@ -13,11 +13,12 @@ from util.GuildDataHandler import *
 from util.ColorUtil import rectColor
 from util.cmdutil import cmdutil
 text = cmdutil()
+PATH = load(".\\locals\\%PATH%")
 
-def _cmdl_():
-    return ["count", "minesweeper", "farkle"]
+def commandList():
+    return [count, minesweeper, farkle]
 
-def _catdesc_():
+def categoryDescription():
     return "Games and other fun things."
 
 @commands.command(aliases=['cnt', 'counting'])
@@ -27,28 +28,29 @@ Every power of 10, the counting multiplier increases!
 Algorithm: increment = 2^count.exponent×(1+(userLevel/4))"""
     guildSettings = GuilddataGetFile(ctx.guild, "settings.json")
     if guildSettings["Counting"]:
-        pathfind(".\\data")
-        if exists(".\\data\\counting.txt"): globalCount = expol(load(".\\data\\counting.txt"))
-        else: globalCount = expol([0.0,0])
+        pathfind(PATH)
+        if exists(f"{PATH}\\counting.txt"): globalCount = expol(load("counting.txt", PATH))
+        else: globalCount = expol("0E0")
         pathfind(f".\\guilddata\\{ctx.guild.id}\\")
         personalCount = expol(PlayerdataGetFileIndex(ctx.author, "stats.json", "Counting Done"))
         guildCount = expol(GuilddataGetFileIndex(ctx.guild, "stats.json", "Counting Done"))
         
         userGlobalLevel = PlayerdataGetFileIndex(ctx.author, "level.json", "Level")
-        userGuildLevel = GuilddataGetFile(ctx.guild, "levels.json")[str(ctx.author.id)]["Level"]
-        globalIncrement = expol(2)**expol(globalCount.exponent)*(1+(userGlobalLevel/4))
+        userGuildLevel = GuilddataGetFile(ctx.guild, "levels.json")[str(ctx.author.id)]["Level"]        
+        userMultis = PlayerdataGetFile(ctx.author, "multis.json")
+        globalIncrement = expol(2)**expol(globalCount.exponent)*(1+(userGlobalLevel/4))*(expol(userMultis['ShopCountingMulti']).log10()+1)
         if guildSettings["GlobalLevel"]: guildIncrement = globalIncrement
-        else: guildIncrement = expol(2)**expol(globalCount.exponent)*(1+(userGuildLevel/4))
+        else: guildIncrement = expol(2)**expol(globalCount.exponent)*(1+(userGuildLevel/4))*(expol(userMultis['ShopCountingMulti']).log10()+1)
         
         
         newGlobalCount = globalCount + globalIncrement
         newGuildCount = guildCount + guildIncrement
         newPersonalCount = personalCount + globalIncrement
         
-        save(str(list(newGlobalCount)),"counting.txt",".\\data")
-        save(str(list(newGuildCount)),"counting.txt",f".\\guilddata\\{ctx.guild.id}")
-        GuilddataSetFileIndex(ctx.guild, "stats.json", "Counting Done", list(newGuildCount))
-        PlayerdataSetFileIndex(ctx.author, "stats.json", "Counting Done", list(newPersonalCount))
+        save(str(newGlobalCount),"counting.txt",PATH)
+        save(str(newGuildCount),"counting.txt",f".\\guilddata\\{ctx.guild.id}")
+        GuilddataSetFileIndex(ctx.guild, "stats.json", "Counting Done", str(newGuildCount))
+        PlayerdataSetFileIndex(ctx.author, "stats.json", "Counting Done", str(newPersonalCount))
 
         notation = GetNotationCode(ctx.author)
 
@@ -179,9 +181,8 @@ Values:
   1,2,3,4,5,6 - 2,500pts"""
 
     def d6():
-        return randrange(6)+1
+        return random.randrange(6)+1
 
-    mult = cost/750
     dice = []
     farkled = False
     score = 0

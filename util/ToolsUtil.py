@@ -40,7 +40,7 @@ def parenthesisFinder(funct:list, index, direction, symbols="()"):
 def calculatorFunct(user, funct:str):
     funct = list(funct) #converts tuple to string, then to list
     derivedFunct = []
-    expectedStrings = ["//","**","floor","fdiv","ceil","ceiling","cdiv","log","ln","ld","mod","exp","pi","phi","tau"]
+    expectedStrings = ["***","^^","//","**","floor","fdiv","ceil","ceiling","cdiv","round","rnd","root","sqrt","log","ln","ld","tet","mod","exp","pi","phi","tau"]
     for index in range(len(funct)): #splits string up for recombination into ints
         try:
             if funct[index] in "-0123456789.": #combining numbers
@@ -77,10 +77,28 @@ def calculatorFunct(user, funct:str):
                 if derivedFunct[-1] in ["floor","fdiv"]: derivedFunct[-1] = "//"
                 if derivedFunct[-1] == "mod": derivedFunct[-1] = "%"
                 #filtering out constants
-                if derivedFunct[-1] in ["phi","φ","ϕ"]: derivedFunct[-1] = "expol(1.61803399)"
-                if derivedFunct[-1] in ["pi","π"]: derivedFunct[-1] = "expol(3.14159265)"
-                if derivedFunct[-1] in ["tau","τ"]: derivedFunct[-1] = "expol(6.28318530)"
+                if derivedFunct[-1] in ["phi","φ","ϕ","Φ"]: derivedFunct[-1] = "expol(1.61803399)"
+                if derivedFunct[-1] in ["pi","π","Π"]: derivedFunct[-1] = "expol(3.14159265)"
+                if derivedFunct[-1] in ["tau","τ","Τ","T"]: derivedFunct[-1] = "expol(6.28318530)"
                 if derivedFunct[-1] == "e": derivedFunct[-1] = "expol(2.71828183)"
+                if derivedFunct[-1] == "⅒": derivedFunct[-1] = "expol(0.1)"
+                if derivedFunct[-1] == "⅑": derivedFunct[-1] = f"expol({1/9})"
+                if derivedFunct[-1] == "⅛": derivedFunct[-1] = "expol(0.125)"
+                if derivedFunct[-1] == "⅐": derivedFunct[-1] = f"expol({1/7})"
+                if derivedFunct[-1] == "⅙": derivedFunct[-1] = f"expol({1/6})"
+                if derivedFunct[-1] == "⅕": derivedFunct[-1] = "expol(0.2)"
+                if derivedFunct[-1] == "¼": derivedFunct[-1] = "expol(0.25)"
+                if derivedFunct[-1] == "⅓": derivedFunct[-1] = f"expol({1/3})"
+                if derivedFunct[-1] == "⅜": derivedFunct[-1] = "expol(0.375)"
+                if derivedFunct[-1] == "⅖": derivedFunct[-1] = "expol(0.4)"
+                if derivedFunct[-1] == "½": derivedFunct[-1] = "expol(0.5)"
+                if derivedFunct[-1] == "⅗": derivedFunct[-1] = "expol(0.6)"
+                if derivedFunct[-1] == "⅝": derivedFunct[-1] = "expol(0.625)"
+                if derivedFunct[-1] == "⅔": derivedFunct[-1] = f"expol({2/3})"
+                if derivedFunct[-1] == "¾": derivedFunct[-1] = "expol(0.75)"
+                if derivedFunct[-1] == "⅘": derivedFunct[-1] = "expol(0.8)"
+                if derivedFunct[-1] == "⅚": derivedFunct[-1] = f"expol({5/6})"
+                if derivedFunct[-1] == "⅞": derivedFunct[-1] = "expol(0.875)"
         except IndexError: break #reached end of list before expected
     for index in range(len(derivedFunct), -1, -1): #second pass, to apply functions that must look ahead
         try:
@@ -119,9 +137,39 @@ def calculatorFunct(user, funct:str):
                     derivedFunct.insert(index+1, "expol(1000)")
                     if derivedFunct[index+2] == "*": derivedFunct[index+2] = '**'
                     else: derivedFunct.insert(index+2, '**')
+            elif derivedFunct[index] in ["√", "root", "sqrt"]:
+                if derivedFunct[index+1] == "(": #exponent must come after parenthesis
+                    newIndex = parenthesisFinder(derivedFunct, index+1, 1)-1
+                else: newIndex = index
+                derivedFunct.insert(newIndex+2, "**")
+                derivedFunct.insert(newIndex+3, "(")
+                derivedFunct.insert(newIndex+4, "expol(1)")
+                derivedFunct.insert(newIndex+5, "/")
+                if derivedFunct[index] == "sqrt":
+                    derivedFunct.insert(newIndex+6, "expol(2)")
+                    derivedFunct.insert(newIndex+7, ")")
+                    del derivedFunct[index]
+                elif "expol" in derivedFunct[index-1]: #root found, move it
+                    derivedFunct.insert(newIndex+6, derivedFunct[index-1])
+                    derivedFunct.insert(newIndex+7, ")")
+                    del derivedFunct[index-1]
+                    del derivedFunct[index-1]
+                elif derivedFunct[index-1] == ")": #root found, but it's in parenthesis
+                    prevIndex = parenthesisFinder(derivedFunct, index-1, -1)
+                    derivedFunct = derivedFunct[0:prevIndex] + derivedFunct[index+1:newIndex+6] + derivedFunct[prevIndex:index] + [")"] + derivedFunct[newIndex+6:]
+                else: #no root given, assume square root
+                    derivedFunct.insert(index+6, "expol(2)")
+                    derivedFunct.insert(index+7, ")")
+                    del derivedFunct[index]
+            elif derivedFunct[index] in ["tet", "***", "^^"]:
+                derivedFunct[index] = ".tet("
+                derivedFunct.insert(index+2, ")")
+            elif derivedFunct[index] in ["ceil", "ceiling", "cdiv"]:
+                derivedFunct[index] = ".ceildiv("
+                derivedFunct.insert(index+2, ")")
+            elif derivedFunct[index] in ["rnd", "round"]:
+                derivedFunct[index] = ".round("
+                derivedFunct.insert(index+2, ")")
         except IndexError: continue #list suddenly shrank, but the index will return to the list soon
-    try:
-        funct = eval("".join(derivedFunct))
-        return f"{funct:{GetNotationCode(user)}}"
-    except:
-        return traceback.format_exc().splitlines()[-1]
+    funct = eval("".join(derivedFunct))
+    return f"{funct:{GetNotationCode(user)}}"

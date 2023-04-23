@@ -11,13 +11,15 @@ from util.UsernameToUUID import UsernameToUUID
 from util.PlayerDataHandler import *
 from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
+from util.CardUtil import *
 text = cmdutil()
+PATH = load(".\\locals\\%PATH%")
 
-def _cmdl_():
-    return ["source", "zblacklist", "zwhitelist", "linkacct", "resetval",
-            "midvillaswhitelist", "lvtoexp", "reloadall", "raiseerror"]
+def commandList():
+    return [source, zblacklist, zwhitelist, linkacct, resetval,
+            lvtoexp, reloadall, raiseerror, getcard]
 
-def _catdesc_():
+def categoryDescription():
     return "Debug commands."
 
 developers = ["248641004993773569", #Noobly
@@ -41,16 +43,25 @@ async def dbgArbExec(ctx, *, code):
     else: await ctx.send('You do not have permission to perform this action.')
 
 @commands.command()
+async def getcard(ctx, ID=None):
+    """Dev Command: Returns a random card, or a specified card if ID is given."""
+    if str(ctx.author.id) not in developers:
+        await ctx.send('You do not have permission to perform this action.'); return
+    getCard(generateCard(ID))
+    await ctx.send(file=discord.File(".\\temp\\card.png"))
+    
+
+@commands.command()
 async def zblacklist(ctx, userid):
     """Dev Command: Bans someone from using Zako."""
     if str(ctx.author.id) not in developers:
         await ctx.send('You do not have permission to perform this action.'); return
-    if not exists(f".\\data\\zakoBlacklist.json"):
+    if not exists(f"{PATH}\\zakoBlacklist.json"):
         blacklist = []
-        text.warn("File .\\data\\zakoBlacklist.json not found.")
-    else: blacklist = loadJSON("zakoBlacklist.json", "data")
+        text.warn(f"File {PATH}\\zakoBlacklist.json not found.")
+    else: blacklist = loadJSON("zakoBlacklist.json", PATH)
     blacklist.append(int(userid))
-    saveJSON(blacklist, "zakoBlacklist.json", "data")
+    saveJSON(blacklist, "zakoBlacklist.json", PATH)
     await ctx.send(f"Blacklisted {userid}. :thumbsup:")
 
 @commands.command()
@@ -58,12 +69,12 @@ async def zwhitelist(ctx, userid):
     """Dev Command: Unbans someone from using Zako."""
     if str(ctx.author.id) not in developers:
         await ctx.send('You do not have permission to perform this action.'); return
-    if not exists(f".\\data\\zakoBlacklist.json"):
+    if not exists(f"{PATH}\\zakoBlacklist.json"):
         blacklist = []
-        text.warn("File .\\data\\zakoBlacklist.json not found.")
-    else: blacklist = loadJSON("zakoBlacklist.json", "data")
+        text.warn(f"File {PATH}\\zakoBlacklist.json not found.")
+    else: blacklist = loadJSON("zakoBlacklist.json", PATH)
     blacklist.remove(int(userid))
-    saveJSON(blacklist, "zakoBlacklist.json", "data")
+    saveJSON(blacklist, "zakoBlacklist.json", PATH)
     await ctx.send(f"Whitelisted {userid}. :thumbsup:")
 
 @commands.command()
@@ -71,12 +82,12 @@ async def linkacct(ctx, main, alt):
     """Dev Command: Links alt accounts."""
     if str(ctx.author.id) not in developers:
         await ctx.send('You do not have permission to perform this action.'); return
-    if not exists(f".\\data\\playerAltDB.json"):
+    if not exists(f"{PATH}\\playerAltDB.json"):
         alts = {}
-        text.warn("File .\\data\\playerAltDB.json not found.")
-    else: alts = loadJSON("playerAltDB.json", "data")
+        text.warn(f"File {PATH}\\playerAltDB.json not found.")
+    else: alts = loadJSON("playerAltDB.json", PATH)
     alts[alt] = main
-    saveJSON(alts, "playerAltDB.json", "data")
+    saveJSON(alts, "playerAltDB.json", PATH)
     await ctx.send(f"Linked {alt} to {main}. :thumbsup:")
 
 @commands.command()
@@ -136,39 +147,6 @@ async def raiseerror(ctx, *, errortext):
         await ctx.send('You do not have permission to perform this action.'); return
     raise Exception(errortext)
 
-@commands.command(aliases=["mvwl", "mvwhitelist"])
-async def midvillaswhitelist(ctx, mcUsername, discordID):
-    """MidVillas Staff Command: Whitelists users to both MidVillas servers, and links their Minecraft accounts to Zako."""
-    if str(ctx.author.id) not in midvillasStaff:
-        await ctx.send('You do not have permission to perform this action.'); return
-        
-    #get player uuid
-    converter = UsernameToUUID(mcUsername)
-    uuid = converter.get_uuid()
-    if uuid is None: await ctx.send("No UUID was returned."); return
-    mcPlayer = {"uuid": uuid, "name": mcUsername}
-
-    #whitelist to alpha
-    whitelistA = loadJSON("whitelist.json", "E:\\Mid Villas Server Old")
-    whitelistA.append(mcPlayer)
-    saveJSON(whitelistA, "whitelist.json", "E:\\Mid Villas Server")
-    await ctx.send(f"Whitelisted {mcUsername} with UUID {uuid} to Mid Villas Alpha!")
-
-    #whitelist to beta
-    whitelistB = loadJSON("whitelist.json", "E:\\Mid Villas Server")
-    whitelistB.append(mcPlayer)
-    saveJSON(whitelistB, "whitelist.json", "E:\\Mid Villas Server")
-    await ctx.send(f"Whitelisted {mcUsername} with UUID {uuid} to Mid Villas Beta!")
-
-    #link accounts
-    if not exists(f".\\data\\mcUserConvert.json"):
-        mcUserDict = {}
-        text.warn("File .\\data\\mcUserConvert.json not found.")
-    else: mcUserDict = loadJSON("mcUserConvert.json", "data")
-    mcUserDict[mcUsername] = discordID
-    saveJSON(mcUserDict, "mcUserConvert.json", "data")
-    await ctx.send("Linked minecraft account! :thumbsup:")
-
 @commands.command() #I hope you guys found this tool useful.
 async def source(ctx, filepath="zakobot.py"):
     """Returns chunks of Zako's source code.
@@ -187,17 +165,23 @@ Pathing:
         cmd_tools.py
     util\\
         BackupManager.py
+        CardUtil.py
+        cmdutil.py
+        coinStacker.py
         ColorUtil.py
         DataHandlerUtil.py
         expol.py
         GuildDataHandler.py
         InventoryHandler.py
+        MapGenerator.py
         PlayerDataHandler.py
         PotionRandomizer.py
         SLHandle.py
         TextFormat.py
         TimeUtil.py
+        ToolsUtil.py
         UsernameToUUID.py
+        zakoctx.py
         """
     if str(ctx.author.id) not in developers:
         await ctx.send('You do not have permission to perform this action.'); return

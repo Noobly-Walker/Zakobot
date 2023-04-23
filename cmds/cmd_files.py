@@ -10,11 +10,12 @@ from util.TextFormat import *
 from cmds.cmd_tools import parenthesisFinder, calculatorFunct
 from util.cmdutil import cmdutil
 text = cmdutil()
+PATH = load(".\\locals\\%PATH%")
 
-def _cmdl_():
-    return ["file"]
+def commandList():
+    return [file]
 
-def _catdesc_():
+def categoryDescription():
     return "Commands involving information storage."
 
         
@@ -23,17 +24,17 @@ async def file(ctx, mode, filename="", *, texts=""):
     """A file management system! Take notes, save funny messages, and more!
 
 Modes:
-z/file read <filename> - Returns the content of the file, if allowed.
-z/file write <filename> <permission> <texts> - Writes to a file, if allowed.
+file read <filename> - Returns the content of the file, if allowed.
+file write <filename> <permission> <texts> - Writes to a file, if allowed.
     File names cannot be larger than 50 characters.
     Files cannot be larger than 10,000 characters.
     May overwrite a file that already exists.
     In case of overwrite, permission need not be defined.
-z/file append <filename> <texts> - Appends text to a file, if allowed.
+file append <filename> <texts> - Appends text to a file, if allowed.
     Files cannot be larger than 10,000 characters.
-z/file delete <filename> - Deletes a file, if allowed. Deleted files cannot be recovered.
-z/file modify <filename> <permission> - Modifies the permission state of a file.
-z/file list <filter> - Lists files.
+file delete <filename> - Deletes a file, if allowed. Deleted files cannot be recovered.
+file modify <filename> <permission> - Modifies the permission state of a file.
+file list <filter> - Lists files.
 
 Permissions:
 r - Read-only: anyone can read this file. Recommended permission mode.
@@ -43,7 +44,7 @@ pb - Public: anyone can read, write, modify, or delete this file. Not recommende
 pv - Private: only the file's creator can read this file.
 The creators of files always have full perms to do with files what they wish."""
 
-    path = ".\\data\\library\\"
+    path = f"{PATH}\\library\\"
     modes = ["read", "write", "append", "delete", "modify", "list"]
     illegalChars = ["\\", "<", ">", ":", "\"", "/", "|", "?", "*"]
     illegalNames = ["con", "prn", "aux", "nul",
@@ -136,7 +137,7 @@ The creators of files always have full perms to do with files what they wish."""
                 fileLength = str(len(fileData["text"]))
 
                 try:
-                    fileAuthor = loadJSON("playerNameDB.json", "data")[fileData["id"]]
+                    fileAuthor = loadJSON("playerNameDB.json", PATH)[fileData["id"]]
                 except Exception as e:
                     fileAuthor = fileData["id"]
                 
@@ -169,118 +170,5 @@ The creators of files always have full perms to do with files what they wish."""
                     "="*(29 + longestFileName + longestAuthorName)
         if len(filteredList) > 0:
             for i in filteredList: printList += "\n" + i[0].ljust(longestFileName+2) + i[1].ljust(longestAuthorName+2) + i[2].center(4) + "  " + f"{i[3]}B".rjust(6)
-        else: printList += "\nThere are no files to display."
-        await ctx.send(printList + "```")
-
-@commands.command(aliases=['funct', '>']) #this command is a rough duplicate of z/file and should NOT be enabled.
-async def function(ctx, mode, filename, function=""):
-    """A custom command renaming system!
-
-Modes:
-z/function run <function> - Runs the function.
-z/file write <function> <arguments...> - Writes or overwrites a function.
-    Be sure to get the source before you overwrite an existing function.
-z/file delete <function> - Deletes a function.
-z/file source <function> - Returns a function's source string.
-z/file list <filter> - Lists functions.
-
-Functions:
-int <term> - Convert to type integer.
-str <term> - Convert to type string.
-float <term> - Convert to type float.
-expol <term> - Convert to type expol.
-bool <term> - Convert to type boolean.
-
-calc "<funct...>" - Does math using z/calc. Returns type expol.
-var <name> <value> - Creates a variable.
-
-<term> + <term> - Adds numbers and combines strings.
-<term> - <term> - Subtracts numbers and removes chunks from strings.
-<term> * <term> - Multiplies numbers and duplicates strings.
-<term> / <term> - Divides numbers.
-<term> % <term> - Modulos numbers.
-<term> // <term> - Floor divides numbers.
-<term> ** <term> - Exponentiates numbers."""
-
-    path = f".\\guilddata\\{ctx.guild.id}\\"
-    modes = ["run", "write", "source", "delete", "list"]
-    legalChars = "abcdefghijklmnopqrstuvwxyz123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_-"
-    illegalNames = ["con", "prn", "aux", "nul",
-                    "com1", "com2", "com3", "com4", "com5", "com6", "com7", "com8", "com9", "com0",
-                    "lpt1", "lpt2", "lpt3", "lpt4", "lpt5", "lpt6", "lpt7", "lpt8", "lpt9", "lpt0"]
-
-    mode = mode.lower()
-    if mode not in modes: await ctx.send("Invalid mode."); return
-    
-    for char in filename:
-        if char not in legalChars: filename.replace(char, "_") # removing illegal characters from the function name
-        
-    if filename.lower() in illegalNames: # outright blocking the creation of a file with an illegal name
-        await ctx.send("Zako has encountered an exception with Windows.")
-        await ctx.send("https://cdn.discordapp.com/attachments/304362989799079937/969152125605146665/unknown.png")
-        return
-    
-    if mode != "list":
-        if testForFile(filename+".json", path):
-            file = loadJSON(filename+".json", path)
-            if mode == "delete":
-                remove(path+filename+".json")
-                await ctx.send("Function deleted.")
-            if mode == "run":
-                pass#runCode(file["source"])
-            if mode == "write":
-                if "http://" in function or "https://" in function:
-                    await ctx.send("Write failed: Possible hyperlink detected. Links are not allowed.")
-                    return
-                file["source"] = function
-                await ctx.send("Function overwritten.")
-                try: saveJSON(file, filename+".json", path)
-                except Exception as e: await ctx.send(f"An unexpected error occurred when I attempted to save this function: {e}")
-            if mode == "source":
-                await ctx.send(file["source"])
-        elif mode != "write": await ctx.send("File not found."); return
-        else: #mode IS write
-            if "http://" in function or "https://" in function:
-                await ctx.send("Write failed: Possible hyperlink detected. Links are not allowed.");
-                return
-            file["source"] = function
-            await ctx.send("Function written.")
-            try: saveJSON(file, filename+".json", path)
-            except Exception as e: await ctx.send(f"An unexpected error occurred when I attempted to save this function: {e}")
-    else: #mode is list
-        try: filename = int(filename)
-        except Exception: pass #filename is a filter
-        fileList = []
-        for root, dirs, files in walk(path):
-            for file in files:
-                fileTitle = file.replace(".json",'')
-                fileData = loadJSON(fileTitle + ".json", path)
-                fileLength = str(len(fileData["source"]))
-                fileList.append([fileTitle, fileLength])
-        filteredList = []
-        if type(filename) is int:
-            i = (filename-1)*50
-            while i < (filename)*50: #filter by page
-                try:
-                    filteredList.append(fileList[i])
-                    i += 1
-                except Exception: break #reached end of list
-        else:
-            i, j = 0, 0
-            while i < 50:
-                try:
-                    for k in fileList[j]: #allows filtering by author, filename, or perms
-                        if filename.lower() in k.lower():
-                            filteredList.append(fileList[j])
-                            i += 1
-                            break
-                    j += 1
-                except Exception: break #reached end of list
-        longestFileName = 5
-        for i in filteredList: #getting spacing for strings
-            longestFileName = max(longestFileName, len(i[0]))
-        printList = "```" + "Files".ljust(longestFileName+2) + "  " + "Size".center(6) + "\n" + "="*(29 + longestFileName)
-        if len(filteredList) > 0:
-            for i in filteredList: printList += "\n" + i[0].ljust(longestFileName+2) + i[1].center(4) + "  " + f"{i[3]}B".rjust(6)
         else: printList += "\nThere are no files to display."
         await ctx.send(printList + "```")

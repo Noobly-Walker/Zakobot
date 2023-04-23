@@ -16,12 +16,15 @@ from util.ColorUtil import rectColor
 from util.TextFormat import *
 from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
+from util.CardUtil import *
 text = cmdutil()
+local = loadJSON('.\\locals\\locals.json')
+PATH = load(".\\locals\\%PATH%")
 
-def _cmdl_():
-    return ["profile", "leaderboard", "settings", "statistics"]
+def commandList():
+    return [profile, leaderboard, settings, statistics, backpack]
 
-def _catdesc_():
+def categoryDescription():
     return "Commands involving individual users."
 
 
@@ -66,6 +69,55 @@ async def profile(ctx, *userIn):
     except Exception:
         await ctx.send("The requested user does not have a profile set up yet, or does not exist. Or something's broken.")
 
+@commands.command(aliases=['inventory', 'inv', 'bp'])
+async def backpack(ctx, category=None, *args):
+    """View your belongings!
+
+backpack cards page|view (number)"""
+    pack = PlayerdataGetFile(ctx.author, "backpack.json")
+    if category == None:
+        cats = []
+        for cat in pack.keys():
+            cats.append(cat)
+        await ctx.send("Available Categories:\n> " + "\n> ".join(cats))
+    if category == "cards":
+        deck = pack["cards"]
+        num = None
+        if len(args) == 0:
+            mode = "page"; num = 1
+        elif args[0] in ["page", "view"]:
+            if len(args) == 1: mode = args[0]; num = 1
+            else: mode = args[0]; num = int(args[1])
+        else:
+            await ctx.send("Invalid arguments."); return
+            
+        if mode == "page":
+            maximumCards = 25
+            def sortInt(key):
+                return int(key)
+            keys = list(deck.keys())
+            keys.sort(key=sortInt)
+            cards = []
+            for i in keys[ maximumCards*(num-1) : (maximumCards*num) ]:
+                card = deck[i]
+                if card[2] > 0: cards.append(["cardbase-shiny", card[0], int(i)])
+                else: cards.append(["cardbase", card[0], int(i)])
+            if len(cards) == 0:
+                await ctx.send("You don't have any cards to show on this page.")
+            else:
+                getPack(cards)
+                await ctx.send(f"Your cards (pg{num}):", file=discord.File(".\\temp\\pack.png"))
+                
+        elif mode == "view":
+            if num == None: await ctx.send(f"Which card do you want to look at? {local['prefix']}backpack cards view (card ID)"); return
+            if str(num) not in deck: await ctx.send("You don't have that card."); return
+            
+            card = deck[str(num)]
+            if card[2] > 0: getCard(["cardbase-shiny", card[0], num])
+            else: getCard(["cardbase", card[0], num])
+            await ctx.send(f"You have {card[1]+card[2]} card(s), {card[2]} of them are foil.", file=discord.File(".\\temp\\card.png"))
+            
+
 @commands.command(aliases=['stats'])
 async def statistics(ctx, *userIn):
     """View some recorded metrics!"""
@@ -78,6 +130,9 @@ async def statistics(ctx, *userIn):
         userStats = PlayerdataGetFile(user, "stats.json")
         userProfile = PlayerdataGetFile(user, "profile.json")
         userLevel = PlayerdataGetFile(user, "level.json")
+        userMultis = PlayerdataGetFile(user, "multis.json")
+        userGuildLevel = GuilddataGetFile(ctx.guild, "levels.json")[str(user.id)]["Level"]
+        globalCount = expol(load(f"{PATH}\\counting.txt"))
         embed = discord.Embed(title=f"{userProfile['Name']}'s Statistics", color=rectColor(PlayerdataGetFileIndex(user, "settings.json", "Color")))
         embed.set_thumbnail(url=user.avatar_url)
         embed.add_field(name=f"Stats", value=f"\
@@ -87,7 +142,9 @@ Average Msgs/dy (all time):\n\
 Account Creation:\n\
 Dailys Claimed:\n\
 Personal Counting Done:\n\
-Global Experience Gained:")
+Global Experience Gained:\n\
+Global Counting Multiplier:\n\
+Guild Counting Multiplier:")
         embed.add_field(name=f"Values", value=f"\
 {userStats['Messages Sent']}\n\
 {get60DayActivity(userStats):.3f}\n\
@@ -95,7 +152,9 @@ Global Experience Gained:")
 {getAcctAgeYMDAsStr(userStats)} ago\n\
 {userStats['Dailys Claimed']}\n\
 {expol(userStats['Counting Done']):{GetNotationCode(ctx.author)}}\n\
-{expol(levelToExp(userLevel['Level'])+userLevel['Experience']):{GetNotationCode(ctx.author)}}")
+{expol(levelToExp(userLevel['Level'])+userLevel['Experience']):{GetNotationCode(ctx.author)}}\n\
+{expol(2)**expol(globalCount.exponent)*(1+(userLevel['Level']/4))*(expol(userMultis['ShopCountingMulti']).log10()+1):{GetNotationCode(ctx.author)}}\n\
+{expol(2)**expol(globalCount.exponent)*(1+(userGuildLevel/4))*(expol(userMultis['ShopCountingMulti']).log10()+1):{GetNotationCode(ctx.author)}}")
         await ctx.send(embed=embed)
     except Exception:
         await ctx.send("The requested user does not have a profile set up yet, or does not exist. Or something's broken.")
@@ -105,29 +164,13 @@ async def settings(ctx, setting="", newValue=None):
     """Change how Zako interacts with you!
 Booleans (that is, settings with true/false values) can be toggled without a newValue set
 
-Color can be named using the table of color names below, or darkBaseColor/lightBaseColor
 Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
 Color can be defined as three numbers in the format 0xxRR,0xGG,0xBB, where RGB is hexadecimal
+Color can also be named using the table found using this command.
+  z!file read colors
 
-Base colors (Max sat, min lum):
-  gray/grey, red, vermillion, orange, amber, yellow, chartreuse, green, cyan, cornflower, blue, violet, purple, magenta
-  black, white (these base colors don't have dark or light variants, for what i hope to be obvious reasons)
-
-All accepted color names (not including darkBaseColor/lightBaseColor if another name exists, eg. lightRed is accepted):
-  black, darkGray/darkGrey, gray/grey, silver, white
-  maroon, red, pink
-  brick/copper, vermillion, peach
-  brown, orange, lightOrange
-  brass, amber, lightAmber
-  gold, yellow, lemon
-  swamp, chartreuse, avocado
-  forest, green, lime
-  teal, cyan, sky
-  darkCornflower, cornflower, lightCornflower
-  navy, blue, slate
-  midnight, indigo, lightIndigo
-  plum, purple, lavender
-  eggplant, magenta, rose"""
+Notation can be defined using the table found using this command.
+  z!file read notations"""
     userSettings = PlayerdataGetFile(ctx.author, "settings.json")
     if setting == "":
         out = ""
@@ -137,15 +180,22 @@ All accepted color names (not including darkBaseColor/lightBaseColor if another 
         embed.add_field(name=f"**{ctx.author.name}'s Settings**", value=out)
         await ctx.send(embed=embed)
     else:
-        if setting not in userSettings: await ctx.send("Setting doesn't exist. Do z/settings to get a list of settings.")
+        if setting not in userSettings: await ctx.send(f"Setting doesn't exist. Do {local['prefix']}settings to get a list of settings.")
         if type(userSettings[setting]) is bool:
             if newValue == None: userSettings[setting] = not userSettings[setting]
-            else: userSettings[setting] = bool(newValue)
+            else:
+                if str.lower(newValue) in ["yes", "on", "1", "true"]: newValue = True
+                elif str.lower(newValue) in ["no", "off", "0", "false"]: newValue = False
+                else: await ctx.send("Invalid boolean input."); return
+                userSettings[setting] = newValue
             await ctx.send("Updated. :thumbsup:")
         else:
+            if setting == "Notation" and newValue == None:
+                await ctx.send("Notation can be defined using the table found using this command.\n  z!file read notations")
+                return
             if newValue == None: await ctx.send("Please redo this command with a new value for this."); return
             if setting == "Color":
-                try: newValue = rectColor(newValue)
+                try: test = rectColor(newValue)
                 except Exception: await ctx.send(f"'{newValue}' isn't a valid color."); return
             try:
                 newValue = type(userSettings[setting])(newValue)
@@ -161,8 +211,8 @@ Global compares with all Zako users.
 Boards:
   level         - Ranks people by level. Local/global, user only.
   value         - Ranks people by net worth. Local/global, user only.
-  activity      - Ranks by avg messages per day. Local/global, user/server.
-  msgs/messages - Ranks by messages sent. Local/global, user/server.
+  activity      - Ranks by avg messages per day. Global only, user/server.
+  msgs/messages - Ranks by messages sent. Global only, user/server.
   count         - Ranks by amount added to count. Local/global, user/server.
   members       - Ranks by number of total members. Global only, server only.
   users         - Ranks by number of users. Global only, server only.
@@ -180,43 +230,43 @@ Sources:
     globalboard = False
     source = ""
     args = str.lower(args)
+    guild = ctx.message.guild
 
     # Check arguments and set them based on context
     if "level" in args: board = "level"
     elif "value" in args: board = "value"
     elif "activity" in args: board = "activity"
-    elif "msgs" in args: board = "msgs"
-    elif "messages" in args: board = "msgs"
+    elif any(x in args for x in ["msgs", "messages"]): board = "msgs"
     elif "count" in args: board = "count"
     elif "members" in args: board = "members"
     elif "users" in args: board = "users"
     elif "user%" in args: board = "user%"
     else:
-        if "guild" in args: board = "members"
-        elif "server" in args: board = "members"
+        if any(x in args for x in ["guild", "server"]): board = "members"
         else: board = "level"
     
     if "local" in args: globalboard = False
     elif "global" in args: globalboard = True
     else:
-        if board in ["members", "users", "user%"]: globalboard = True
-        elif "guild" in args: globalboard = True
+        if board in ["members", "users", "user%", "msgs", "activity"]: globalboard = True
+        elif board == "level": globalboard = GuilddataGetFileIndex(ctx.guild, "settings.json", "GlobalLevel")
+        elif "guild" in args or "server" in args: globalboard = True
         elif "server" in args: globalboard = True
         else: globalboard = False
     
-    if "user" in args and "users" not in args: source = "player"
-    elif "user" in args and "users" in args: source = "guild"
-    elif "guild" in args: source = "guild"
-    elif "server" in args: source = "guild"
+    if "user" in args and not any(x in args for x in ["users", "user%"]): source = "player"
+    elif any(x in args for x in ["users", "user%", "guild", "server"]): source = "guild"
     else: source = "player"
-
     #Block incorrect argument combinations
+    if [globalboard, source] == [False, "guild"]:
+        await ctx.send("Error: Guilds can only be ranked with global scope!"); return
     if [board, source] in [["level", "guild"], ["value", "guild"], ["members", "player"],
                            ["users", "player"], ["user%", "player"]]:
         await ctx.send("Error: Source does not have that board!"); return
-    if [board, globalboard] in [["members", False], ["users", False], ["user%", False]]:
+    if [board, globalboard] in [["members", False], ["users", False], ["user%", False],
+                                ["msgs", False], ["activity", False]]:
         await ctx.send("Error: Board cannot be viewed in this scope!"); return
-    guild = ctx.message.guild
+        
     leaderboard = {}
     memberPool = []
 
@@ -250,7 +300,7 @@ Sources:
         path = f".\\{source}data\\{member}\\"
         try:
             if board == 'level':
-                if not GuilddataGetFileIndex(ctx.guild, "settings.json", "GlobalLevel") and not globalboard:
+                if not globalboard:
                     LvData = loadJSON("levels.json", f".\\guilddata\\{ctx.guild.id}\\")[member]
                 else:
                     LvData = loadJSON("level.json", path)
@@ -270,7 +320,7 @@ Sources:
                         guildCTX = await converter.convert(ctx, str(loadJSON("profile.json", path)["ID"]))
                         value.append(getActivityRating(guildCTX))
                 if board == "msgs": value = [StatData['Messages Sent']]
-                if board == "count": value = [f"{expol(StatData['Counting Done']):{GetNotationCode(ctx.author)}}"]
+                if board == "count": value = [expol(StatData['Counting Done'])]
                 if board == "members": value = [StatData['Members']]
                 if board == "users": value = [StatData['Users']]
                 if board == "user%": value = [StatData['Users']/StatData['Members']*100]
@@ -296,16 +346,22 @@ Sources:
     auth = ""
     if source == "player": auth = ctx.author.name
     if source == "guild": auth = ctx.guild.name
+    print(leaderboard)
     for x in list(leaderboard)[0:20]:
+        print(x)
         indexList += f"#{index}: {x}\n"
         if board == "level":
             valueList += f"Lv{leaderboard[x][0]}, {leaderboard[x][1]}Exp\n"
         elif board == "value":
             gold, silver, copper = IntToGSC(leaderboard[x][0])
             valueList += f"{gold}GP {silver}SP {copper}CP\n"
-        elif board in ["user%", "activity"]:
+        elif board == "activity":
             if source == "guild": valueList += f"{leaderboard[x][0]:.3f} ({leaderboard[x][1]})\n"
             else: valueList += f"{leaderboard[x][0]:.3f}\n"
+        elif board == "user%":
+            valueList += f"{leaderboard[x][0]:.3f}\n"
+        elif board == "count":
+            valueList += f"{leaderboard[x][0]:{GetNotationCode(ctx.author)}}\n"
         elif board in ["msgs", "members", "users", "count"]:
             valueList += f"{leaderboard[x][0]}\n"
         if x == auth: foundAuthor = True
@@ -330,7 +386,7 @@ Sources:
         if not foundAuthor: #the person or guild who asked isn't on this leaderboard
             authorRank += f"Unlisted - Not on {board} leaderboard"
             
-    if indexList == "" or valueList == "": string = "Couldn't find any profiles. If you believe this is in error, report it using z/file."
+    if indexList == "" or valueList == "": string = f"Couldn't find any profiles. If you believe this is in error, report it using {local['prefix']}file."
     embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
     title = "Leaderboard"
     if globalboard: title = "**Global Leaderboard**"

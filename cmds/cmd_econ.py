@@ -1,6 +1,7 @@
 import asyncio
 from discord.ext import commands
 import traceback
+from os import walk
 from os.path import isdir,exists
 from math import factorial
 from random import *
@@ -13,29 +14,31 @@ from util.DataHandlerUtil import *
 from util.SLHandle import *
 from util.ColorUtil import rectColor
 from util.cmdutil import cmdutil
+from util.CardUtil import *
+from util.coinStacker import *
 text = cmdutil()
 
-def _cmdl_():
-    return ["bank", "daily"]
+def commandList():
+    return [bank, daily, shop]
 
-def _catdesc_():
+def categoryDescription():
     return "Economy commands."
 
-@commands.command()
+@commands.command(aliases=["bal"])
 async def bank(ctx, action="", *amount):
     """Access your bank account.
 
-z/bank deposit <quantity>
+bank deposit <quantity>
   minimum deposit is 100SP
-z/bank withdraw <quantity>
+bank withdraw <quantity>
   quantity will be in SP
   5% processing fee on withdrawals
   minimum withdrawal is 20SP
   account will not accrue interest if balance is less than 1GP
-z/bank balance
+bank balance
   1000CP = 1SP
   1000SP = 1GP
-  gains 0.1% interest per day if there is a balance of at least 1GP"""
+  gains 0.25% interest per day if there is a balance of at least 1GP"""
     if action in ["withdraw", "with", "w", "deposit", "dep", "d"]:
         if len(amount) == 0: await ctx.send("You must specify an amount for this action."); return
         else:
@@ -75,6 +78,7 @@ Your account balance is now **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wa
         embed.add_field(name=f"**First Pikatonian Bank**", value=out)
         await ctx.send(embed=embed)
     if action in ["balance", "bal", "b", ""]:
+        #generate ledger string
         ledgerDates = list(wallet["BankLedger"].keys())
         ledger = ""
         inverseIndex = -1
@@ -84,6 +88,22 @@ Your account balance is now **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wa
                 ledger = f"{convertedTimestamp} UTC: **{wallet['BankLedger'][ledgerDates[inverseIndex]][0]} {wallet['BankLedger'][ledgerDates[inverseIndex]][1]}SP**\n" + ledger
                 inverseIndex -= 1
             except Exception: break #reached top of ledger
+        if ledger == "": ledger = "No transactions to show."
+
+        #generate coinpile
+        coinPile = None
+        coinColors = {
+            1: (200, 100, 64),
+            50: (164, 114, 96),
+            1000: (128, 128, 128),
+            50000: (164, 164, 96),
+            1000000: (200, 200, 64)
+            }
+        coinRender = coinStacker(coinColors)
+        if wallet['BankKups'] + wallet['BankArgs']*1000 + wallet['BankAurus']*1000000 > 0:
+            coinPile = coinRender.createPile(wallet['BankKups'] + wallet['BankArgs']*1000 + wallet['BankAurus']*1000000)
+            coinPile = discord.File(coinPile, filename="coinpile.png")
+        
         netWorthAuru, netWorthArg, netWorthKup = regularizeGSC(wallet['Aurus']+wallet['BankAurus'], wallet['Args']+wallet['BankArgs'], wallet['Kups']+wallet['BankKups'])
         out = f"Your wallet balance is **{wallet['Aurus']}GP {wallet['Args']}SP {wallet['Kups']}CP**.\n\
 Your account balance is **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wallet['BankKups']}CP**.\n\n\
@@ -92,7 +112,12 @@ Your net worth is **{netWorthAuru}GP {netWorthArg}SP {netWorthKup}CP**."
         embed.add_field(name=f"**First Pikatonian Bank**", value=out, inline=False)
         embed.add_field(name=f"Ledger", value=ledger, inline=False)
         embed.set_footer(text="WITH = withdrawal, DEP = deposit, INT = interest")
-        await ctx.send(embed=embed)
+        if coinPile is not None:
+            embed.set_image(url="attachment://coinpile.png")
+            await ctx.send(file=coinPile, embed=embed)
+        else:
+            await ctx.send(embed=embed)
+        coinRender.purge()
 
     PlayerdataSetFile(ctx.author, "wallet.json", wallet)
 
@@ -113,3 +138,70 @@ async def daily(ctx):
             PlayerdataGetFileIndex(ctx.author, "stats.json", "Dailys Claimed") + 1)
     else: await ctx.send("It appears you've already claimed this. Try again later.")
 
+
+outText = None
+outFile = None
+
+@commands.command()
+async def shop(ctx, category=None, action="list", selection=None, quantity=1):
+    """Buy stuff or get out!
+
+Categories:
+  multi, cards
+
+Actions:
+  buy, list
+"""
+    global outText, outFile
+    embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
+    action = action.lower()
+    quantity = int(quantity)
+    path = ".\\shopdata\\"
+    if category == None:
+        cats = []
+        descs = []
+        for root, dirs, files in walk(path):
+            for directory in dirs:
+                if directory == path: continue
+                cats.append(directory)
+                descs.append(load("desc.txt", f"{path}{directory}\\"))
+        embed.add_field(name=f"Categories", value="\n".join(cats), inline=True)
+        embed.add_field(name=f"Description", value="\n".join(descs), inline=True)
+        await ctx.send(embed=embed)
+    elif action == "list":
+        shop = loadJSON("shop.json", f"{path}{category}\\")
+        items = list(shop.keys())
+        prices = []
+        descs = []
+        for item in shop:
+            if shop[item]['currency'] == "Kups": prices.append(f"{shop[item]['price']}CP")
+            elif shop[item]['currency'] == "Args": prices.append(f"{shop[item]['price']}SP")
+            elif shop[item]['currency'] == "Aurus": prices.append(f"{shop[item]['price']}GP")
+            elif shop[item]['currency'] == "Gems": prices.append(f":gem:{shop[item]['price']}")
+            else: prices.append(f"{shop[item]['price']}")
+            descs.append(shop[item]['description'])
+        embed.add_field(name=f"Item", value="\n".join(items), inline=True)
+        embed.add_field(name=f"Price", value="\n".join(prices), inline=True)
+        embed.add_field(name=f"Description", value="\n".join(descs), inline=True)
+        await ctx.send(embed=embed)
+    elif action == "buy":
+        if selection == None:
+            await ctx.send("You must select an item from this store to buy!"); return
+        shop = loadJSON("shop.json", f"{path}{category}\\")
+        item = shop[selection]
+        wallet = PlayerdataGetFile(ctx.author, "wallet.json")
+        if wallet[item['currency']] < item['price']*quantity:
+            await ctx.send(f"You cannot afford {quantity}×{selection}!"); return
+        wallet[item['currency']] -= item['price']*quantity
+        payload = item['payload']
+        author=ctx.author
+        _locals = locals()
+        exec(payload, globals(), _locals)
+        currencyNameConversion = {"Kups":"CP", "Args":"SP", "Aurus":"GP"}
+        await ctx.send(f"{quantity}×{selection} purchased successfully for {item['price']*quantity}{currencyNameConversion[item['currency']]}!")
+        if outText not in [None, "", " ", "\n"]: await ctx.send(outText)
+        if outFile != None: await ctx.send(file=discord.File(outFile))
+        outText = None
+        outFile = None
+        PlayerdataSetFile(ctx.author, "wallet.json", wallet)
+        

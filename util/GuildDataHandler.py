@@ -7,6 +7,7 @@ from util.SLHandle import *
 from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
 text = cmdutil()
+local = loadJSON('.\\locals\\locals.json')
 
 def preloadGuilddata(guild):
     path = f".\\guilddata\\{guild.id}\\"
@@ -30,9 +31,15 @@ def preloadGuilddata(guild):
     dataSettings.setdefault("Counting", True)
     dataSettings.setdefault("PublicScripts", False)
     dataSettings.setdefault("GlobalLevel", False)
+    dataSettings.setdefault("SomeonePing", False)
+    dataSettings.setdefault("CharacterLimit", 4000)
+    dataSettings.setdefault("GetUpdates", False)
+    dataSettings.setdefault("Prefix", local["prefix"])
+    dataSettings.setdefault("AnnounceBirthdays", False)
     for key in list(dataSettings.keys()): #clean up my blunders
         if key in ["Levels", "LvUpReacts", "Counting", "PublicScripts",
-                   "GlobalLevel"]: pass
+                   "GlobalLevel", "SomeonePing", "CharacterLimit",
+                   "GetUpdates", "AnnounceBirthdays", "Prefix"]: pass
         else: del dataSettings[key]
     GuilddataSetFile(guild, "settings.json", dataSettings)
     
@@ -52,6 +59,14 @@ def preloadGuilddata(guild):
     else: eventOnMessageHas = GuilddataGetFile(guild, "scripts\\onMessageHas.json")
     GuilddataSetFile(guild, "scripts\\onMessageHas.json", eventOnMessageHas)
 
+    if not exists(f"{path}scripts\\onMemberJoin.json"): eventOnMemberJoin = {}
+    else: eventOnMemberJoin = GuilddataGetFile(guild, "scripts\\onMemberJoin.json")
+    GuilddataSetFile(guild, "scripts\\onMemberJoin.json", eventOnMemberJoin)
+
+    if not exists(f"{path}scripts\\onMemberLeave.json"): eventOnMemberLeave = {}
+    else: eventOnMemberLeave = GuilddataGetFile(guild, "scripts\\onMemberLeave.json")
+    GuilddataSetFile(guild, "scripts\\onMemberLeave.json", eventOnMemberLeave)
+
     if not exists(f"{path}scripts\\function.json"): eventFunction = {}
     else: eventFunction = GuilddataGetFile(guild, "scripts\\function.json")
     GuilddataSetFile(guild, "scripts\\function.json", eventFunction)
@@ -59,12 +74,13 @@ def preloadGuilddata(guild):
     if not exists(f"{path}stats.json"): dataStats = {}
     else: dataStats = GuilddataGetFile(guild, "stats.json")
     ts = datetime.timestamp(datetime.now())
+    memberParse = realUsers(guild)
     dataStats.setdefault("Messages Sent", 0)
     dataStats.setdefault("Counting Done", [0.0, 0])
     dataStats.setdefault("Acct Creation", ts)
-    dataStats.setdefault("Members", realUsers(guild)[0])
-    dataStats.setdefault("Users", realUsers(guild)[1])
-    dataStats.setdefault("Bots", realUsers(guild)[2])
+    dataStats.setdefault("Members", memberParse[0])
+    dataStats.setdefault("Users", memberParse[1])
+    dataStats.setdefault("Bots", memberParse[2])
     dataStats.setdefault("Last Update", 0)
     dataStats.setdefault("Activity Board", [])
     if len(dataStats["Activity Board"]) == 0:
@@ -84,20 +100,32 @@ def preloadGuilddata(guild):
     if not exists(f"{path}admin.json"): dataAdmin = {}
     else: dataAdmin = GuilddataGetFile(guild, "admin.json")
     dataAdmin.setdefault("Update Channel", None)
+    dataAdmin.setdefault("Admin Channel", None)
     dataAdmin.setdefault("Censored Users", [])
     dataAdmin.setdefault("Image Blocked Channels", [])
     dataAdmin.setdefault("Link Blocked Channels", [])
+    dataAdmin.setdefault("Emoji Blocked Channels", [])
+    dataAdmin.setdefault("Zako Ignored Channels", [])
     for key in list(dataAdmin.keys()): #clean up my blunders
-        if key in ["Update Channel", "Censored Users", "Image Blocked Channels",
-                   "Link Blocked Channels"]: pass
+        if key in ["Update Channel", "Admin Channel", "Censored Users",
+                   "Image Blocked Channels", "Link Blocked Channels", 
+                   "Emoji Blocked Channels", "Zako Ignored Channels"]: pass
         else: del dataAdmin[key]
     GuilddataSetFile(guild, "admin.json", dataAdmin)
 
+def updateMemberCount(guild):
+    dataStats = GuilddataGetFile(guild, "stats.json")
+    memberParse = realUsers(guild)
+    dataStats["Members"] = memberParse[0]
+    dataStats["Users"] = memberParse[1]
+    dataStats["Bots"] = memberParse[2]
+    GuilddataSetFile(guild, "stats.json", dataStats)
+    
 def getActivityRating(guild):
     stats = GuilddataGetFile(guild, "stats.json")
     activity = get60DayActivity(stats) / stats["Users"]
     out = ""
-    limit = 20
+    limit = 100
     if activity < limit*0.01: out += "F"
     elif limit*0.02 <= activity < limit*0.05: out += "D-"
     elif limit*0.05 <= activity < limit*0.1: out += "D"

@@ -1,4 +1,5 @@
 from PIL import Image
+from perlin_noise import PerlinNoise
 
 #from util.SLHandle import *
 
@@ -47,7 +48,7 @@ System: (x,y) range 0-9
     
     sect = list(map(int.__add__, quadrant, sector))
     #galaxyDensityMap = Image.open(".\\data\\galaxyDensityMap.png")
-    galaxyDensityMap = Image.open("B:\\zako3\\data\\galaxyDensityMap.png")
+    galaxyDensityMap = Image.open("B:\\zako3\\assets\\maps\\galaxyDensityMap.png")
     sectorColor = galaxyDensityMap.getpixel(tuple(sect))
     density = sectorColor[0]//16 #the galaxy map is grayscale, it doesn't matter if the index is 0, 1, or 2.
     
@@ -113,14 +114,76 @@ System: (x,y) range 0-9
             moons = int(round((planetSeed+rock)*1.379641633%5))
             planetType = None
             if temperature > 80:
-                planetType = hotPlanets[clamp(0, 4-density+planetSeed%6, 8)]
+                planetType = hotPlanets[clamp(0, (4-density+planetSeed)%8, 8)]
             if 80 >= temperature >= 50:
-                planetType = tempPlanets[clamp(0, 6-density+planetSeed%9, 12)]
+                planetType = tempPlanets[clamp(0, (6-density+planetSeed)%12, 12)]
             if 50 > temperature:
-                planetType = tempPlanets[clamp(0, 3-density+planetSeed%5, 7)]
+                planetType = coldPlanets[clamp(0, (3-density+planetSeed)%7, 7)]
             planets.append([planetType, moons])
             temperature -= orbitSpacing
 
         print(starClasses[starType])
         for rock in planets:
             print(str(rock).replace("[", "").replace(",", "").replace("]", "").replace("'", ""))
+
+    else:
+        planet -= 1
+        planetSeed = seedTranslator(quadrant, sector, subsector, system, star, planet)
+        starSeed = seedTranslator(quadrant, sector, subsector, system, star)
+        starType = clamp(0, starSeed%15, 15)
+        orbitSpacing = clamp(10, 10-density+starSeed%15, 30)
+        temperature = starType*10 - orbitSpacing*planet
+        if temperature > 80:
+            planetType = hotPlanets[clamp(0, (4-density+planetSeed)%8, 8)]
+        if 80 >= temperature >= 50:
+            planetType = tempPlanets[clamp(0, (6-density+planetSeed)%12, 12)]
+        if 50 > temperature:
+            planetType = coldPlanets[clamp(0, (3-density+planetSeed)%7, 7)]
+            
+        octaves = 3
+        xpix, ypix = 12*6*5, 6*6*5
+        heights1 = PerlinNoise(seed=planetSeed*starSeed*planet%2**30, octaves=octaves)
+        heights2 = PerlinNoise(seed=planetSeed*starSeed*planet%2**30, octaves=2*octaves)
+        heights3 = PerlinNoise(seed=planetSeed*starSeed*planet%2**30, octaves=4*octaves)
+        heights4 = PerlinNoise(seed=planetSeed*starSeed*planet%2**30, octaves=8*octaves)
+
+        heightMap = []
+        for i in range(xpix):
+            row = []
+            for j in range(ypix):
+                noise_val = heights1([i/xpix, j/ypix])
+                noise_val += 0.5 * heights2([i/xpix, j/ypix])
+                noise_val += 0.25 * heights3([i/xpix, j/ypix])
+                noise_val += 0.125 * heights4([i/xpix, j/ypix])
+                row.append(noise_val)
+            heightMap.append(row)
+        
+        temps1 = PerlinNoise(seed=planetSeed*starType*starType*planet%2**30, octaves=octaves)
+        temps2 = PerlinNoise(seed=planetSeed*starType*starType*planet%2**30, octaves=2*octaves)
+        temps3 = PerlinNoise(seed=planetSeed*starType*starType*planet%2**30, octaves=4*octaves)
+        temps4 = PerlinNoise(seed=planetSeed*starType*starType*planet%2**30, octaves=8*octaves)
+        
+        tempMap = []
+        for i in range(xpix):
+            row = []
+            for j in range(ypix):
+                noise_val = temps1([i/xpix, j/ypix])
+                noise_val += 0.5 * temps2([i/xpix, j/ypix])
+                noise_val += 0.25 * temps3([i/xpix, j/ypix])
+                noise_val += 0.125 * temps4([i/xpix, j/ypix])
+                row.append(noise_val)
+            tempMap.append(row)
+        
+        #tempMap = [[temps([i/xpix, j/ypix]) for j in range(xpix)] for i in range(ypix)]
+        
+        worldMap = Image.new(mode="RGB", size=(xpix, ypix))
+        worldMapEdit = worldMap.load()
+        try: colorizer = Image.open(f"B:\\zako3\\assets\\maps\\planets\\{planetType}world.png")
+        except Exception: colorizer = Image.open("B:\\zako3\\assets\\maps\\planets\\Cworld.png")
+
+        for x in range(len(tempMap)):
+            for y in range(len(tempMap[x])):
+                localTemp = clamp(0, (tempMap[x][y] + 1)*128 * abs(y-ypix//2)/(ypix//4)-2, 255)
+                localHeight = clamp(0, (heightMap[x][y] + 1)*128, 255)
+                worldMapEdit[x,y] = colorizer.getpixel((localTemp, localHeight))
+        worldMap.show()

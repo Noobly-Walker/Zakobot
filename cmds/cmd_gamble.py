@@ -15,16 +15,16 @@ from util.expol import expol
 from util.cmdutil import cmdutil
 text = cmdutil()
 
-def _cmdl_():
-    return ["roulette", "headsgame", "doubleornothing", "coingame"]
+def commandList():
+    return [roulette, headsgame, doubleornothing, coingame]
 
-def _catdesc_():
+def categoryDescription():
     return "Gamble. Maybe you'll win. Probably, you'll lose. >:D"
 
 @commands.command()
 async def roulette(ctx, wager, bet, *bet2):
     """Roll the wheel. Watch the mesmerizing circle. See where the ball lands. Fail to notice as I take all of your money.\n\
-z/roulette <wager> <bet> *<bet2>
+roulette <wager> <bet> *<bet2>
 
 Bet colors: red, black, row
 Bet evenness: even, odd, row
@@ -191,17 +191,16 @@ async def coingame(ctx):
     silver = -6
     while coin == state:
         loops += 1
-        change = 2**loops*5
         coin = randrange(2)
-    if state == 0: change *= -1
-    silver += change
     if state == 1:
         coinside = 'heads'
         if loops < 1:
             flash = '**Loss!** '
             net = 'losing'
+            change = -2**loops*5
         if loops >= 1:
             net = 'winning'
+            change = 3**loops*5
             if loops < 5: flash = '**Win!**'
             elif loops < 10: flash = '**Big Win!**'
             elif loops < 15: flash = '***Huge Win!***'
@@ -210,10 +209,12 @@ async def coingame(ctx):
     elif state == 0:
         coinside = 'tails'
         net = 'losing'
+        change = -2**loops*5
         if loops < 5: flash = '**Loss!**'
         elif loops < 10: flash = '**Big Loss!**'
         elif loops < 15: flash = '***Huge Loss!***'
         elif loops < 20: flash = '***BANKRUPCY!!!***'
         elif loops >= 20: flash = '__***SUPER BANKRUPCY!!!***__'
+    silver += change
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
     await ctx.send(f"{flash} {ctx.author.name} flipped {coinside} {loops} times, {net} {silver:,}SP.")

@@ -12,11 +12,11 @@ from util.expol import expol
 from util.cmdutil import cmdutil
 text = cmdutil()
 
-def _cmdl_():
-    return ["splash", "joke", "choose", "complain", "potion",
-            "roll", "namegenerator"]
+def commandList():
+    return [splash, joke, choose, potion,
+            roll, namegenerator]
 
-def _catdesc_():
+def categoryDescription():
     return "Random numbers and items from lists."
 
 def get_rand_from_list(listName:str):
@@ -36,20 +36,21 @@ async def joke(ctx):
     "Returns a random joke"
     await ctx.send(get_rand_from_list("jokes"))
 
-@commands.command()
-async def complain(ctx):
-    "Returns a random gripe from the developer. THESE ARE OPINIONS."
-    await ctx.send(get_rand_from_list("complaints"))
-
 @commands.command(aliases=['pot'])
 async def potion(ctx):
     "Returns a random potion and effect. For fun or roleplaying, has no bearing on anything else."
     await ctx.send(potion_randomizer(ctx, {"debuff": True, "tf": True, "nsfw": False, "vore": False, "gore": False, "fetish": False}))
 
 @commands.command(aliases=['choice']) # Bot randomly chooses between the inputs.
-async def choose(ctx, *choices: str):
-    """Lets me choose between two items."""
-    await ctx.send(choice(choices))
+async def choose(ctx, *, choices: str):
+    """Lets me choose between a list of items. Separate items using commas."""
+    vals = choices.split(",")
+    options = [] # short for post-processed
+    for val in vals:
+      stripped = val.strip()
+      if stripped: # Empty sequences are falsy.
+        options.append(stripped)
+    await ctx.send(choice(options))
 
 @commands.command(aliases=['dice']) # Bot rolls X Y-sided dice. Not as nice as Tsumikibot's dice system, and that's okay.
 async def roll(ctx, dice: str, *formating: str):

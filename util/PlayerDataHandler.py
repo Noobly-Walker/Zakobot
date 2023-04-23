@@ -6,6 +6,7 @@ from util.expol import *
 from util.SLHandle import *
 from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
+from util.GuildDataHandler import GuilddataGetFile
 text = cmdutil()
 
 def preloadPlayerdata(user):
@@ -49,12 +50,28 @@ def preloadPlayerdata(user):
     else: dataSettings = PlayerdataGetFile(user, "settings.json")
     dataSettings.setdefault("LvUpReacts", True)
     dataSettings.setdefault("Color", "teal")
-    dataSettings.setdefault("ExpolNotation", "e")
-    dataSettings.setdefault("ExpolRounding", "5")
+    dataSettings.setdefault("Notation", "e")
+    dataSettings.setdefault("Rounding", "5")
     for key in list(dataSettings.keys()): #clean up my blunders
-        if key in ["LvUpReacts", "Color", "ExpolNotation", "ExpolRounding"]: pass
+        if key in ["LvUpReacts", "Color", "Notation", "Rounding"]: pass
         else: del dataSettings[key]
     PlayerdataSetFile(user, "settings.json", dataSettings)
+
+    if not exists(f"{path}multis.json"): dataMultis = {}
+    else: dataMultis = PlayerdataGetFile(user, "multis.json")
+    dataMultis.setdefault("ShopCountingMulti", 1)
+    for key in list(dataMultis.keys()): #clean up my blunders
+        if key in ["ShopCountingMulti"]: pass
+        else: del dataMultis[key]
+    PlayerdataSetFile(user, "multis.json", dataMultis)
+
+    if not exists(f"{path}backpack.json"): dataBackpack = {}
+    else: dataBackpack = PlayerdataGetFile(user, "backpack.json")
+    dataBackpack.setdefault("cards", {})
+    for key in list(dataBackpack.keys()): #clean up my blunders
+        if key in ["cards"]: pass
+        else: del dataBackpack[key]
+    PlayerdataSetFile(user, "backpack.json", dataBackpack)
 
     if not exists(f"{path}stats.json"): dataStats = {}
     else: dataStats = PlayerdataGetFile(user, "stats.json")
@@ -88,11 +105,55 @@ def preloadPlayerdata(user):
     dataWallet.setdefault("BankArgs", 0)
     dataWallet.setdefault("BankAurus", 0)
     dataWallet.setdefault("BankLedger", {})
+    dataWallet.setdefault("Gems", 0)
     for key in list(dataWallet.keys()): #clean up my blunders
-        if key in ["Kups", "Args", "Aurus", "BankKups", "BankArgs", "BankAurus", "BankLedger"]: pass
+        if key in ["Kups", "Args", "Aurus", "BankKups", "BankArgs", "BankAurus", "BankLedger", "Gems"]: pass
         else: del dataWallet[key]
     dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = IntToGSC(GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"]))
     PlayerdataSetFile(user, "wallet.json", dataWallet)
+
+def incrementXP(ctx, userLevelFile, experienceGain, globalScope=True):
+    guild = ctx.guild
+    message = ctx.message
+    author = message.author
+
+    if globalScope: scope = "Global"
+    else: scope = guild.name
+    
+    userLevelFile["Experience"] += experienceGain
+    if userLevelFile["Level"] < 200:
+        if userLevelFile["Experience"] >= 20+(userLevelFile["Level"]**2*20):
+            userLevelFile["Experience"] -= 20+(userLevelFile["Level"]**2*20)
+            userLevelFile["Level"] += 1
+            text.log(f"{author.name} is now level {userLevelFile['Level']} in scope {scope}.")
+
+            if globalScope:
+                userSilver = PlayerdataGetFileIndex(author, "wallet.json", "Args")
+                userSilver += 10*userLevelFile["Level"]
+                PlayerdataSetFileIndex(author, "wallet.json", "Args", userSilver)
+            return userLevelFile, True
+        else: return userLevelFile, False
+
+async def reactToLvUp(ctx, integer):
+    message = ctx.message
+    author = message.author
+    guild = ctx.guild
+    guildSettings = GuilddataGetFile(guild, "settings.json")
+    
+    thirdNumSet = ["<:zero:962696895682199593>", "<:one2:996450500167872612>",
+                    "<:two:962696895988396062>"]
+    secondNumSet = ["<:zero:962696895682199593>", "<:one:962696895925481482>",
+                    "<:two:962696895988396062>", "<:three:962696895917080666>",
+                    "<:four:962696895514431529>", "<:five:962696895996780594>",
+                    "<:six:962696896072257626>", "<:seven:962696895980011630>",
+                    "<:eight:962696895422165003>", "<:nine:962696895921274910>"]
+    if PlayerdataGetFileIndex(author, "settings.json", "LvUpReacts") and guildSettings["LvUpReacts"]:
+        await message.add_reaction(u"\U0001F1F1")
+        await message.add_reaction(u"\U0001F1FB")
+        await message.add_reaction(u"\u2B06")
+        await message.add_reaction(str(integer)[0]+"\u20e3")
+        if integer >= 10: await message.add_reaction(secondNumSet[int(str(integer)[1])])
+        if integer >= 100: await message.add_reaction(thirdNumSet[int(str(integer)[2])])
 
 def UpdateTimers(user):
     dataTimers = PlayerdataGetFile(user, "timers.json")
@@ -102,7 +163,7 @@ def UpdateTimers(user):
         dataWallet = PlayerdataGetFile(user, "wallet.json")
         balance = GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"])
         if balance >= 1000000:
-            interest = balance * (1 + 0.001/bankElapses)**bankElapses - balance
+            interest = balance * (1 + 0.0025/bankElapses)**bankElapses - balance
             dataTimers["BankInterest"] += 86400 * bankElapses
             dataWallet["BankLedger"][dataTimers["BankInterest"]] = ["INT", round(interest/1000,3)]
             dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = IntToGSC(balance + int(interest))
@@ -118,8 +179,19 @@ def UpdateTimers(user):
 
 def GetNotationCode(user):
     userSettings = PlayerdataGetFile(user, "settings.json")
-    code = f"{userSettings['ExpolNotation']}.{userSettings['ExpolRounding']}"
+    code = f"{userSettings['Notation']}.{userSettings['Rounding']}"
     return code
+
+def AddCards(user, cards):
+    cardbook = PlayerdataGetFileIndex(user, "backpack.json", "cards")
+    for card in cards:
+        if card[2] not in cardbook.keys():
+            cardbook[card[2]] = [card[1], 0, 0]
+        if card[0] == "cardbase":
+            cardbook[card[2]][1] += 1
+        elif card[0] == "cardbase-shiny":
+            cardbook[card[2]][2] += 1
+    PlayerdataSetFileIndex(user, "backpack.json", "cards", cardbook)
 
 def PlayerdataGetFile(user, filename):
     """File extension must be supplied."""

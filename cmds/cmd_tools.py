@@ -13,14 +13,14 @@ from util.ColorUtil import rectColor
 from util.cmdutil import cmdutil
 text = cmdutil()
 
-def _cmdl_():
-    return ["calc", "tempcalc"]
+def commandList():
+    return [calc, tempcalc, speedcalc]
 
-def _catdesc_():
+def categoryDescription():
     return "Useful, helpful commands."
 
 
-@commands.command(aliases=['calculate', 'calculator'])
+@commands.command(aliases=['cal', 'calculate', 'calculator'])
 async def calc(ctx, *funct):
     """Calculates equations.
 
@@ -31,20 +31,44 @@ Operations:
     Division: /, ÷
     Floor Div: //, floor, fdiv
     Ceiling Div: ceil, ceiling, cdiv
+    Rounding: rnd, round
     Modulo: %, mod
     Exponent: ^, **, exp
     Root: root, √
+    Square root: sqrt
     Log to arbitrary base: log(base)
     Natural Log: ln
     Log10: ld
     Multiplication by ten raised to a power: E, ×10^
     Multiplication by one thousand raised to a power: K, ×1000^
+    Tetration: ^^, ***, tet
 
 Variables:
-    Golden Ratio: phi, φ, ϕ = 1.61803399
-    Euler's Number: e       = 2.71828183
-    Pi: pi, π               = 3.14159265
-    Tau: tau, τ             = 6.28318530"""
+    Golden Ratio: phi, φ, ϕ, Φ = 1.61803399
+    Euler's Number: e          = 2.71828183
+    Pi: pi, π, Π               = 3.14159265
+    Tau: tau, τ, Τ, T          = 6.28318530
+
+Fractions:
+    One tenth: ⅒               = 0.1
+    One ninth: ⅑               = 0.11111111
+    One eighth: ⅛              = 0.125
+    One seventh: ⅐             = 0.14285714
+    One sixth: ⅙               = 0.16666667
+    One fifth: ⅕               = 0.2
+    One fourth: ¼              = 0.25
+    One third: ⅓               = 0.33333333
+    Three eighths: ⅜           = 0.375
+    Two fifths: ⅖              = 0.4
+    One half: ½                = 0.5
+    Three fifths: ⅗            = 0.6
+    Five eighths: ⅝            = 0.625
+    Two thirds: ⅔              = 0.66666667
+    Three fourths: ¾           = 0.75
+    Four fifths: ⅘             = 0.8
+    Five sixths: ⅚             = 0.83333333
+    Seven eighths: ⅞           = 0.875
+"""
     await ctx.send(calculatorFunct(ctx.author, "".join(funct)))
 
 @commands.command()
@@ -187,7 +211,9 @@ Scales:
         "Ts": [723, 883, 7.699],
         "Og": [325, 350, 8.914],
         "Uue": [288, 903, 4.799],
-        "Ubn": [953, 1973, 5.838]
+        "Ubn": [953, 1973, 5.838],
+        "Ubu": [1600, 3300, 2.680], #poor estimation of MP, BP
+        "Ubb": [3100, 6200, 3.401] #poor estimation of MP, BP
         }
     MELTING_POINT = 0
     BOILING_POINT = 1
@@ -274,26 +300,28 @@ Scales:
  Rb  Sr  Y   Zr  Nb  Mo  Tc  Ru  Rh  Pd  Ag  Cd  In  Sn  Sb  Te  I   Xe \n\
 {el['Rb']}{el['Sr']}{el['Y']}{el['Zr']}{el['Nb']}{el['Mo']}{el['Tc']}{el['Ru']}{el['Rh']}{el['Pd']}{el['Ag']}{el['Cd']}{el['In']}\
 {el['Sn']}{el['Sb']}{el['Te']}{el['I']}{el['Xe']}`**"
-        pt2 = f"` Cs  Ba  Lu  Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn `"
-        pt3 = f"**`{el['Cs']}{el['Ba']}{el['Lu']}{el['Hf']}{el['Ta']}{el['W']}{el['Re']}{el['Os']}{el['Ir']}{el['Pt']}{el['Au']}{el['Hg']}\
+        pt2 = f"` Cs  Ba  La  Hf  Ta  W   Re  Os  Ir  Pt  Au  Hg  Tl  Pb  Bi  Po  At  Rn `"
+        pt3 = f"**`{el['Cs']}{el['Ba']}{el['La']}{el['Hf']}{el['Ta']}{el['W']}{el['Re']}{el['Os']}{el['Ir']}{el['Pt']}{el['Au']}{el['Hg']}\
 {el['Tl']}{el['Pb']}{el['Bi']}{el['Po']}{el['At']}{el['Rn']}\n\
- Fr  Ra  Lr  Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og \n\
-{el['Fr']}{el['Ra']}{el['Lr']}{el['Rf']}{el['Db']}{el['Sg']}{el['Bh']}{el['Hs']}{el['Mt']}{el['Ds']}{el['Rg']}{el['Cn']}{el['Nh']}\
+ Fr  Ra  Ac  Rf  Db  Sg  Bh  Hs  Mt  Ds  Rg  Cn  Nh  Fl  Mc  Lv  Ts  Og \n\
+{el['Fr']}{el['Ra']}{el['Ac']}{el['Rf']}{el['Db']}{el['Sg']}{el['Bh']}{el['Hs']}{el['Mt']}{el['Ds']}{el['Rg']}{el['Cn']}{el['Nh']}\
 {el['Fl']}{el['Mc']}{el['Lv']}{el['Ts']}{el['Og']}\n\
-Uue Ubn \n\
-{el['Uue']}{el['Ubn']}\n\
-         La  Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb \n\
-        {el['La']}{el['Ce']}{el['Pr']}{el['Nd']}{el['Pm']}{el['Sm']}{el['Eu']}\
-{el['Gd']}{el['Tb']}{el['Dy']}{el['Ho']}{el['Er']}{el['Tm']}{el['Yb']}\n\
-         Ac  Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No \n\
-        {el['Ac']}{el['Th']}{el['Pa']}{el['U']}{el['Np']}{el['Pu']}{el['Am']}\
-{el['Cm']}{el['Bk']}{el['Cf']}{el['Es']}{el['Fm']}{el['Md']}{el['No']}`**"
+Uue Ubn Ubu \n\
+{el['Uue']}{el['Ubn']}{el['Ubu']}\n\
+         Ce  Pr  Nd  Pm  Sm  Eu  Gd  Tb  Dy  Ho  Er  Tm  Yb  Lu \n\
+        {el['Ce']}{el['Pr']}{el['Nd']}{el['Pm']}{el['Sm']}{el['Eu']}\
+{el['Gd']}{el['Tb']}{el['Dy']}{el['Ho']}{el['Er']}{el['Tm']}{el['Yb']}{el['Lu']}\n\
+         Th  Pa  U   Np  Pu  Am  Cm  Bk  Cf  Es  Fm  Md  No  Lr \n\
+        {el['Th']}{el['Pa']}{el['U']}{el['Np']}{el['Pu']}{el['Am']}\
+{el['Cm']}{el['Bk']}{el['Cf']}{el['Es']}{el['Fm']}{el['Md']}{el['No']}{el['Lr']}\n\
+        Ubb \n\
+        {el['Ubb']}`**"
     elif kValue == 2000000000000: pt1 = "**`            * Fermi melting point *              \nThe 'boiling point' of atomic nuclei into quarks.`**"
     elif 2000000000000 < kValue < expol([1.42,32]): pt1 = "**`* Quark-gluon plasma *`**"
     elif kValue == expol([1.42,32]): pt1 = "**`       * Planck Temperature *          \nThe maximum temperature that can exist.\n    Wavelength of one Planck Length.   `**"
     elif kValue > expol([1.42,32]): pt1 = "**`                    * Kugelblitz *                       \nBlack hole formed from extreme electromagnetic radiation.`**"
 
-    embed = discord.Embed(title=f"Temperature Calculator: {value:is.3}{scale}", color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
+    embed = discord.Embed(title=f"Temperature Calculator: {value:{GetNotationCode(ctx.author)}}{scale}", color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
     embed.add_field(name="Scales", value=scaleConvStr, inline=False)
     embed.add_field(name="Elements", value=pt1, inline=False)
     if kValue < 2000000000000: embed.add_field(name=pt2, value=pt3, inline=False)
@@ -326,10 +354,10 @@ async def speedcalc(ctx, speed: float, mode="short"):
 ##                        'Thousia', 'Mia', 'Bia', 'Tria', 'Quadria', 'Quintia', 'Sextia', 'Septia', 'Octia', 'Nonia', 'Decia',
 ##                        'Undecia', 'Duodecia', 'Tredecia', 'Quattordecia', 'Quindecia',
 ##                        'Sexdecia', 'Septendecia', 'Octodecia', 'Novemdecia', 'Vigintia']
-    metric_name = ['v', 'w', 'x', 'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'X', 'W', 'V',
+    metric_name = ['v', 'q', 'r', 'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'R', 'Q', 'V',
                    'UDc ', 'DDc ', 'TDc ', 'QaDc ', 'QiDc ', 'SxDc ', 'SpDc ', 'ODc ', 'NDc ', 'Vg ', ]
-    metric_name_long = ['Vendeko', 'Weko', 'Xoni', 'Yocto', 'Zepto', 'Atto', 'Femto', 'Pico', 'Nano', 'Micro', 'Milli', '',
-                        'Kilo', 'Mega', 'Giga', 'Tera', 'Peta', 'Exa', 'Zeta', 'Yotta', 'Xona', 'Weka', 'Vendeka',
+    metric_name_long = ['Vendeko', 'Quecto', 'Ronto', 'Yocto', 'Zepto', 'Atto', 'Femto', 'Pico', 'Nano', 'Micro', 'Milli', '',
+                        'Kilo', 'Mega', 'Giga', 'Tera', 'Peta', 'Exa', 'Zetta', 'Yotta', 'Ronna', 'Quetta', 'Vendeka',
                         'Undecillion ', 'Duodecillion ', 'Tredecillion ', 'Quattordecillion ', 'Quindecillion ',
                         'Sexdecillion ', 'Septendecillion ', 'Octodecillion ', 'Novemdecillion ', 'Vigintillion ']
     met_orig = 11
@@ -493,3 +521,61 @@ async def speedcalc(ctx, speed: float, mode="short"):
 
     out = metric_out + us_out + mach_out + c_out + wf_out + time_out
     await ctx.send(out)
+
+
+@commands.command(aliases=['timecalculate', 'timecalculator')
+async def timecalc(ctx, mode: str, value: float, unit: str):
+    """Add or subtract time from the current timestamp.
+Due to limits with datetime, units smaller than the microsecond cannot be parsed."""
+    unitmap = {
+        "mcs": 0.000001,
+        "µs": 0.000001,
+        "microsecond": 0.000001,
+        "microseconds": 0.000001,
+        "ms": 0.001,
+        "millisecond": 0.001,
+        "milliseconds": 0.001,
+        "cs": 0.01,
+        "centisecond": 0.01,
+        "centiseconds": 0.01,
+        "ds": 0.1,
+        "decisecond": 0.1,
+        "deciseconds": 0.1,
+        "second": 1,
+        "seconds": 1,
+        "Ds": 10,
+        "dekasecond": 10,
+        "dekaseconds": 10,
+        "min": 60,
+        "minute": 60,
+        "minutes": 60,
+        "hs": 100,
+        "hectosecond": 100,
+        "hectoseconds": 100,
+        "ks": 1000,
+        "kilosecond": 1000,
+        "kiloseconds": 1000,
+        "hr": 3600,
+        "hour": 3600,
+        "hours": 3600,
+        "dy": 86400,
+        "day": 86400,
+        "days": 86400,
+        "sol": 88775,
+        "sols": 88775,
+        "wk": 604800,
+        "week": 604800,
+        "weeks": 604800,
+        "Ms": 1000000,
+        "megasecond": 1000000,
+        "megaseconds": 1000000,
+        "fn": 1209600,
+        "fortnight": 1209600,
+        "fortnights": 1209600,
+        "fortnite": 1209600, #included because damn kids think the length of time is the name of that damn game
+        "fortnites": 1209600,
+        "lmo": 2419200,
+        }
+
+
+

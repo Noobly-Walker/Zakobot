@@ -1,8 +1,13 @@
 from math import log, ceil, floor
-# Expol.PY is free to use.
+from decimal import Decimal
+# Written and maintained by Noobly Walker.
+# Liscensed with GNU General Public Liscense v3.
 
 MANTISSA = 0
 EXPONENT = 1
+REAL = 0
+IMAGINARY = 1
+EMAX = 1000000
 
 class MemoryOverflowSafeguard(Exception):
     def __init__(self, length, message="this operation would require a dangerous amount of memory. This action has been cancelled."):
@@ -16,6 +21,7 @@ class MemoryOverflowSafeguard(Exception):
         else: self.message = message
 
         super().__init__(self.message)
+    
 
 class expol:
     def __init__(self, obj=None):
@@ -35,51 +41,56 @@ s   - Scientific                1.23×10^45680
 sl  - Scientific Log-looped     1.23×10^10^4.660
 sk  - Scientific K              123.000×1000^15226
 skl - Scientific K Log-looped   123.000×1000^1000^1.394
-i   - Illions                   123.000 QuinVigintDucent-QuinMyrMillillion
-is  - Illions Shorthand         123.000 QiVgDc-QimMyMl
-li  - Long Illions              <not implemented>
-l   - Logarithmic               <not implemented>
+i   - Illions                   123.000 QuinVigintDucent-QuinDecMillillion
+is  - Illions Shorthand         123.000 QiVgDt-QiDcMl
+r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
 
 .   - Round to Nth decimal place
 ,   - Insert thousands separators
 %   - Append percent sign"""
         self.value = [0,0]
+        self.isInfinite = False
+        self.isNaN = False
         if obj != None:
             if type(obj) == str:
                 #Case 1: Stringified exponent
                 values = obj.split('e')
                 if len(values) == 2:
                     if values[0] == '': values[0] = 1 #e0 = 1
-                    else: raise TypeError(f"Invalid string value '{values[0]}' passed in.")
+                    else:
+                        try: values[0] = Decimal(values[0])
+                        except Exception: raise TypeError(f"Invalid string value '{values[0]}' passed in.")
                     if values[1] == '': values[1] = 0 #8e = 8
-                    else: raise TypeError(f"Invalid string value '{values[1]}' passed in.")
+                    else:
+                        try: values[1] = int(values[1])
+                        except Exception: raise TypeError(f"Invalid string value '{values[1]}' passed in.")
                     self.value = [values[0], values[1]]
                 else:
                     evaldStr = eval(obj)
                     #Case 2: Stringified list
                     if type(evaldStr) == list:
                         if len(evaldStr) == 2:
-                            if type(evaldStr[0]) in [float, int] and type(evaldStr[1]) == int: self.value = evaldStr
+                            if type(evaldStr[0]) in [float, Decimal, int] and type(evaldStr[1]) == int: self.value = [Decimal(evaldStr[0]), evaldStr[1]]
                             else: #going to find out which one was the wrong type
-                                if type(evaldStr[0]) not in [float, int]: raise TypeError(f"index 0: expected int or float, but got {type(evaldStr[0])}")
-                                if type(evaldStr[1]) not in [int]: raise TypeError(f"index 1: expected int, but got {type(evaldStr[0])}")
-                        else: raise IndexError(f"expol list takes 2 positional variables but {len(evaldStr)} were given")
-                    #Cases 3 and 4: Stringified float or int
-                    elif type(evaldStr) in [float, int]: self.value = self.expExtract(evaldStr)
-                    else: raise ValueError(f"invalid literal for expol() with value '{obj}'")
-            #Case 5: List
+                                if type(evaldStr[0]) not in [float, int, Decimal]: raise TypeError(f"Index 0: expected int, float, or decimal, but got {type(evaldStr[0])}")
+                                if type(evaldStr[1]) not in [int]: raise TypeError(f"Index 1: expected int, but got {type(evaldStr[0])}")
+                        else: raise IndexError(f"Expol list takes 2 positional variables but {len(evaldStr)} were given")
+                    #Cases 3, 4, and 5: Stringified float, int, or decimal
+                    elif type(evaldStr) in [float, int, Decimal]: self.value = self.expExtract(evaldStr)
+                    else: raise ValueError(f"Invalid literal for expol() with value '{obj}'")
+            #Case 6: List
             elif type(obj) == list:
                 if len(obj) == 2:
-                    if type(obj[0]) in [float, int] and type(obj[1]) == int: self.value = obj
+                    if type(obj[0]) in [float, int, Decimal] and type(obj[1]) == int: self.value = [Decimal(obj[0]), obj[1]]
                     else: #going to find out which one was the wrong type
-                        if type(obj[0]) not in [float, int]: raise TypeError(f"index 0: expected int or float, but got {type(obj[0])}")
-                        if type(obj[1]) not in [int]: raise TypeError(f"index 1: expected int, but got {type(obj[0])}")
-                else: raise IndexError(f"expol list takes 2 positional variables but {len(obj)} were given")
-            #Cases 6 and 7: Float or int
-            elif type(obj) in [float, int]: self.value = self.expExtract(obj)
-            #Case 8: Expol
+                        if type(obj[0]) not in [float, int, Decimal]: raise TypeError(f"Index 0: expected int, float, or decimal, but got {type(obj[0])}")
+                        if type(obj[1]) not in [int]: raise TypeError(f"Index 1: expected int, but got {type(obj[0])}")
+                else: raise IndexError(f"Expol list takes 2 positional variables but {len(obj)} were given")
+            #Cases 7, 8 and 9: Float, int, or decimal
+            elif type(obj) in [float, int, Decimal]: self.value = self.expExtract(obj)
+            #Case 10: Expol
             elif type(obj) == expol: self.value = obj.value
-            else: raise TypeError(f"expected int, float, list, or str, but got {type(obj[0])}")
+            else: raise TypeError(f"Expected int, float, list, expol, Decimal, or str, but got {type(obj[0])}")
 
     @property
     def mantissa(self):
@@ -89,36 +100,54 @@ l   - Logarithmic               <not implemented>
     def exponent(self):
         return self.value[EXPONENT]
             
-    def expExtract(self, variable): #Converts integers and double floating point numbers into exponent lists
-        if type(variable) in [int, float]:
+    def expExtract(self, variable): #Converts integers, double floating point numbers, and decimal floating point numbers into exponent lists
+        if type(variable) in [int, float, Decimal]:
             if variable != 0:
                 exponent = int(log(abs(variable),10))
-                mantissa = variable / 10**exponent
+                mantissa = Decimal(variable) / Decimal(10**exponent)
                 return self.expFixVar([mantissa, exponent])
             else: return [0,0]
         elif type(variable) == expol:
-            return variable.value
+            if type(variable.mantissa) is float: return self.expFixVar([variable.mantissa, variable.exponent])
+            else: return variable.value
         elif type(variable) == list:
             return variable
 
     def expFixVar(self, variable): #Corrals the mantissa between 1 and 10 and updates the exponent accordingly
+        if type(variable[MANTISSA]) is float:
+            variable = [Decimal(variable[MANTISSA]), variable[EXPONENT]]
         if variable[MANTISSA] != 0:
-            while abs(variable[MANTISSA]) >= 10:
+            while abs(variable[MANTISSA]) >= 10: #Rough adjustment
                 variable[MANTISSA] /= 10
                 variable[EXPONENT] += 1
             while abs(variable[0]) < 1:
                 variable[MANTISSA] *= 10
                 variable[EXPONENT] -= 1
+            if abs(variable[MANTISSA]) >= 9.9999999999: #Fine adjustment
+                variable[MANTISSA] = Decimal(round(variable[MANTISSA]))
+                variable[MANTISSA] /= 10
+                variable[EXPONENT] += 1
         else:
             variable[EXPONENT] = 0
+        self.format_float(variable[MANTISSA])
         return variable
 
+    def getSign(self, var): # Splits the sign from the number.
+        if not var.isNaN:
+            if var < 0: return var*-1, -1
+            else: return var, 1
+
+    def format_float(self, f):
+        d = Decimal(str(f));
+        return d.quantize(Decimal(1)) if d == d.to_integral() else d.normalize()
+
     def __add__(self, addend): #Addition operation +
+        if self.isNaN or self.isInfinite: return self
         var1 = self.value; var2 = self.expExtract(addend)
         expDiff = var1[EXPONENT] - var2[EXPONENT]
         if abs(expDiff) <= 50:
-            if expDiff < 0: mantOut = var1[MANTISSA]*10**expDiff+var2[MANTISSA]
-            elif expDiff >= 0: mantOut = var1[MANTISSA]+var2[MANTISSA]/10**expDiff
+            if expDiff < 0: mantOut = var1[MANTISSA]*10**Decimal(expDiff)+var2[MANTISSA]
+            elif expDiff >= 0: mantOut = var1[MANTISSA]+var2[MANTISSA]/10**Decimal(expDiff)
             expOut = max(var1[EXPONENT], var2[EXPONENT])
         #the following is to prevent float overflow due to attempting to add two numbers of incomparable size
         elif expDiff > 50: mantOut = var1[MANTISSA]; expOut = var1[EXPONENT]
@@ -137,13 +166,20 @@ l   - Logarithmic               <not implemented>
 
     def __truediv__(self, divisor): #Division operation /
         var1 = self.value; var2 = self.expExtract(divisor)
-        return self.__mul__([1/var2[MANTISSA], -var2[EXPONENT]])
+        return self.__mul__([Decimal(1)/Decimal(var2[MANTISSA]), -var2[EXPONENT]])
 
     def __floordiv__(self, divisor): #Floor division operation //
         quotient = self.__truediv__(self.expExtract(divisor))
         if abs(quotient.value[EXPONENT]) < 100: #if the number is too large, the ones place might not be saved anyway
-            quotient.value[MANTISSA] = floor(quotient.value[MANTISSA]*10**quotient.value[EXPONENT])/10**quotient.value[EXPONENT]
+            quotient.value[MANTISSA] = Decimal(floor(quotient.value[MANTISSA]*Decimal(10**quotient.value[EXPONENT])))/Decimal(10**quotient.value[EXPONENT])
         return expol(self.expFixVar(quotient.value))
+
+    def ceildiv(self, divisor): #Ceiling division operation
+        return -(-self // self.expExtract(divisor))
+
+    def round(self): #Rounding operation
+        if self%1 < 0.5: return self//1
+        else: return self.ceildiv(1)
 
     def __mod__(self, divisor): #Modulo division operation %
         quotient = self.__truediv__(self.expExtract(divisor))
@@ -151,19 +187,39 @@ l   - Logarithmic               <not implemented>
         return quotient - floor
 
     def __pow__(self, exponent): #Exponentiation operation **
-        const = 13000000000
-        var1 = self.value; var2 = expol(exponent)
-        expOut = int(expol(var1).log10() * var2)
-        mantOut = 10**((int(expol(var1).log10()*const * var2)%const)/const)
+        var1 = self.value; var2 = self.expExtract(exponent)
+        a, b, c, d = var1[0], var1[1], var2[0], var2[1]
+        if d > EMAX: raise MemoryOverflowSafeguard(d)
+        n = int(((b+Decimal(log(a, 10)))*Decimal(10**d)*c)*10**30)
+        if n >= 0: expOut = abs(n) // 10**30
+        else: expOut = abs(n) // 10**30 * -1
+        mantOut = round(10**(n % 10**30 / 10**30),10)
+        # Thanks to Dorijanko, Feodoric, and mustache for help figuring out this nightmare.
         return expol(self.expFixVar([mantOut, expOut]))
 
     def log10(self): #Log10 operation
         mant,exp = self.value
-        return expol(log(mant, 10)+exp)
+        if abs(exp) >= 10:
+            exp, expSign = self.getSign(exp) 
+            exp = log(exp, 10)
+            intExp = int(exp//1)
+            mant = float(expol([log(mant, 10), -intExp])) + 10**(exp-intExp)*expSign
+            return expol([mant, intExp])
+        else:
+            return expol(log(mant, 10)+exp)
 
-    def log(self, base:float): #Custom log operation
+    def log(self, base:Decimal): #Custom log operation
         mant,exp = self.value
-        return expol(log(mant, base)+exp/log(base, 10))
+        return expol(Decimal(log(mant, base))+Decimal(exp)/Decimal(log(base, 10)))
+
+    def tet(self, tetraponent): #Rough tetration operation
+        tetraponent = expol(tetraponent)
+        out = expol(self)
+        while tetraponent > 1:
+            if out.exponent > EMAX: raise MemoryOverflowSafeguard(out.exponent)
+            out = self**out
+            tetraponent -= 1
+        return out
 
     def __neg__(self): #Negate operation -expol
         return expol([self.value[MANTISSA]*-1,self.value[EXPONENT]])
@@ -218,90 +274,157 @@ l   - Logarithmic               <not implemented>
         else: return False
 
     def __str__(self):#Conversion to string
-        return f"{self.value[MANTISSA]}e{self.value[EXPONENT]}"
+        return f"{self:e}"
 
     def __format__(self, fmt): #String format codes
         mant = self.value[MANTISSA]; exp = self.value[EXPONENT]
         MANTISSA_ROUND = 10
         string = ""
 
-        tier0long1 = ["Thousand","Million","Billion","Trillion","Quadrillion","Quintillion","Sextillion","Septillion","Octillion","Nonillion"]
-        
-        tier1long1 = ["","Un","Duo","Tre","Quattor","Quin","Sex","Septen","Octo","Novem"]
-        tier1long2 = ["","Dec","Vigint","Trigint","Quadragint","Quinquagint","Sexagint","Septuagint","Octagint","Nonagint"]
-        tier1long3 = ["","Cent","Ducent","Trecent","Quadringent","Quincent","Sescent","Septingent","Octingent","Nongent"]
-        
-        tier2long1 = ["","Mill","Dumill","Tremill","Quadrimill","Quinmill","Sextimill","Septimill","Octimill","Nonimill"]
-        tier2long1b = ["","","Du","Tre","Quadri","Quin","Sexti","Septi","Octi","Noni"]
-        tier2long2 = ["","Myr","Dumyr","Tremyr","Quadrimyr","Quinmyr","Sextimyr","Septimyr","Octimyr","Nonimyr"]
-        tier2long3 = ["","Ce","Duce","Trece","Quadrice","Quince","Sextice","Septice","Octice","Nonice"]
-        tier2long4 = ["","Mill","Micr","Nan","Pic","Femt","Att","Zept","Yoct","Xon"]
-        tier2long4b = ["Ve","Me","Due","Trio","Tetre","Pente","Hexe","Hepte","Octe","Enne"]
-        tier2long4c = ["","Me","Due","Trio","Tetre","Pente","Hexe","Hepte","Octe","Enne"]
-        tier2long4d = ["","","Due","Trio","Tetre","Pente","Hexe","Hepte","Octe","Enne"]
-        tier2long5 = ["","c","Icos","Triacont","Tetracont","Pentacont","Hexacont","Heptacont","Octacont","Ennacont"]
-        tier2long6 = ["","Hect","Duehect","Triahect","Tetrahect","Pentahect","Hexahect","Heptahect","Octahect","Ennahect"]
-
-        tier3long1 = ["","Kill","Meg","Gig","Ter","Pet","Ex","Zet","Yot","Xenn"]
-
-        tier0short1 = ["k","M","B","T","Qa","Qi","Sx","Sp","O","N"]
-        
-        tier1short1 = ["","U","D","T","Qa","Qi","Sx","Sp","O","N"]
-        tier1short2 = ["","Dc","Vg","Tg","Qag","Qig","Sxg","Spg","Og","Ng"]
-        tier1short3 = ["","Ct","Dt","Tt","Qat","Qit","Sct","Spt","Ot","Nt"]
-        
-        tier2short1 = ["","Ml","Dl","Tl","Qal","Qil","Sxl","Spl","Ol","Nl"]
-        tier2short1b = ["","","D","T","Qa","Qi","Sx","Sp","O","N"]
-        tier2short2 = ["","My","Dy","Ty","Qay","Qiy","Sxy","Spy","Oy","Ny"]
-        tier2short3 = ["","Ce","De","Te","Qae","Qie","Sxe","Spe","Oe","Ne"]
-        tier2short4 = ["","Ml","Mc","Na","Pc","Fm","At","Zp","Yc","Xn"]
-        tier2short4b = ["Ve","M","D","Tr","Te","P","Hx","Hp","O","E"]
-        tier2short4c = ["","M","D","Tr","Te","P","Hx","Hp","O","E"]
-        tier2short4d = ["","","D","Tr","Te","P","Hx","Hp","O","E"]
-        tier2short5 = ["","","Ic","Trc","Tec","Pc","Hxc","Hpc","Oc","Ec"]
-        tier2short6 = ["","Hct","Dct","Trct","Tect","Pct","Hxct","Hpct","Oct","Ect"]
-
-        tier3short1 = ["","Kil","Meg","Gig","Ter","Pet","Ex","Zet","Yot","Xen"]
-
         illionsShortList = [
-          [
-            ["k","M","B","T","Qa","Qi","Sx","Sp","O","N"],
-            ["","U","D","T","Qa","Qi","Sx","Sp","O","N"],
-            ["","Dc","Vg","Tg","Qag","Qig","Sxg","Spg","Og","Ng"],
-            ["","Ct","Dt","Tt","Qat","Qit","Sct","Spt","Ot","Nt"]
-          ],
-          [
-            ["","Ml","Dl","Tl","Qal","Qil","Sxl","Spl","Ol","Nl"],
-            ["","M","D","Tr","Te","P","Hx","Hp","O","E"],
-            ["","Vc","Ic","Trc","Tec","Pc","Hxc","Hpc","Oc","Ec"],
-            ["","Hct","Dct","Trct","Tect","Pct","Hxct","Hpct","Oct","Ect"]
-          ],
-          [
-            ["","Kl","Mg","Gg","Tr","P","E","Z","Y","X"],
-            ["","H","D","Tr","Te","P","E","Z","Y","N"],
-            ["","Dk","Ik","Trk","Tek","Pk","Ek","Zk","Yk","Nk"],
-            ["","Hot","Bot","Trot","Tot","Pot","Eot","Zot","Yot","Not"]
-          ]
+            [
+                ["k","M","B","T","Qa","Qi","Sx","Sp","O","N"],
+                ["","U","D","T","Qa","Qi","Sx","Sp","O","N"],
+                ["","Dc","Vg","Tg","Qag","Qig","Sxg","Spg","Og","Ng"],
+                ["","Ct","Dt","Tt","Qat","Qit","Sct","Spt","Ot","Nt"]
+            ],
+            [
+                ["","Ml","Mc","Na","Pc","Fm","At","Zp","Yc","Xn"],
+                ["","M","D","Tr","Te","P","Hx","Hp","O","E"],
+                ["","Vc","Ic","Trc","Tec","Pc","Hxc","Hpc","Oc","Ec"],
+                ["","Hct","Dct","Trct","Tect","Pct","Hxct","Hpct","Oct","Ect"]
+            ],
+            [
+                ["","Kl","Mg","Gg","Tr","P","E","Z","Y","X"],
+                ["","H","D","Tr","Te","P","E","Z","Y","N"],
+                ["","Dk","Ik","Trk","Tek","Pk","Ek","Zk","Yk","Nk"],
+                ["","Hot","Bot","Trot","Tot","Pot","Eot","Zot","Yot","Not"]
+            ]
+        ]
+
+        illionsList = [
+            [
+                ["Thousand","M","B","Tr","Quadr","Quint","Sext","Sept","Oct","Non"],
+                ["","Un","Duo","Tre","Quattor","Quin","Sex","Septen","Octo","Novem"],
+                ["","Dec","Vigint","Trigint","Quadragint","Quinquagint","Sexagint","Septuagint","Octagint","Nonagint"],
+                ["","Cent","Ducent","Trecent","Quadringent","Quincent","Sescent","Septingent","Octingent","Nongent"]
+            ],
+            [
+                ["","Mill","Micr","Nan","Pic","Femt","Att","Zept","Yoct","Xon"],
+                ["","Me","Due","Trio","Tetre","Pente","Hexe","Hepte","Octe","Enne"],
+                ["","Vec","Icos","Triacont","Tetracont","Pentacont","Hexacont","Heptacont","Octacont","Ennacont"],
+                ["","Hect","Duehect","Triahect","Tetrahect","Pentahect","Hexahect","Heptahect","Octahect","Ennahect"]
+            ],
+            [
+                ["","Kill","Meg","Gig","Ter","Pet","Ex","Zett","Yott","Xenn"],
+                ["","Hen","Do","Tra","Te","Pe","Ex","Ze","Yo","Ne"],
+                ["","Dak","Ik","Trak","Tek","Pek","Exac","Zak","Yok","Nek"],
+                ["","Hot","Bot","Trot","Tot","Pot","Exot","Zot","Yoot","Not"]
+            ]
         ]
 
         def splitThou(number):
             number = f"{number:,}".split(",")
             return [int(n) for n in number]
 
-        def parseIllionsShort(_tier, index, highest=True):
+        def parseNotationList(notList, _tier, index, highest=True):
             out = ""
             revindex = str(index)[:: -1]
             for power in range(len(revindex)):
+                if revindex[power] == "-": continue
                 if index < 10 and power == 0 and highest:
-                    out += illionsShortList[_tier][power][int(revindex[power])]
-                    print(f"triggered: '{out}' for {_tier}, {power}, {int(revindex[power])}")
+                    out += notList[_tier][power][int(revindex[power])]
                 else:
-                    out += illionsShortList[_tier][power+1][int(revindex[power])]
+                    out += notList[_tier][power+1][int(revindex[power])]
             return out
+
+        def convToListNotation(mant, exp, _list):
+            mant *= 10**(exp % 3) # mantissa convert e to k
+            if exp < 0: isFraction = True
+            else: isFraction = False
+            exponentAtWorkingTier = (abs(exp)-isFraction) // 3 -1 + isFraction # exponent convert e to k
+            name = ""
+            workingTier = 0
+            exponentAtLastTier = None #this is the exponent before the previous log1000()
+            
+            while exponentAtWorkingTier >= 1000: #figure out which tier -illion to use with repeated log1000()
+                exponentAtLastTier = exponentAtWorkingTier #save the last tier's exponent, in case it's needed
+                exponentAtWorkingTier = int(expol(exponentAtWorkingTier).log(1000))
+                workingTier += 1 #workingTier is googological tier, with 0 starting million, 1 starting millillion, 2 starting killillion, etc.
+                
+            if exponentAtWorkingTier == -1 and not isFraction: # it's between zero and one thousand!
+                pass # We don't need to do anything.
+            
+            elif exponentAtWorkingTier < 10 and exponentAtLastTier != None: # It is a normal illion
+                exponentGroupsAtLastTier = splitThou(exponentAtLastTier) # split the exponent into groups of three digits, then combine the googolism of the last tier with the one for this tier
+                sections = []
+                for workingTierValue in range(exponentAtWorkingTier, -1, -1): # workingTierValue is the number of this tier. 7 in tier 2 is zetillion.
+                    if workingTierValue == exponentAtWorkingTier:
+                        if exponentGroupsAtLastTier[-(workingTierValue)+1] == 1: # if theres only one, then theres no need to bother with numbers before. It's millillion, not memillillion.
+                            sections.insert(0, parseNotationList(_list, workingTier, workingTierValue))
+                        else: #if there is more than one, then we do need to specify the quantity of that place.
+                            sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)+1], False) +
+                                            parseNotationList(_list, workingTier, workingTierValue))
+                    elif exponentGroupsAtLastTier[-(workingTierValue)] != 0:
+                        sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)+1], False) +
+                                        parseNotationList(_list, workingTier, workingTierValue))
+                    if sections[0] == "": sections.pop(0)
+                if len(sections) > 1: name = "-".join(sections)
+                else: name = sections[0]
+                if _list == illionsList: name += "illion"
+                
+            else: # 0-illion to 9-illion is speshul and has a speshul list
+                name = parseNotationList(_list, workingTier, exponentAtWorkingTier)
+                if _list == illionsList and exponentAtWorkingTier != 0: name += "illion"
+                
+            if isFraction:
+                if _list == illionsShortList: name += "þ"
+                if _list == illionsList: name += "th"
+            if len(name) > 80:
+                name = "..." + name[-80:]
+            if (workingTier <= 1 and exponentAtWorkingTier < 10) or (workingTier == 0):
+                return f"{self.format_float(round(mant,MANTISSA_ROUND))} " + name
+            else:
+                return name
 
         def checkIndex(indexedList, index):
             try: return indexedList[index]
             except IndexError: return 0
+
+        def romanize(mant, exp, notationstr, fractions):
+            string = ""
+            if mant < 0:
+                mant = abs(mant)
+                string += notationstr[-1]
+            mant *= 10**(exp % 3)
+            exp //= 3
+            remainder = round(mant % 1 * 12)
+            mant = int(mant // 1)
+            if remainder >= 12:
+                mant += 1
+                remainder -= 12
+            if mant >= 1000:
+                mant /= 1000
+                remainder = round(mant % 1 * 12)
+                mant = int(mant // 1)
+                exp += 1
+            mant = str("".join(reversed(str(mant))))
+            power = len(mant)-1
+            while power >= 0:
+                notmap = {"0":"",
+                          "1":notationstr[power*2],
+                          "2":notationstr[power*2]*2,
+                          "3":notationstr[power*2]*3,
+                          "4":notationstr[power*2]+notationstr[power*2+1],
+                          "5":notationstr[power*2+1],
+                          "6":notationstr[power*2+1]+notationstr[power*2],
+                          "7":notationstr[power*2+1]+notationstr[power*2]*2,
+                          "8":notationstr[power*2]*2+notationstr[power*2+2],
+                          "9":notationstr[power*2]+notationstr[power*2+2]}
+                string += notmap[mant[power]]
+                power -= 1
+            string += fractions[remainder]
+            return string, exp
         
         if "." in fmt: #rounding
             fmtChunks = fmt.split(".")
@@ -316,11 +439,11 @@ l   - Logarithmic               <not implemented>
             while exp > 10:
                 exp = round(log(exp, 10),MANTISSA_ROUND)
                 loops += 1
-            string = f"{round(mant,MANTISSA_ROUND)}" + "e" * loops + "{exp}"
+            string = f"{self.format_float(round(mant,MANTISSA_ROUND))}" + "E" * loops + f"{exp}"
         
         elif "e" in fmt or fmt == "": #engineering
-            if "," in fmt: string = f"{round(mant,MANTISSA_ROUND)}e{exp:,}"
-            else: string = f"{round(mant,MANTISSA_ROUND)}e{exp}"
+            if "," in fmt: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}E{exp:,}"
+            else: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}E{exp}"
         
         elif "skl" in fmt: #scientific k log looped
             if "," in fmt: k = "1,000"
@@ -331,133 +454,30 @@ l   - Logarithmic               <not implemented>
             while exp > 1000:
                 exp = round(log(exp, 1000),MANTISSA_ROUND)
                 loops += 1
-            string = f"{round(mant,MANTISSA_ROUND)}×" + k * loops + "{exp}"
+            string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×" + k * loops + f"{exp}"
         
         elif "sk" in fmt: #scientific k
             mant *= 10**(exp % 3)
             exp //= 3
-            if "," in fmt: string = f"{round(mant,MANTISSA_ROUND)}×1,000^{exp:,}"
-            else: string = f"{round(mant,MANTISSA_ROUND)}×1000^{exp}"
+            if "," in fmt: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×1,000^{exp:,}"
+            else: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×1000^{exp}"
 
         elif "is" in fmt: #illions shorthand
-            mant *= 10**(exp % 3)
-            if exp < 0: isFraction = True
-            else: isFraction = False
-            exp = (abs(exp)-isFraction) // 3 -1 + isFraction
-            name = ""
-            tier = 0
-            oldExp = None
-            while exp > 1000:
-                oldExp = exp #save the last tier's exponent, in case it's needed
-                exp = round(log(exp, 1000))
-                tier += 1
-            if exp < 10 and oldExp != None:
-                oldExp = splitThou(oldExp)
-                sections = []
-                for e in range(exp, -1, -1):
-                    if e == exp:
-                        sections.insert(0, parseIllionsShort(tier-1, oldExp[-(e+1)]) + parseIllionsShort(tier, e, False))
-                    else:
-                        sections.insert(0, parseIllionsShort(tier-1, oldExp[-(e+1)], False) + parseIllionsShort(tier, e, False))
-                if len(sections) > 1: name = "-".join(sections)
-            else:
-                name = parseIllionsShort(tier, exp)
-
-            if isFraction: name += "þ"
-            if len(name) > 80:
-                name = "..." + name[-80:]
-            if (tier <= 1 and exp < 10) or (tier == 0):
-                string = f"{round(mant,MANTISSA_ROUND)} " + name
-            else:
-                string = name
-##            mant *= 10**(exp % 3)
-##            if exp < 0: isFraction = True
-##            else: isFraction = False
-##            exp = (abs(exp)-isFraction) // 3 -1 + isFraction
-##            name = ""
-##            if -1 < exp < 10: #the illions every school kid knows about
-##                name = tier0short1[exp]
-##            if 10 <= exp < 10**30: #the illions that are latin
-##                places = [int(i) for i in str(exp)]
-##                name += tier1short1[checkIndex(places,-1)] + tier1short2[checkIndex(places,-2)] + tier1short3[checkIndex(places,-3)]
-##                if exp >= 1000:
-##                    if name != "": name += "-"
-##                    name += tier2short1[checkIndex(places,-4)] + tier2short2[checkIndex(places,-5)] + tier2short3[checkIndex(places,-6)]
-##            if 1000000 <= exp < 10**30: # the illions that are descending SI prefixes. Transitional!
-##                for block in range(round(log(exp,10)//3)):
-##                    places = [int(i) for i in str(exp)]
-##                    if block == 0: continue
-##                    if name != "": name += "-"
-##                    name += tier2short1b[checkIndex(places,-(block*3+4))] + tier2short2[checkIndex(places,-(block*3+5))] + tier2short3[checkIndex(places,-(block*3+6))] + tier2short4[block+1]
-##            if 10**30 <= exp: #the illions that are greek
-##                exp = round(log(exp,10))//3
-##                name += "~"
-##                for block in range(round(log(exp,1000)//1)+1):
-##                    places = [int(i) for i in str(exp)]
-##                    if name != "~": name += "-"
-##                    if checkIndex(places,-(block*3+2)) == 0: 
-##                        if block == 0:
-##                            name += tier2short4[checkIndex(places,-(block*3+1))]
-##                        else:
-##                            name += tier2short4d[checkIndex(places,-(block*3+1))]
-##                    elif checkIndex(places,-(block*3+2)) == 1: name += tier2short4b[checkIndex(places,-(block*3+1))]
-##                    else: name += tier2short4c[checkIndex(places,-(block*3+1))]
-##                    name += tier2short5[checkIndex(places,-(block*3+2))] + tier2short6[checkIndex(places,-(block*3+3))] + tier3short1[block]
-##            if isFraction: name += "þ"
-##            if len(name) > 80:
-##                name = "..." + name[-80:]
-##            string = f"{round(mant,MANTISSA_ROUND)} " + name
+            string = convToListNotation(mant, exp, illionsShortList)
 
         elif "i" in fmt: #illions
-            mant *= 10**(exp % 3)
-            if exp < 0: isFraction = True
-            else: isFraction = False
-            exp = (abs(exp)-isFraction) // 3 -1 + isFraction
-            name = ""
-            if -1 < exp < 10: #the illions every school kid knows about
-                name = tier0long1[exp]
-            if 10 <= exp < 10**30: #the illions that are latin
-                places = [int(i) for i in str(exp)]
-                name += tier1long1[checkIndex(places,-1)] + tier1long2[checkIndex(places,-2)] + tier1long3[checkIndex(places,-3)]
-                if exp >= 1000:
-                    if name != "": name += "-"
-                    name += tier2long1[checkIndex(places,-4)] + tier2long2[checkIndex(places,-5)] + tier2long3[checkIndex(places,-6)]
-            if 1000000 <= exp < 10**30: # the illions that are descending SI prefixes. Transitional!
-                for block in range(round(log(exp,10)//3)):
-                    places = [int(i) for i in str(exp)]
-                    if block == 0: continue
-                    if name != "": name += "-"
-                    name += tier2long1b[checkIndex(places,-(block*3+4))] + tier2long2[checkIndex(places,-(block*3+5))] + tier2long3[checkIndex(places,-(block*3+6))] + tier2long4[block+1]
-            if 10**30 <= exp: #the illions that are greek
-                exp = round(log(exp,10))//3
-                name += "~"
-                for block in range(round(log(exp,1000)//1)+1):
-                    places = [int(i) for i in str(exp)]
-                    if name != "~": name += "-"
-                    if checkIndex(places,-(block*3+2)) == 0: 
-                        if block == 0:
-                            name += tier2long4[checkIndex(places,-(block*3+1))]
-                        else:
-                            name += tier2long4d[checkIndex(places,-(block*3+1))]
-                    elif checkIndex(places,-(block*3+2)) == 1: name += tier2long4b[checkIndex(places,-(block*3+1))]
-                    else: name += tier2long4c[checkIndex(places,-(block*3+1))]
-                    name += tier2long5[checkIndex(places,-(block*3+2))] + tier2long6[checkIndex(places,-(block*3+3))] + tier3long1[block]
-            if exp >= 10: name += "illion"
-            if isFraction: name += "th"
-            if len(name) > 80:
-                name = "..." + name[-80:]
-            string = f"{round(mant,MANTISSA_ROUND)} " + name
+            string = convToListNotation(mant, exp, illionsList)
             
         elif "sl" in fmt: #scientific log looped
             loops = 1
             while exp > 10:
                 exp = round(log(exp, 10),MANTISSA_ROUND)
                 loops += 1
-            string = f"{round(mant,MANTISSA_ROUND)}×" + "10^" * loops + "{exp}"
+            string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×" + "10^" * loops + f"{exp}"
         
         elif "s" in fmt: #scientific
-            if "," in fmt: string = f"{round(mant,MANTISSA_ROUND)}×10^{exp:,}"
-            else: string = f"{round(mant,MANTISSA_ROUND)}×10^{exp}"
+            if "," in fmt: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×10^{exp:,}"
+            else: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}×10^{exp}"
         
         elif "kl" in fmt: #engineering k log looped
             mant *= 10**(exp % 3)
@@ -466,13 +486,33 @@ l   - Logarithmic               <not implemented>
             while exp > 1000:
                 exp = round(log(exp, 1000),MANTISSA_ROUND)
                 loops += 1
-            string = f"{round(mant,MANTISSA_ROUND)}" + "k" * loops + "{exp}"
+            string = f"{self.format_float(round(mant,MANTISSA_ROUND))}" + "K" * loops + f"{exp}"
 
         elif "k" in fmt: #engineering k
             mant *= 10**(exp % 3)
             exp //= 3
-            if "," in fmt: string = f" = {round(mant,MANTISSA_ROUND)}k{exp:,}"
-            else: string = f" = {round(mant,MANTISSA_ROUND)}k{exp}"
+            if "," in fmt: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}K{exp:,}"
+            else: string = f"{self.format_float(round(mant,MANTISSA_ROUND))}K{exp}"
+
+        elif "r" in fmt: #roman
+            notationstr = "IVXLCDM-"
+            notationexpstr = "ᶦᵛˣᴸᶜᴰᴹ⁻"
+            fractions = ["","·",":","∴","∷","⁙","S","S·","S:","S∴","S∷","S⁙"]
+            fractionsexp = ["","⚀","⚁","⚂","⚃","⚄","ˢ","ˢ⚀","ˢ⚁","ˢ⚂","ˢ⚃","ˢ⚄"]
+            if mant == 0:
+                string = "N"
+            else:
+                stringadd, exp = romanize(mant, exp, notationstr, fractions)
+                string += stringadd
+                if exp < 1000:
+                    stringadd, exp2 = romanize(exp, 0, notationexpstr, fractionsexp)
+                    string += "ᴹ"*exp2 + stringadd
+                else:
+                    exp2 = log(exp, 1000)
+                    stringadd, exp3 = romanize(1000**(exp2%1), 0, notationexpstr, fractionsexp)
+                    string += stringadd + "^"
+                    stringadd, _ = romanize(exp2//1+exp3, 0, notationexpstr, fractionsexp)
+                    string += stringadd
 
         if "%" in fmt: #percent sign
             string += "%"
@@ -482,19 +522,132 @@ l   - Logarithmic               <not implemented>
         return str(self.value)
 
     def __int__(self): #Conversion to integer
-        if self.value[EXPONENT] > 1000000: raise MemoryOverflowSafeguard(self.value[EXPONENT])
+        if self.value[EXPONENT] > EMAX: raise MemoryOverflowSafeguard(self.value[EXPONENT])
         elif self.value[EXPONENT] > 100: #must carefully step down to int to prevent float overflow
             x = int(self.value[MANTISSA]*10**100)
             expon = self.value[EXPONENT]-100
-            return x*10**expon
+            out = x*10**expon
         elif self.value[EXPONENT] < 0:
-            return 0
-        else: return int(self.value[MANTISSA]*10**self.value[EXPONENT])
+            out = 0
+        else: out = int(self.value[MANTISSA]*10**self.value[EXPONENT])
+        expon2 = self.value[EXPONENT]
+        if len(str(out)) >= 9:
+            factor = 10**(expon2-9)
+            if int(str(out)[8]) < 5:
+                out = out//factor * factor
+            else:
+                out = ceil(out/factor) * factor
+        return int(out)
 
     def __float__(self): #Conversion to double floating point
-        if abs(self.value[EXPONENT]) > 308: raise OverflowError("expol too large to convert to float") #will float overflow if too large, and could cause memory overflow.
+        if abs(self.value[EXPONENT]) > 308: raise OverflowError("Expol too large to convert to float") #will float overflow if too large, and could cause memory overflow.
         else: return float(self.value[MANTISSA]*10**self.value[EXPONENT])
 
     def __iter__(self): #Conversion to list
         return iter(self.value)
-    
+
+class expolComplex:
+    def __init__(self, real=None, imag=None):
+        self.value = [expol(0),expol(0)]
+        self.validReal = [float, int, Decimal, expol]
+        self.validComplex = [expolComplex, complex]
+        if type(real) in self.validComplex:
+            self.value[REAL] = real.real
+            self.value[IMAGINARY] = real.imag
+        else:
+            if real != None:
+                #Cases 1, 2 and 3: Float, int, or decimal
+                if type(real) in [float, int, Decimal]: self.value[REAL] = expol(real)
+                #Case 4: Expol
+                elif type(real) == expol: self.value[REAL] = real.value
+                else: raise TypeError(f"Expected int, float, list, Decimal, or expol, but got {type(obj[0])}")
+            if imag != None:
+                #Cases 1, 2 and 3: Float, int, or decimal
+                if type(imag) in [float, int, Decimal]: self.value[IMAGINARY] = expol(imag)
+                #Case 4: Expol
+                elif type(imag) == expol: self.value[IMAGINARY] = imag.value
+                else: raise TypeError(f"Expected int, float, list, Decimal, or expol, but got {type(obj[0])}")
+            
+    @property
+    def real(self):
+        return self.value[REAL]
+
+    @property
+    def imag(self):
+        return self.value[IMAGINARY]
+
+    def __add__(self, addend): #Addition operation +
+        if type(addend) in self.validReal:
+            self.value[REAL] += addend
+        elif type(addend) in self.validComplex:
+            self.value[REAL] += addend.real
+            self.value[IMAGINARY] += addend.imag
+        return self
+
+    def __sub__(self, subtrahend): #Subtraction operation -
+        if type(subtrahend) in self.validReal:
+            self.value[REAL] -= subtrahend
+        elif type(subtrahend) in self.validComplex:
+            self.value[REAL] -= subtrahend.real
+            self.value[IMAGINARY] -= subtrahend.imag
+        return self
+
+    def __mul__(self, factor): #Multiplication operation *
+        if type(factor) in self.validReal:
+            self.value[REAL] *= factor
+            self.value[IMAGINARY] *= factor
+        elif type(factor) in self.validComplex:
+            r = self.real * factor.real - self.imag * factor.imag
+            i = self.real * factor.imag + self.imag * factor.real
+            self.value[REAL] = r
+            self.value[IMAGINARY] = i
+        return self
+
+    def __truediv__(self, divisor): #Division operation /
+        if type(divisor) in self.validReal:
+            self.value[REAL] /= divisor
+            self.value[IMAGINARY] /= divisor
+        elif type(divisor) in self.validComplex:
+            numerator = self * expolComplex(divisor.real, -divisor.imag)
+            denominator = expolComplex(divisor) * expolComplex(divisor.real, -divisor.imag)
+            self = numerator
+            self.value[REAL] /= denominator.real
+            self.value[IMAGINARY] /= denominator.real
+        return self
+
+    def __floordiv__(self, divisor): #Floor division operation //
+        self /= divisor
+        self.value[REAL] //= 1
+        self.value[IMAGINARY] //= 1
+        return self
+
+    def ceildiv(self, divisor): #Ceiling division operation
+        self /= divisor
+        self.value[REAL] = self.real.ceildiv(1)
+        self.value[IMAGINARY] = self.imag.ceildiv(1)
+        return self
+        
+    def round(self): #Rounding operation
+        self.value[REAL] = self.real.round()
+        self.value[IMAGINARY] = self.imag.round()
+        return self
+
+    def __mod__(self, divisor): #Modulo division operation %
+        if type(addend) in self.validReal:
+            self.value[REAL]
+
+    def __pow__(self, exponent): #Exponentiation operation **
+        if type(addend) in self.validReal:
+            self.value[REAL]
+
+    def log10(self): #Log10 operation
+        if type(addend) in self.validReal:
+            self.value[REAL]
+
+    def log(self, base:Decimal): #Custom log operation
+        if type(addend) in self.validReal:
+            self.value[REAL]
+
+    def tet(self, tetraponent): #Rough tetration operation
+        if type(addend) in self.validReal:
+            self.value[REAL]

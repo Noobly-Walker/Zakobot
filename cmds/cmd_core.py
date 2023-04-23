@@ -17,12 +17,14 @@ from util.TextFormat import *
 from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
 text = cmdutil()
+local = loadJSON('.\\locals\\locals.json')
+PATH = load(".\\locals\\%PATH%")
 
-def _cmdl_():
-    return ["ping", "echo", "emoji", "joined", "now", "invite", 
-            "echoformat", "changelog", "embed", "report"]
+def commandList():
+    return [ping, echo, emoji, joined, now, invite, 
+            echoformat, changelog, embed, report, webhook]
 
-def _catdesc_():
+def categoryDescription():
     return "Important core commands."
 
 @commands.command()
@@ -40,8 +42,21 @@ async def echoformat(ctx, *, string):
     """I will repeat whatever text is put into this command!
 Accepts formatting! Slower.
 
-e!emojiname - Replaces with emote."""
+e!emojiname - Replaces with emote.
+e[string] - Emojifies part of string.
+<t> - Inserts timestamp."""
     await ctx.send(formatText(string))
+
+@commands.command()
+async def webhook(ctx):
+    """Forces your message to be turned into a webhook!
+Accepts formatting!
+
+e!emojiname - Replaces with emote.
+e[string] - Emojifies part of string.
+<t> - Inserts timestamp."""
+    # This command is here so it can be found with z!cmd. It is handled in zakobot.py.
+    return
 
 @commands.command()
 async def embed(ctx, color, title, *, string):
@@ -50,29 +65,10 @@ async def embed(ctx, color, title, *, string):
 Separate fields into <1024 character chunks using <field>.
 Maximum 1024 characters per field, 6 fields per embed.
 
-Color can be named using the table of color names below, or darkBaseColor/lightBaseColor
 Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
 Color can be defined as three numbers in the format 0xxRR,0xGG,0xBB, where RGB is hexadecimal
-
-Base colors (Max sat, min lum):
-  gray/grey, red, vermillion, orange, amber, yellow, chartreuse, green, cyan, cornflower, blue, violet, purple, magenta
-  black, white (these base colors don't have dark or light variants, for what i hope to be obvious reasons)
-
-All accepted color names (not including darkBaseColor/lightBaseColor if another name exists, eg. lightRed is accepted):
-  black, darkGray/darkGrey, gray/grey, silver, white
-  maroon, red, pink
-  brick/copper, vermillion, peach
-  brown, orange, lightOrange
-  brass, amber, lightAmber
-  gold, yellow, lemon
-  swamp, chartreuse, avocado
-  forest, green, lime
-  teal, cyan, sky
-  darkCornflower, cornflower, lightCornflower
-  navy, blue, slate
-  midnight, indigo, lightIndigo
-  plum, purple, lavender
-  eggplant, magenta, rose
+Color can also be named using the table found using this command.
+  z!file read colors
 """
     embed = discord.Embed(title=title, color=rectColor(color))
     string = string.split("<field>")
@@ -88,10 +84,13 @@ All accepted color names (not including darkBaseColor/lightBaseColor if another 
 
 @commands.command(aliases=['em'])
 async def emoji(ctx):
-    """Returns a list of all emojis available to Zako."""
+    """Returns a list of all emojis available to Zako.
+These emojis can be called the same way that they would be if they were on the server, or if you had nitro.
+++:emoji: - Reacts to the replied to message, or the most recent message.
++++:emoji: - Turns the emoji into a sticker."""
     eml = loadJSON("emojis.json", "data")
     out = ""
-    for e in list(eml.keys()):
+    for e in list(sorted(eml.keys())):
         name = e.replace('_', '\\_')
         if len(out + f"{name} = {eml[e]}, ") > 2000:
             await ctx.send(out)
@@ -112,64 +111,104 @@ async def joined(ctx, member):
 @commands.command()
 async def now(ctx):
     """Shows the current time anywhere on Earth."""
-    DST = True
-    DST_South = not DST
-    out = f"**Anchorage Daylight Time**: {current_time(-9+DST)}\n\n\
-**Pacific Daylight Time**: {current_time(-8+DST)}\n\n\
-**Mountain Daylight Time**: {current_time(-7+DST)}\n\n\
-**Central Daylight Time**: {current_time(-6+DST)}\n\n\
-**Eastern Daylight Time**: {current_time(-5+DST)}\n\n\
-**Atlantic Daylight Time**: {current_time(-4+DST)}\n\n\
+    timestamp = int(ctx.message.created_at.replace(tzinfo=timezone.utc).timestamp())
+    dt = datetime.now()
+    if dt.month in [11, 12, 1, 2]: DST = False
+    else: DST = True
+    if dt.month in [5, 6, 7, 8]: DST_South = False
+    else: DST_South = True
+
+    def queryTZ(DST:bool, region:str):
+        if region == "US":
+            if DST: return "Daylight"
+            else: return "Standard"
+        if region == "EU":
+            if DST: return "Summer"
+            else: return "Standard"
+    
+    out = f"**Your Time**: <t:{timestamp}>\n\n\
+**Anchorage {queryTZ(DST, 'US')} Time**: {current_time(-9+DST)}\n\n\
+**Pacific {queryTZ(DST, 'US')} Time**: {current_time(-8+DST)}\n\n\
+**Mountain {queryTZ(DST, 'US')} Time**: {current_time(-7+DST)}\n\n\
+**Central {queryTZ(DST, 'US')} Time**: {current_time(-6+DST)}\n\n\
+**Eastern {queryTZ(DST, 'US')} Time**: {current_time(-5+DST)}\n\n\
+**Atlantic {queryTZ(DST, 'US')} Time**: {current_time(-4+DST)}\n\n\
 **Brasília Time**: {current_time(-3)}\n\n\
 **Universal Coordinated Time**: {current_time(0)}\n\n\
-**British Summer Time**: {current_time(0+DST)}\n\n\
-**Central European Summer Time**: {current_time(1+DST)}\n\n\
-**Eastern European Summer Time**: {current_time(2+DST)}\n\n\
+**British {queryTZ(DST, 'EU')} Time**: {current_time(0+DST)}\n\n\
+**Central European {queryTZ(DST, 'EU')} Time**: {current_time(1+DST)}\n\n\
+**Eastern European {queryTZ(DST, 'EU')} Time**: {current_time(2+DST)}\n\n\
 **Moscow Standard Time**: {current_time(3)}\n\n\
 **China Standard Time**: {current_time(8)}\n\n\
 **Singapore Time**: {current_time(8)}\n\n\
 **Philipines Standard Time**: {current_time(8)}\n\n\
 **Korea Standard Time**: {current_time(9)}\n\n\
 **Japan Standard Time**: {current_time(9)}\n\n\
-**Australia Eastern Standard Time**: {current_time(10+DST_South)}"
+**Australia Eastern {queryTZ(DST_South, 'EU')} Time**: {current_time(10+DST_South)}"
     await ctx.send(out)
 
 @commands.command()
 async def changelog(ctx, version=""):
-    """View changes to Zako's code!"""
-    changeFile = loadJSON("changelog.txt", ".\\data\\")
+    """View changes to Zako's code!
+Key:
++ Item added.
+- Item removed.
+× Item changed.
+% Item patched or bugfixed.
+‼ Comment
+> Item List (for listing multiple aspects of the same change)
+# Technical change.
+! Unimplemented item."""
+    changeFile = loadJSON(f"changelog.txt", PATH)
     versionList = list(changeFile.keys())
     if version == "":
+        embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")), title="Zako Zaun Changelog - Table of Contents")
+        embed.add_field(name="Development Stages", value=f"1.0 (2018 Jan 25th ~ 2018 Mar 21st)\n\
+2.0 (2019 Dec 14th ~ 2021 Apr 14th)\n\
+3.0 (2023 Jan 1st ~ Present)", inline=False)
+        embed.add_field(name="Snapshots", value=f"3.0s (2021 May 14th ~ 2022 Dec 31st)\n\
+3.1s (2023 Jan 3rd ~ Present)", inline=False)
+        await ctx.send(embed=embed)
+        
+    elif version in ["1.0", "2.0", "3.0s", "3.0", "3.1s"]:
         versionList1 = ""
         versionList2 = ""
-        versionList3d = ""
+        versionList3s = ""
+        versionList3 = ""
+        versionList3_1s = ""
         for v in versionList:
             if v[:2] == "1.": versionList1 += f"{v}, "
             if v[:2] == "2.": versionList2 += f"{v}, "
-            if v[:4] == "3.0_": versionList3d += f"{v}, "
+            if v[:5] == "3.0_s": versionList3s += f"{v}, "
+            elif v[:5] == "3.1_s": versionList3_1s += f"{v}, "
+            elif v[:2] == "3.": versionList3 += f"{v}, "
         embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")), title="Zako Zaun Changelog - Table of Contents")
-        embed.add_field(name=f"1.X Releases (2018 Jan 25th ~ 2018 Mar 21st)", value=versionList1[:-2], inline=False)
-        embed.add_field(name=f"2.X Releases (2020 Feb ?? ~ 2021 Apr 14th)", value=versionList2[:-2], inline=False)
-        embed.add_field(name=f"3.0 Snapshots (2021 May 14 ~ present)", value=versionList3d[:-2], inline=False)
+        if version == "1.0": embed.add_field(name=f"1.X Releases (2018 Jan 25th ~ 2018 Mar 21st)", value=versionList1[:-2], inline=False)
+        if version == "2.0": embed.add_field(name=f"2.X Releases (2019 Dec 14th ~ 2021 Apr 14th)", value=versionList2[:-2], inline=False)
+        if version == "3.0s": embed.add_field(name=f"3.0 Snapshots (2021 May 14th ~ 2022 Dec 30th)", value=versionList3s[:-2], inline=False)
+        if version == "3.0": embed.add_field(name=f"3.X Releases (2022 Dec 30th ~ Present)", value=versionList3[:-2], inline=False)
+        if version == "3.1s": embed.add_field(name=f"3.1 Snapshots (2023 Jan 3rd ~ Present)", value=versionList3_1s[:-2], inline=False)
         await ctx.send(embed=embed)
-    elif version in versionList: await ctx.send(changeFile[version])
+    elif version in versionList:
+        for i in ["\n".join(changeFile[version].split('\n')[start:start+15]) for start in range(0, len(changeFile[version].split('\n')), 15)]:
+            await ctx.send(i)
     else: await ctx.send("Error: Version is either invalid or was never documented. Versions between α1.3.2 and α2.4.0 are undocumented.")
 
-@commands.command(aliases=['inv'])
+@commands.command()
 async def invite(ctx):
     """Invite the bot to your server!"""
-    await ctx.send("Invite Zako 3.0 DEV to your server!\nhttps://discord.com/oauth2/authorize?client_id=807593322033971231&scope=bot&permissions=511")
+    await ctx.send(f"Invite Zako Zaun{local['branch']} to your server!\nhttps://discord.com/oauth2/authorize?client_id={local['id']}&scope=bot&permissions=511")
 
 @commands.command()
 async def report(ctx, _type, mode, *, args:str):
     """Request features and report bugs!
 Types:
-  bug                                - Something's not working right, or at all.
+  bug/bugs                           - Something's not working right, or at all.
   request/req/suggest/suggestion/sug - Something should be added or removed (please provide reason).
 
 Modes:
   r/read/v/view/search               - Read report logs.
-  s/send                             - Send report log.
+  s/send/add                         - Send report log.
 
 Args:
   read (ID:int)                      - Returns a given report ID.
@@ -178,89 +217,60 @@ Args:
   send (message:str)                 - Sends a report.
 
 Statuses:
-  UNVIEWED               - A dev has not viewed the report. Bug or request.
-  VIEWED                 - A dev has viewed the report, but has yet to do anything about it. Bug or request.
-  WORKING                - A dev is looking into the issue, and trying to fix it. Bug or request.
-  
-  UNVERIFIED             - A dev has viewed the report, and may be looking into it. Bug only.
-  UNREPLICABLE           - A dev has tried and failed to replicate this issue. Bug only.
-  INVALID                - A dev has failed to find any issue. Bug only.
-  WONTFIX                - A dev has decided that the report won't be fixable, for whatever reason. Bug only.
-  FIXED                  - A dev has fixed the issue. Bug only.
-
-  PLANNED                - A dev has viewed the report, and may be looking into it. Request only.
-  WONTADD                - A dev has refused to add this feature. Request only.
-  ADDED                  - A dev has taken action to add this feature. Request only.
+  OPEN                               - Unaddressed bug/feature.
+  TRIAGE                             - Bug under investigation.
+  UNVERIFIED                         - Bug cannot be found or replicated, but it might exist.
+  VERIFIED                           - Bug/feature may be fixed/added.
+  INVALID                            - Bug cannot be found or replicated, because it doesn't exist.
+  INTENDED                           - Bug isn't bug because it was designed that way on purpose.
+  DUPLICATE                          - Bug/feature has been mentioned before.
+  WONTDO                             - Bug/feature won't be worked on.
+  CLOSED                             - Bug/feature is fixed/added.
 """
     
     _type = str.lower(_type)
     mode = str.lower(mode)
-    statuses = ["UNVIEWED", "UNVERIFIED", "INVALID", "WORKING", "UNREPLICABLE",
-                "WONTFIX", "FIXED", "PLANNED", "WONTADD", "ADD", "VIEWED"]
+    statuses = ["OPEN", "TRIAGE", "UNVERIFIED", "VERIFIED", "INVALID",
+                "INTENDED", "WONTDO", "CLOSED", "DUPLICATE"]
     
-    if _type == "bug":
-        if exists(".\\data\\bugs.json"): reports = loadJSON("bugs.json", "data")
+    if _type in ["bug", "bugs"]:
+        if exists(f"{PATH}\\bugs.json"): reports = loadJSON("bugs.json", PATH)
         else: reports = []
     elif _type in ["request", "req", "suggestion", "suggest", "sug"]:
-        if exists(".\\data\\requests.json"): reports = loadJSON("data\\requests.json")
+        if exists(f"{PATH}\\requests.json"): reports = loadJSON(f"requests.json", PATH)
         else: reports = []
-    else: await ctx.send("Invalid type. Use z/help report for info, then try again."); return
+    else: await ctx.send(f"Invalid type. Use {local['prefix']}help report for info, then try again."); return
     
     if mode in ["r", "read", "v", "view", "search"]:
         args = args.split()
         if args[0].isdigit():
-            await ctx.send(f"[{int(args[0])}]({reports[int(args[0])][0]}) - {reports[int(args[0])][1]}")
+            await ctx.send(f"\[{int(args[0])}\]\({reports[int(args[0])][0]}\) - {reports[int(args[0])][1]}")
             return
         else:
             filtered = []
             if args[0].upper() in statuses:
                 for i in range(len(reports)):
-                    if i[0] == str.upper(args[0]): filtered.append([i, *reports[i]])
+                    if str.upper(args[0]) in i[0]: filtered.append([i, *reports[i]])
             elif args[0].lower() == "page":
                 for i in range(len(reports)):
                     filtered.append([i, *reports[i]])
-            else: await ctx.send("No args provided. Used z/help reports for info, then try again.")
+            else: await ctx.send(f"No args provided. Used {local['prefix']}help reports for info, then try again.")
             page = 0
             if len(args) == 2:
                 if args[1].isdigit:
                     page = int(args[1])-1
             listFilt = []
-            for i in range(0+20*page, 19+20*page):
+            for i in range(0+10*page, 10+10*page):
                 try:
-                    listFilt.append(f"[{filtered[i][0]}]({filtered[i][1]}) - {filtered[i][2]}")
+                    listFilt.append(f"\[{filtered[i][0]}\]\({filtered[i][1]}\) - {filtered[i][2]}")
                 except Exception:
                     break
             if len(listFilt) > 0: await ctx.send("\n".join(listFilt))
             else: await ctx.send("No reports to see.")
-    elif mode in ["s", "send"]:
-        reports.append(["UNVIEWED", args])
-        if _type == "bug":
-            saveJSON(reports, "bugs.json", "data")
+    elif mode in ["s", "send", "add"]:
+        reports.append(["OPEN", args])
+        if _type in ["bug", "bugs"]:
+            saveJSON(reports, "bugs.json", PATH)
         elif _type in ["request", "req", "suggestion", "suggest", "sug"]:
-            saveJSON(reports, "requests.json", "data")
+            saveJSON(reports, "requests.json", PATH)
         await ctx.send("Sent report. :thumbsup:")
-
-polls = []
-
-@commands.command()
-async def poll(ctx, duration, *, string):
-    """Start a poll! Democracy!"""
-    embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
-    embed.add_field(name="Poll", value=string, inline=False)
-    embed.add_field(name="This poll is still running.", value="\u2714 0\n\u274C 0", inline=False)
-    botMessage = await ctx.send(embed=embed)
-    await botMessage.add_reaction(u"\u2714")
-    await botMessage.add_reaction(u"\u274C")
-    polls.append([botMessage, duration*4, 0, 0])
-
-@commands.Cog.listener()
-async def on_reaction_add(reaction, user):
-    text.log("Reaction detected.")
-    for message in polls:
-        if reaction.message in message:
-            if reaction.emoji == u"\u2714": message[2] += 1
-            if reaction.emoji == u"\u274C": message[3] += 1
-            poll = message[0]
-            embed = poll.embeds[0]
-            embed.fields[1].value = f"\u2714 {message[2]}\n\u274C {message[3]}"
-            await poll.edit(embed = embed)

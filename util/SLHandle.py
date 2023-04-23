@@ -41,22 +41,17 @@ def load(filename: str, *filepath: str):
     if not isdir(path): text.warn(f"LoadError: The path \"{path}\" is invalid.")
     elif not exists(path+"\\"+filename): text.warn(f"LoadError: The file \"{path}\\{filename}\" does not exist.")
     else:
-        file = open(path+"\\"+filename,"r")
+        file = open(path+"\\"+filename,"r",encoding="utf-8")
         fileData = file.read()
         file.close()
         return fileData
 
-def saveJSON(filedata:str, filename: str, *filepath: str):
-    if len(filepath) > 0:
-        path = filepath[0]
-        pathfind(path)
-    else: path = "."
+def saveJSON(filedata:str, filename: str, path="."):
+    pathfind(path)
     with open(path+"\\"+filename,"w") as file:
-        dump(filedata, file)
+        dump(filedata, file, indent=4, separators=(',', ': '))
 
-def loadJSON(filename: str, *filepath: str):
-    if len(filepath) > 0: path = filepath[0]
-    else: path = "."
+def loadJSON(filename: str, path="."):
     if not isdir(path): text.warn(f"LoadJSONError: The path \"{path}\" is invalid.")
     elif not exists(path+"\\"+filename): text.warn(f"LoadJSONError: The file \"{path}\\{filename}\" does not exist.")
     else:
@@ -67,9 +62,7 @@ def loadJSON(filename: str, *filepath: str):
             text.warn(f"File {filepath}\\{filename} is corrupted.")
             return
 
-def delete(filename: str, *filepath: str):
-    if len(filepath) > 0: path = filepath[0]
-    else: path = "."
+def delete(filename: str, path="."):
     if not isdir(path): text.warn(f"DeleteError: The path \"{path}\" is invalid.")
     elif not exists(path+"\\"+filename): text.warn(f"DeleteError: The file \"{path}\\{filename}\" does not exist.")
     else:
