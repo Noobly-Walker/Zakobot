@@ -158,7 +158,7 @@ Each coin flip costs 6SP. Winnings are potentially infinite, though the house wi
         elif wins < 20: flash = '***JACKPOT!!!***'
         elif wins >= 20: flash = '__***SUPER JACKPOT!!!***__'
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} flipped heads {wins} times, {net} {silver:,}SP.")
+    await ctx.send(f"{flash} {global_name(author)} flipped heads {wins} times, {net} {silver:,}SP.")
 
 @commands.command(aliases=['dn', 'doublenothing']) # Double or nothing.
 async def doubleornothing(ctx, wager: int):
@@ -177,7 +177,7 @@ async def doubleornothing(ctx, wager: int):
         net = f'won an additional {wager}SP!!!'
         silver = wager
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} {net}")
+    await ctx.send(f"{flash} {global_name(author)} {net}")
 
 @commands.command(aliases=['cg3']) # Gain or lose silver based on how many heads or tails are flipped
 async def coingame(ctx):
@@ -191,17 +191,16 @@ async def coingame(ctx):
     silver = -6
     while coin == state:
         loops += 1
-        change = 2**loops*5
         coin = randrange(2)
-    if state == 0: change *= -1
-    silver += change
     if state == 1:
         coinside = 'heads'
         if loops < 1:
             flash = '**Loss!** '
             net = 'losing'
+            change = -2**loops*5
         if loops >= 1:
             net = 'winning'
+            change = 3**loops*5
             if loops < 5: flash = '**Win!**'
             elif loops < 10: flash = '**Big Win!**'
             elif loops < 15: flash = '***Huge Win!***'
@@ -210,10 +209,12 @@ async def coingame(ctx):
     elif state == 0:
         coinside = 'tails'
         net = 'losing'
+        change = -2**loops*5
         if loops < 5: flash = '**Loss!**'
         elif loops < 10: flash = '**Big Loss!**'
         elif loops < 15: flash = '***Huge Loss!***'
         elif loops < 20: flash = '***BANKRUPCY!!!***'
         elif loops >= 20: flash = '__***SUPER BANKRUPCY!!!***__'
+    silver += change
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} flipped {coinside} {loops} times, {net} {silver:,}SP.")
+    await ctx.send(f"{flash} {global_name(author)} flipped {coinside} {loops} times, {net} {silver:,}SP.")

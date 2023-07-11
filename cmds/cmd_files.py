@@ -9,6 +9,7 @@ from util.expol import expol
 from util.TextFormat import *
 from cmds.cmd_tools import parenthesisFinder, calculatorFunct
 from util.cmdutil import cmdutil
+from util.PlayerDataHandler import global_name
 text = cmdutil()
 PATH = load(".\\locals\\%PATH%")
 
@@ -91,7 +92,7 @@ The creators of files always have full perms to do with files what they wish."""
             if mode == "read":
                 converter = commands.MemberConverter()
                 user = await converter.convert(ctx, file["id"])
-                await ctx.send('Loading file "' + filename.replace(".json", "") + '" by ' + user.name + '...\n===========================================')
+                await ctx.send('Loading file "' + filename.replace(".json", "") + '" by ' + global_name(user) + '...\n===========================================')
                 out = ""
                 try:
                     await ctx.send(file["text"])

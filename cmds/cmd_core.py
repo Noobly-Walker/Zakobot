@@ -6,6 +6,7 @@ import traceback
 from os import walk
 from os.path import isdir,exists
 from datetime import *
+from time import time as timetime
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
 from util.expol import expol
 from util.TimeUtil import *
@@ -21,7 +22,7 @@ local = loadJSON('.\\locals\\locals.json')
 PATH = load(".\\locals\\%PATH%")
 
 def commandList():
-    return [ping, echo, emoji, joined, now, invite, 
+    return [ping, echo, emoji, joined, now, invite,
             echoformat, changelog, embed, report, webhook]
 
 def categoryDescription():
@@ -30,7 +31,23 @@ def categoryDescription():
 @commands.command()
 async def ping(ctx):
     """Kinda like poking me in the shoulder to see if I\'m awake."""
-    await ctx.send('Yes? Hello.')
+    start_time = timetime()
+    message = await ctx.send('Calculating ping...')
+    end_time = timetime()
+    elapsed_time = end_time - start_time
+    latency = ctx.bot.latency * 1000
+    if latency == float('inf'):
+        await message.edit(content=f'My ping is supposedly infinite, yet somehow this still got through.\n\
+Message latency: ∞ ms | Roundtrip latency: {elapsed_time*1000:.3f} ms')
+    elif latency >= 10000 or elapsed_time >= 10:
+        await message.edit(content=f'These conditions are dreadful, and I may lose connection. Is there an outage?\n\
+Message latency: {latency:.3f} ms | Roundtrip latency: {elapsed_time*1000:.3f} ms')
+    elif latency >= 1000 or elapsed_time >= 1:
+        await message.edit(content=f'Uh... the connection\'s a bit slow, but I\'m alright.\n\
+Message latency: {latency:.3f} ms | Roundtrip latency: {elapsed_time*1000:.3f} ms')
+    else:
+        await message.edit(content=f'Yes? Hello.\n\
+Message latency: {latency:.3f} ms | Roundtrip latency: {elapsed_time*1000:.3f} ms')
 
 @commands.command()
 async def echo(ctx, *, string):
@@ -68,7 +85,7 @@ Maximum 1024 characters per field, 6 fields per embed.
 Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
 Color can be defined as three numbers in the format 0xxRR,0xGG,0xBB, where RGB is hexadecimal
 Color can also be named using the table found using this command.
-  z!file read colors
+  [PREFIX]file read colors
 """
     embed = discord.Embed(title=title, color=rectColor(color))
     string = string.split("<field>")
@@ -99,13 +116,17 @@ These emojis can be called the same way that they would be if they were on the s
     await ctx.send(out[:-2])
 
 @commands.command() # Bot returns the date a given user joined.
-async def joined(ctx, member):
+async def joined(ctx, member=None):
     """Returns the date when a user joined this server."""
-    memberconverter = commands.MemberConverter()
-    userobj = await memberconverter.convert(ctx, member)
-    ttime = translate_time(userobj.joined_at)
-    datejoined = "UNIX {} {} {}, {}:{}:{}.{}'{} UTC".format(ttime[0], ttime[1], ttime[2], ttime[3], ttime[4], ttime[5], ttime[6], ttime[7])
-    out = f'{userobj.name} joined this server on {datejoined}.'
+    if member is None:
+        userobj = ctx.message.author
+    else:
+        memberconverter = commands.MemberConverter()
+        userobj = await memberconverter.convert(ctx, member)
+    joinedDiscord = f"<t:{int(datetime.timestamp(userobj.created_at))}>"
+    joinedGuild = f"<t:{int(datetime.timestamp(userobj.joined_at))}>"
+    out = f'{global_name(userobj)} joined Discord on {joinedDiscord}.\n\
+{global_name(userobj)} joined this guild on {joinedGuild}.'
     await ctx.send(out)
 
 @commands.command()
@@ -180,8 +201,8 @@ Key:
             if v[:2] == "1.": versionList1 += f"{v}, "
             if v[:2] == "2.": versionList2 += f"{v}, "
             if v[:5] == "3.0_s": versionList3s += f"{v}, "
+            elif v[:5] == "3.1_s": versionList3_1s += f"{v}, "
             elif v[:2] == "3.": versionList3 += f"{v}, "
-            if v[:5] == "3.1_s": versionList3_1s += f"{v}, "
         embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")), title="Zako Zaun Changelog - Table of Contents")
         if version == "1.0": embed.add_field(name=f"1.X Releases (2018 Jan 25th ~ 2018 Mar 21st)", value=versionList1[:-2], inline=False)
         if version == "2.0": embed.add_field(name=f"2.X Releases (2019 Dec 14th ~ 2021 Apr 14th)", value=versionList2[:-2], inline=False)
@@ -190,7 +211,7 @@ Key:
         if version == "3.1s": embed.add_field(name=f"3.1 Snapshots (2023 Jan 3rd ~ Present)", value=versionList3_1s[:-2], inline=False)
         await ctx.send(embed=embed)
     elif version in versionList:
-        for i in ["\n".join(changeFile[version].split('\n')[start:start+15]) for start in range(0, len(changeFile[version].split('\n')), 15)]:
+        for i in ["\n".join(str("# " + changeFile[version]).split('\n')[start:start+15]) for start in range(0, len(str("# " + changeFile[version]).split('\n')), 15)]:
             await ctx.send(i)
     else: await ctx.send("Error: Version is either invalid or was never documented. Versions between α1.3.2 and α2.4.0 are undocumented.")
 

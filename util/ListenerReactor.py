@@ -73,7 +73,7 @@ async def preprocessMessage(ctx):
     #Check if a bot said smth
     if author.bot:
         if author.id not in [405968021337669632, 807593322033971231]:
-            text.log(f"{author.name} said something in {guild.name}, but they're a bot.")
+            text.log(f"{global_name(author)} said something in {guild.name}, but they're a bot.")
         return False
 
     #Check if a banned person is using Zako.
@@ -82,7 +82,7 @@ async def preprocessMessage(ctx):
         text.log(f"File {PATH}\\zakoBlacklist.json not found.")
     else: blacklist = loadJSON("zakoBlacklist.json", PATH)
     if author.id in blacklist:
-        text.log(f"{author.name} said something in {guild.name}, but they're banned from using me.")
+        text.log(f"{global_name(author)} said something in {guild.name}, but they're banned from using me.")
         return False
 
     #Check for any moderation rules.
@@ -97,7 +97,7 @@ async def preprocessMessage(ctx):
     #Check if Zako is ignoring this channel.
     if str(message.channel.id) in admin["Zako Ignored Channels"]:
         if not author.guild_permissions.manage_messages:
-            text.log(f"{author.name} said something in {guild.name}, but I'm ignoring the channel.")
+            text.log(f"{global_name(author)} said something in {guild.name}, but I'm ignoring the channel.")
             return False
 
     #Check for artificial character limit
@@ -106,10 +106,10 @@ async def preprocessMessage(ctx):
             await message.delete()
             await message.channel.send(f"Your message is too long... You've hit the {guildSettings['CharacterLimit']} character count limit.")
             if adminChannel is not None:
-                await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that exceeded the character limit:")
+                await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that exceeded the character limit:")
                 for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                     await adminChannel.send(i)
-            text.log(f"{author.name} said something in {guild.name}, but it exceeded the character limit.")
+            text.log(f"{global_name(author)} said something in {guild.name}, but it exceeded the character limit.")
             return False
 
     #Check for any banned words.
@@ -118,9 +118,9 @@ async def preprocessMessage(ctx):
             if word in str.lower(message.content):
                 await message.channel.send(f"You can't say that, <@{message.author.id}>!")
                 await message.delete()
-                text.log(f"{author.name} said something in {guild.name}, but they said something that wasn't allowed on that guild.")
+                text.log(f"{global_name(author)} said something in {guild.name}, but they said something that wasn't allowed on that guild.")
                 if adminChannel is not None:
-                    await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained a word that wasn't allowed:")
+                    await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a word that wasn't allowed:")
                     for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                         await adminChannel.send(i)
                 return False
@@ -128,9 +128,9 @@ async def preprocessMessage(ctx):
     if str(author.id) in admin["Censored Users"]:
         if not author.guild_permissions.manage_messages:
             await message.delete()
-            text.log(f"{author.name} said something in {guild.name}, but they are being censored.")
+            text.log(f"{global_name(author)} said something in {guild.name}, but they are being censored.")
             if adminChannel is not None:
-                await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that was censored:")
+                await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that was censored:")
                 for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                     await adminChannel.send(i)
             return False
@@ -141,9 +141,9 @@ async def preprocessMessage(ctx):
             for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
                 if message.content.endswith(ext): #Image links
                     await message.delete()
-                    text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                    text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                     if adminChannel is not None:
-                        await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
+                        await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
                         for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                             await adminChannel.send(i)
                     return False
@@ -151,18 +151,18 @@ async def preprocessMessage(ctx):
                     for attachment in message.attachments:
                         if attachment.url.endswith(ext):
                             await message.delete()
-                            text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                            text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                             if adminChannel is not None:
-                                await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
+                                await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
                                 for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                                     await adminChannel.send(i)
                                 await adminChannel.send(attachment.url)
                             return False
             if "https://tenor.com/view/" in message.content: #tenor
                 await message.delete()
-                text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                 if adminChannel is not None:
-                    await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
+                    await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained an image:")
                     for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                         await adminChannel.send(i)
                 return False
@@ -175,9 +175,9 @@ async def preprocessMessage(ctx):
                     for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
                         if not message.content.endswith(ext): #Filter out image links
                             await message.delete()
-                            text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                            text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                             if adminChannel is not None:
-                                await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
+                                await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
                                 for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                                     await adminChannel.send(i)
                             return False
@@ -187,9 +187,9 @@ async def preprocessMessage(ctx):
                             for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
                                 if not message.content.endswith(ext): #Filter out image links
                                     await message.delete()
-                                    text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                                    text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                                     if adminChannel is not None:
-                                        await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
+                                        await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
                                         for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                                             await adminChannel.send(i)
                                     return False
@@ -201,19 +201,19 @@ async def preprocessMessage(ctx):
             for emoji in emojimap:
                 if emojimap[emoji] in message.content:
                     await message.delete()
-                    text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                    text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                     await message.channel.send("This emoji doesn't work here because emojis are disabled in this channel.")
                     if adminChannel is not None:
-                        await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
+                        await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
                         for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                             await adminChannel.send(i)
                     return False
             if re.search("^<:.*>$", message.content) != None or re.search("^<a:.*>$", message.content) != None:
                 await message.delete()
-                text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                 await message.channel.send("This emoji doesn't work here because emojis are disabled in this channel.")
                 if adminChannel is not None:
-                    await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
+                    await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
                     for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                         await adminChannel.send(i)
                 return False
@@ -221,17 +221,17 @@ async def preprocessMessage(ctx):
             for emoji in eml:
                 if f":{emoji}:" in message.content:
                     await message.delete()
-                    text.log(f"{author.name} said something in {guild.name}, but it contained blocked content.")
+                    text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                     await message.channel.send("This emoji doesn't work here because emojis are disabled in this channel.")
                     if adminChannel is not None:
-                        await adminChannel.send(f"{author.name} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
+                        await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that likely contained an emoji:")
                         for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
                             await adminChannel.send(i)
                     return False 
             
 
     # Seems good.
-    text.log(f"{author.name} said something in {guild.name}.")
+    text.log(f"{global_name(author)} said something in {guild.name}.")
     return True
 
 async def parseEventCommand(ctx, inp, event):
@@ -243,7 +243,7 @@ async def parseEventCommand(ctx, inp, event):
         
         userInfo = realUsers(guild)
         variables = {"serverName": guild.name, "memberCount": userInfo[0], "userCount": userInfo[1],
-                     "botCount": userInfo[2], "serverID": guild.id, "userName": author.name,
+                     "botCount": userInfo[2], "serverID": guild.id, "userName": global_name(author),
                      "userID": author.id, "userNick": author.display_name, "userPing": f"<@{author.id}>",
                      "message": message.content.replace(inp, ""), "channelName": channel.name,
                      "channelID": channel.id, "printChannel": channel.id}
@@ -255,7 +255,7 @@ async def parseEventCommand(ctx, inp, event):
         
         userInfo = realUsers(guild)
         variables = {"serverName": guild.name, "memberCount": userInfo[0], "userCount": userInfo[1],
-                     "botCount": userInfo[2], "serverID": guild.id, "userName": author.name,
+                     "botCount": userInfo[2], "serverID": guild.id, "userName": global_name(author),
                      "userID": author.id, "userNick": author.display_name, "userPing": f"<@{author.id}>",
                      "message": "None", "channelName": "None", "channelID": 0, "printChannel": 0}
     

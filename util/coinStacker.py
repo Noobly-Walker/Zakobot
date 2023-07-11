@@ -32,7 +32,7 @@ class coinStacker:
             return im.crop(bbox)
 
     def purge(self):
-        print("Removing generated images!")
+        #print("Removing generated images!")
         for i in self.coinTypes:
             remove(f".\\temp\\{self.salt}coin{i}.png")
             if exists(f".\\temp\\{self.salt}tencoin{i}.png"):
@@ -51,7 +51,7 @@ class coinStacker:
 
         while coinCount > 0:
             #debug
-            if tick%100 == 0: print(f"Placed {startCount-coinCount:,} of {startCount:,} coins ({(startCount-coinCount)/startCount*100:.2f}%)")
+            #if tick%100 == 0: print(f"Placed {startCount-coinCount:,} of {startCount:,} coins ({(startCount-coinCount)/startCount*100:.2f}%)")
 
             #create the most valuable coin possible
             while coinCount < self.coinTypes[index]:
@@ -69,9 +69,9 @@ class coinStacker:
                 stackReq += 0.01
                 
             #debug
-            tick += 1
+            #tick += 1
         
-        print("Stacking complete! Drawing pile!")
+        #print("Stacking complete! Drawing pile!")
         #setting boundaries for drawing the pile
         stackWidth = 34
         coinMaxHeight = 21
@@ -112,7 +112,7 @@ class coinStacker:
             pile = reversed(pile)
             #reset the vertical pointer for this stack
             yPointer = highestPile*coinHeight+6
-            if stackCounter%10 == 0: print(f"Preparing stack {stackCounter:,} of {len(stack):,} ({stackCounter/len(stack)*100:.2f}%)")
+            #if stackCounter%10 == 0: print(f"Preparing stack {stackCounter:,} of {len(stack):,} ({stackCounter/len(stack)*100:.2f}%)")
             for coinstack in pile:
                 coin -= 1
                 while coinstack > 0:
@@ -137,6 +137,6 @@ class coinStacker:
             xPointer += stackWidth
             stackCounter += 1
         #display the image and save it
-        print(f"Image compiled!")
+        #print(f"Image compiled!")
         pileImg.save(f".\\temp\\{self.salt}coinpile.png")
         return f".\\temp\\{self.salt}coinpile.png"

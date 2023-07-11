@@ -3,6 +3,7 @@ from discord.ext import commands
 import discord
 import traceback
 from os.path import isdir,exists
+from datetime import *
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
 from util.expol import expol
 from util.SLHandle import *
@@ -14,7 +15,7 @@ from util.cmdutil import cmdutil
 text = cmdutil()
 
 def commandList():
-    return [calc, tempcalc, speedcalc]
+    return [calc, tempcalc, speedcalc, timecalc]
 
 def categoryDescription():
     return "Useful, helpful commands."
@@ -354,10 +355,10 @@ async def speedcalc(ctx, speed: float, mode="short"):
 ##                        'Thousia', 'Mia', 'Bia', 'Tria', 'Quadria', 'Quintia', 'Sextia', 'Septia', 'Octia', 'Nonia', 'Decia',
 ##                        'Undecia', 'Duodecia', 'Tredecia', 'Quattordecia', 'Quindecia',
 ##                        'Sexdecia', 'Septendecia', 'Octodecia', 'Novemdecia', 'Vigintia']
-    metric_name = ['v', 'w', 'x', 'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'X', 'W', 'V',
+    metric_name = ['v', 'q', 'r', 'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', '', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'R', 'Q', 'V',
                    'UDc ', 'DDc ', 'TDc ', 'QaDc ', 'QiDc ', 'SxDc ', 'SpDc ', 'ODc ', 'NDc ', 'Vg ', ]
-    metric_name_long = ['Vendeko', 'Weko', 'Xoni', 'Yocto', 'Zepto', 'Atto', 'Femto', 'Pico', 'Nano', 'Micro', 'Milli', '',
-                        'Kilo', 'Mega', 'Giga', 'Tera', 'Peta', 'Exa', 'Zeta', 'Yotta', 'Xona', 'Weka', 'Vendeka',
+    metric_name_long = ['Vendeko', 'Quecto', 'Ronto', 'Yocto', 'Zepto', 'Atto', 'Femto', 'Pico', 'Nano', 'Micro', 'Milli', '',
+                        'Kilo', 'Mega', 'Giga', 'Tera', 'Peta', 'Exa', 'Zetta', 'Yotta', 'Ronna', 'Quetta', 'Vendeka',
                         'Undecillion ', 'Duodecillion ', 'Tredecillion ', 'Quattordecillion ', 'Quindecillion ',
                         'Sexdecillion ', 'Septendecillion ', 'Octodecillion ', 'Novemdecillion ', 'Vigintillion ']
     met_orig = 11
@@ -436,8 +437,8 @@ async def speedcalc(ctx, speed: float, mode="short"):
                 if us >= 8: # is at least 1 mile
                     us /= 8
                     us_name_marker = 9
-                    if us >= 3: # is at least 1 league
-                        us /= 3
+                    if us >= 3.452: # is at least 1 league
+                        us /= 3.452
                         us_name_marker = 10
                         if us >= 80000: # is at least 1 lunar distance
                             us /= 80000
@@ -520,4 +521,90 @@ async def speedcalc(ctx, speed: float, mode="short"):
         wf_out = 'Warp Factor: {0}Warp {1}\n'.format(metric_name_long[wf_metric_marker], round(wf, 3))
 
     out = metric_out + us_out + mach_out + c_out + wf_out + time_out
+    await ctx.send(out)
+
+
+@commands.command(aliases=['timecalculate', 'timecalculator'])
+async def timecalc(ctx, mode: str, value: float, unit: str):
+    """Add or subtract time from the current timestamp.
+Due to limits with datetime, units smaller than the second cannot be parsed."""
+    unitmap = {
+        "s": 1,
+        "sec": 1,
+        "second": 1,
+        "seconds": 1,
+        "Ds": 10, # 10 seconds
+        "Dsec": 10,
+        "dekasecond": 10,
+        "dekaseconds": 10,
+        "min": 60,
+        "minute": 60,
+        "minutes": 60,
+        "hs": 100, # 100 seconds, 1 min 40 s
+        "hsec": 100,
+        "hectosecond": 100,
+        "hectoseconds": 100,
+        "ks": 1000, # 1000 seconds, 16 min 40 s
+        "ksec": 1000,
+        "kilosecond": 1000,
+        "kiloseconds": 1000,
+        "hr": 3600,
+        "hour": 3600,
+        "hours": 3600,
+        "dy": 86400,
+        "day": 86400,
+        "days": 86400,
+        "sol": 88775, # martian day, 24 hr 39 min 35 s
+        "sols": 88775,
+        "wk": 604800, # 7 dy
+        "week": 604800,
+        "weeks": 604800,
+        "Ms": 1000000, # 1 million seconds, 11 dy 13 hr
+        "Msec": 1000000,
+        "megasecond": 1000000,
+        "megaseconds": 1000000,
+        "fn": 1209600, # 2 wk or 14 d
+        "fortnight": 1209600,
+        "fortnights": 1209600,
+        "fortnite": 1209600, #included because damn kids think the length of time is the name of that damn game
+        "fortnites": 1209600,
+        "lmo": 2419200, # lunar month, 4 wk or 28 dy
+        "lune": 2419200,
+        "lunes": 2419200,
+        "mo": 2629746, # ideal month, 30 dy 10 hr
+        "month": 2629746,
+        "months": 2629746,
+        "yr": 31556952, # ideal year, 365 dy 5 hr
+        "year": 31556952,
+        "years": 31556952,
+        "decade": 315569520, # 10 years
+        "decades": 315569520,
+        "gen": 631139040, # 20 years
+        "generation": 631139040,
+        "generations": 631139040,
+        "score": 631139040,
+        "scores": 631139040,
+        "Gs": 1000000000, # 1 billion seconds, 31 yr 8 mo 8 dy
+        "Gsec": 1000000000,
+        "gigasecond": 1000000000,
+        "gigaseconds": 1000000000,
+        "life": 2524556160, # 4 gen or 80 yr
+        "lives": 2524556160,
+        "lifetime": 2524556160,
+        "lifetimes": 2524556160
+        }
+    if mode in "+addplus":
+        mode = 1
+        state = "adding"
+    elif mode in "-subtractminus":
+        mode = -1
+        state = "subtracting"
+    combinedVal = value * unitmap[unit] * mode
+    ts = int(ctx.message.created_at.replace(tzinfo=timezone.utc).timestamp())
+    newts = int(ts + combinedVal)
+    if combinedVal > 28800: formatcode = ""
+    else: formatcode = ":t"
+    out = f"Current datetime is <t:{ts}{formatcode}>.\n\
+After {state} {value} {unit}, the datetime is <t:{newts}{formatcode}>.\n\
+This is <t:{newts}:R>."
     await ctx.send(out)

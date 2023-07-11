@@ -17,6 +17,7 @@ from util.cmdutil import cmdutil
 from util.CardUtil import *
 from util.coinStacker import *
 text = cmdutil()
+local = loadJSON('.\\locals\\locals.json')
 
 def commandList():
     return [bank, daily, shop]
@@ -129,7 +130,7 @@ async def daily(ctx):
         userWallet = PlayerdataGetFile(ctx.author, "wallet.json")
         userLevel = PlayerdataGetFile(ctx.author, "level.json")
         userWallet["Args"] += 10*userLevel["Level"]
-        await ctx.send(f"Thanks for checking in, {ctx.author.name}! Here's your **{10*userLevel['Level']}SP**.")
+        await ctx.send(f"Thanks for checking in, {global_name(member)}! Here's your **{10*userLevel['Level']}SP**.")
         userProfile["canDaily"] = False
         PlayerdataSetFile(ctx.author, "wallet.json", userWallet)
         PlayerdataSetFile(ctx.author, "profile.json", userProfile)

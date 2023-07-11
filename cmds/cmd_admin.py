@@ -18,7 +18,7 @@ local = loadJSON('.\\locals\\locals.json')
 def commandList():
     return [kick, ban, role, server, curses, script, purge,
             announcechannel, censor, toggleimages, togglelinks,
-            toggleemojis, ignorechannel, adminchannel]
+            toggleemojis, ignorechannel, adminchannel, unban]
 
 def categoryDescription():
     return "Administrator tools."
@@ -30,16 +30,20 @@ async def kick(ctx, user, *, reason=None):
         if not ctx.message.author.guild_permissions.kick_members:
             await ctx.send("You do not have permission to perform this action.")
             return
+        admin = GuilddataGetFile(ctx.guild, "admin.json")
+        if admin["Admin Channel"] is not None:
+            converter = commands.TextChannelConverter()
+            adminChannel = await converter.convert(ctx, admin["Admin Channel"])
         converter = commands.MemberConverter()
         userobj = await converter.convert(ctx, user)
         await ctx.guild.kick(userobj)
-        out = f"{userobj.name} was kicked from {ctx.guild.name}"
+        out = f"{global_name(userobj)} was kicked from {ctx.guild.name}"
         if reason != None:
             out += f" for: {reason}"
         out += "."
+        await adminChannel.send(out)
     except Exception as e:
-        out = f"Error: {e}"
-    await ctx.send(out)
+        await ctx.send(f"Error: {e}")
 
 @commands.command()
 async def ban(ctx, user, *, reason=None):
@@ -48,16 +52,40 @@ async def ban(ctx, user, *, reason=None):
         if not ctx.message.author.guild_permissions.ban_members:
             await ctx.send("You do not have permission to perform this action.")
             return
+        admin = GuilddataGetFile(ctx.guild, "admin.json")
+        if admin["Admin Channel"] is not None:
+            converter = commands.TextChannelConverter()
+            adminChannel = await converter.convert(ctx, admin["Admin Channel"])
         converter = commands.MemberConverter()
         userobj = await converter.convert(ctx, user)
         await ctx.guild.ban(userobj)
-        out = f"{userobj.name} was banned from {ctx.guild.name}"
+        out = f"{global_name(userobj)} was banned from {ctx.guild.name}"
         if reason != None:
             out += f" for: {reason}"
         out += "."
+        await adminChannel.send(out)
     except Exception as e:
-        out = f"Error: {e}"
-    await ctx.send(out)
+        await ctx.send(f"Error: {e}")
+
+@commands.command(aliases=['pardon'])
+async def unban(ctx, *, user):
+    """Pardon the banished. Requires Ban Members permission."""
+    if not ctx.message.author.guild_permissions.ban_members:
+        await ctx.send("You do not have permission to perform this action.")
+        return
+    admin = GuilddataGetFile(ctx.guild, "admin.json")
+    if admin["Admin Channel"] is not None:
+        converter = commands.TextChannelConverter()
+        adminChannel = await converter.convert(ctx, admin["Admin Channel"])
+    unbanned = None
+    banlist = await ctx.guild.bans()
+    for ban in banlist:
+        target = ban.user
+        if user in [target.name, target.name+"#"+target.discriminator, target.id, global_name(target)]:
+            await ctx.guild.unban(target)
+            unbanned = target
+    out = f"{global_name(unbanned)} was unbanned from {ctx.guild.name}."
+    await adminChannel.send(out)
 
 @commands.command()
 async def role(ctx, mode, user, role):
@@ -124,7 +152,7 @@ async def server(ctx, setting="", newValue=None):
     
     for i in range(len(guildAdmin["Censored Users"])):
         user = await memberConverter.convert(ctx, guildAdmin["Censored Users"][i])
-        guildAdmin["Censored Users"][i] = user.name
+        guildAdmin["Censored Users"][i] = global_name(user)
         
     if len(guildAdmin["Censored Users"]) > 0: censoredUsers = ", ".join(guildAdmin["Censored Users"])
     
@@ -155,7 +183,7 @@ Censored Users: {censoredUsers}"
         modules = ""
         for setn in list(guildSettings.keys()):
             if setn in ["Counting", "Levels", "LvUpReacts", "PublicScripts", "GlobalLevel", "SomeonePing", "CharacterLimit",
-                        "GetUpdates"]: modules += setn.ljust(10) + " = " + str(guildSettings[setn]) + "\n"
+                        "GetUpdates", "Prefix", "NewUserRoleID"]: modules += setn.ljust(10) + " = " + str(guildSettings[setn]) + "\n"
         embed = discord.Embed(title = f"__{ctx.guild.name} ({ctx.guild.id})__", color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
         embed.add_field(name=f"*=== Basic Info ===*", value=basic, inline=False)
         embed.add_field(name=f"*=== Admin Info ===*", value=admin, inline=False)
@@ -175,6 +203,10 @@ Censored Users: {censoredUsers}"
             if newValue == None: await ctx.send(f"Please provide an integer value for this setting."); return
             try: newValue = int(newValue)
             except Exception: await ctx.send(f"Please provide an integer value for this setting."); return
+            guildSettings[setting] = newValue
+            await ctx.send("Updated. :thumbsup:")
+        elif type(guildSettings[setting]) is str:
+            if newValue == None: await ctx.send(f"Please provide a string value for this setting."); return
             guildSettings[setting] = newValue
             await ctx.send("Updated. :thumbsup:")
                 
@@ -245,10 +277,10 @@ People with Manage Messages are immune. Requires Manage Messages permission."""
     user = await converter.convert(ctx, user)
     if str(user.id) in admin["Censored Users"]:
         admin["Censored Users"].remove(str(user.id))
-        await ctx.send(f"**{user.name}** is no longer getting censored. :thumbsup:")
+        await ctx.send(f"**{global_name(user)}** is no longer getting censored. :thumbsup:")
     else:
         admin["Censored Users"].append(str(user.id))
-        await ctx.send(f"**{user.name}** will be censored. :thumbsup:")
+        await ctx.send(f"**{global_name(user)}** will be censored. :thumbsup:")
     GuilddataSetFile(ctx.guild, "admin.json", admin)
 
 @commands.command(aliases=["togimg", "togimage", "togimages", "toggleimage", "toggleimg", "toggleimgs"])
@@ -401,6 +433,7 @@ Global Variables:
   printChannel             - Returns the ID of the channel that print prints to. Same as channelID by default.
 
 Each output must be on a new line."""
+    _input = _input.lower()
     if not (GuilddataGetFileIndex(ctx.guild, "settings.json", "PublicScripts") or ctx.message.author.guild_permissions.manage_messages):
         out = "You do not have permission to perform this action."
         return

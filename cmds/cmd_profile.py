@@ -167,10 +167,10 @@ Booleans (that is, settings with true/false values) can be toggled without a new
 Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
 Color can be defined as three numbers in the format 0xxRR,0xGG,0xBB, where RGB is hexadecimal
 Color can also be named using the table found using this command.
-  z!file read colors
+  [PREFIX]file read colors
 
 Notation can be defined using the table found using this command.
-  z!file read notations"""
+  [PREFIX]file read notations"""
     userSettings = PlayerdataGetFile(ctx.author, "settings.json")
     if setting == "":
         out = ""
@@ -191,7 +191,7 @@ Notation can be defined using the table found using this command.
             await ctx.send("Updated. :thumbsup:")
         else:
             if setting == "Notation" and newValue == None:
-                await ctx.send("Notation can be defined using the table found using this command.\n  z!file read notations")
+                await ctx.send(f"Notation can be defined using the table found using this command.\n  {local['prefix']}file read notations")
                 return
             if newValue == None: await ctx.send("Please redo this command with a new value for this."); return
             if setting == "Color":
