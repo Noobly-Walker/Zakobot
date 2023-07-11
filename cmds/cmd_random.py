@@ -5,22 +5,23 @@ from os.path import isdir,exists
 from math import factorial
 from random import *
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
-from util.PotionRandomizer import potion_randomizer
+from util.ItemRandomizer import itemGenerator
 from util.SLHandle import load
 from util.SLHandle import *
 from util.expol import expol
 from util.cmdutil import cmdutil
 text = cmdutil()
+PATH = load(".\\locals\\%PATH%")
 
 def commandList():
-    return [splash, joke, choose, potion,
-            roll, namegenerator]
+    return [splash, joke, choose, generate,
+            roll, namegenerator, chuck]
 
 def categoryDescription():
     return "Random numbers and items from lists."
 
 def get_rand_from_list(listName:str):
-    file = load(listName + '.txt', 'data\\randlists\\')
+    file = load(listName + '.txt', PATH + '\\randlists\\')
     randStr = file.split("\n")
     randID = randrange(len(randStr))
     string = randStr[randID]
@@ -36,10 +37,18 @@ async def joke(ctx):
     "Returns a random joke"
     await ctx.send(get_rand_from_list("jokes"))
 
-@commands.command(aliases=['pot'])
-async def potion(ctx):
-    "Returns a random potion and effect. For fun or roleplaying, has no bearing on anything else."
-    await ctx.send(potion_randomizer(ctx, {"debuff": True, "tf": True, "nsfw": False, "vore": False, "gore": False, "fetish": False}))
+@commands.command(aliases=['gen'])
+async def generate(ctx, type_=None):
+    """Returns a random item with random modifiers. For fun or roleplaying; has no bearing on anything else.
+    Valid types: tool, melee, ranged, ammo, armor, jewelry, trinket, potion, furniture, any
+    Type '[PREFIX]generate info' to learn more about formatting of items."""
+    if type_ is None: type_ = "any"
+    await ctx.send(itemGenerator(ctx, type_, {"debuff": True, "tf": True, "nsfw": False, "vore": False, "gore": False, "fetish": False}))
+
+@commands.command()
+async def chuck(ctx):
+    "Returns a random Chuck Norris joke"
+    await ctx.send(get_rand_from_list("chucks"))
 
 @commands.command(aliases=['choice']) # Bot randomly chooses between the inputs.
 async def choose(ctx, *, choices: str):
@@ -55,7 +64,7 @@ async def choose(ctx, *, choices: str):
 @commands.command(aliases=['dice']) # Bot rolls X Y-sided dice. Not as nice as Tsumikibot's dice system, and that's okay.
 async def roll(ctx, dice: str, *formating: str):
     """Rolls some dice.
-    Example: /roll 2d6
+    Example: [prefix]roll 2d6
     Returns: 6, 2"""
     try:
         if dice[0] == 'd': dice = '1' + dice

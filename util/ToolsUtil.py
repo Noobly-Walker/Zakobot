@@ -37,6 +37,13 @@ def parenthesisFinder(funct:list, index, direction, symbols="()"):
     new_index = index + offset
     return new_index
 
+def getWeather(lat, long):
+    key = loadJSON(".\\locals\\keys.json")["openweathermap"]
+    url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={long}&appid={key}"
+    response = requests.get(url)
+    data = response.json()
+    #TODO: Are we using this API, or a different one? I cannot afford anything at this time.
+
 def calculatorFunct(user, funct:str):
     funct = list(funct) #converts tuple to string, then to list
     derivedFunct = []

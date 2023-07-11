@@ -9,80 +9,75 @@ from util.cmdutil import cmdutil
 text = cmdutil()
 local = loadJSON('.\\locals\\locals.json')
 
+def preloadFile(path, guild, file, defaults, skipCheck=False):
+    if not exists(f"{path}{file}.json"): data = {}
+    else: data = GuilddataGetFile(guild, f"{file}.json")
+    for i in defaults:
+        data.setdefault(i, defaults[i])
+    if not skipCheck and type(data) is dict:
+        for key in list(data.keys()): #clean up my blunders
+            if key in defaults.keys(): pass
+            else: del data[key]
+    GuilddataSetFile(guild, f"{file}.json", data)
+    return data
+
 def preloadGuilddata(guild):
     path = f".\\guilddata\\{guild.id}\\"
     pathfind(path)
     pathfind(path + "scripts\\")
     pathfind(path + "data\\")
-
-    if not exists(f"{path}profile.json"): dataProfile = {}
-    else: dataProfile = GuilddataGetFile(guild, "profile.json")
-    dataProfile.setdefault("Name", guild.name)
-    dataProfile.setdefault("ID", guild.id)
-    for key in list(dataProfile.keys()): #clean up my blunders
-        if key in ["Name", "ID"]: pass
-        else: del dataProfile[key]
-    GuilddataSetFile(guild, "profile.json", dataProfile)
-
-    if not exists(f"{path}settings.json"): dataSettings = {}
-    else: dataSettings = GuilddataGetFile(guild, "settings.json")
-    dataSettings.setdefault("Levels", True)
-    dataSettings.setdefault("LvUpReacts", True)
-    dataSettings.setdefault("Counting", True)
-    dataSettings.setdefault("PublicScripts", False)
-    dataSettings.setdefault("GlobalLevel", False)
-    dataSettings.setdefault("SomeonePing", False)
-    dataSettings.setdefault("CharacterLimit", 4000)
-    dataSettings.setdefault("GetUpdates", False)
-    dataSettings.setdefault("Prefix", local["prefix"])
-    dataSettings.setdefault("AnnounceBirthdays", False)
-    for key in list(dataSettings.keys()): #clean up my blunders
-        if key in ["Levels", "LvUpReacts", "Counting", "PublicScripts",
-                   "GlobalLevel", "SomeonePing", "CharacterLimit",
-                   "GetUpdates", "AnnounceBirthdays", "Prefix"]: pass
-        else: del dataSettings[key]
-    GuilddataSetFile(guild, "settings.json", dataSettings)
-    
-    if not exists(f"{path}curses.json"): dataCurses = []
-    else: dataCurses = GuilddataGetFile(guild, "curses.json")
-    GuilddataSetFile(guild, "curses.json", dataCurses)
-    
-    if not exists(f"{path}levels.json"): localLevels = {}
-    else: localLevels = GuilddataGetFile(guild, "levels.json")
-    GuilddataSetFile(guild, "levels.json", localLevels)
-
-    if not exists(f"{path}scripts\\onMessageIs.json"): eventOnMessageIs = {}
-    else: eventOnMessageIs = GuilddataGetFile(guild, "scripts\\onMessageIs.json")
-    GuilddataSetFile(guild, "scripts\\onMessageIs.json", eventOnMessageIs)
-
-    if not exists(f"{path}scripts\\onMessageHas.json"): eventOnMessageHas = {}
-    else: eventOnMessageHas = GuilddataGetFile(guild, "scripts\\onMessageHas.json")
-    GuilddataSetFile(guild, "scripts\\onMessageHas.json", eventOnMessageHas)
-
-    if not exists(f"{path}scripts\\onMemberJoin.json"): eventOnMemberJoin = {}
-    else: eventOnMemberJoin = GuilddataGetFile(guild, "scripts\\onMemberJoin.json")
-    GuilddataSetFile(guild, "scripts\\onMemberJoin.json", eventOnMemberJoin)
-
-    if not exists(f"{path}scripts\\onMemberLeave.json"): eventOnMemberLeave = {}
-    else: eventOnMemberLeave = GuilddataGetFile(guild, "scripts\\onMemberLeave.json")
-    GuilddataSetFile(guild, "scripts\\onMemberLeave.json", eventOnMemberLeave)
-
-    if not exists(f"{path}scripts\\function.json"): eventFunction = {}
-    else: eventFunction = GuilddataGetFile(guild, "scripts\\function.json")
-    GuilddataSetFile(guild, "scripts\\function.json", eventFunction)
-
-    if not exists(f"{path}stats.json"): dataStats = {}
-    else: dataStats = GuilddataGetFile(guild, "stats.json")
     ts = datetime.timestamp(datetime.now())
     memberParse = realUsers(guild)
-    dataStats.setdefault("Messages Sent", 0)
-    dataStats.setdefault("Counting Done", [0.0, 0])
-    dataStats.setdefault("Acct Creation", ts)
-    dataStats.setdefault("Members", memberParse[0])
-    dataStats.setdefault("Users", memberParse[1])
-    dataStats.setdefault("Bots", memberParse[2])
-    dataStats.setdefault("Last Update", 0)
-    dataStats.setdefault("Activity Board", [])
+
+    defaultsProfile = {
+        "Name": guild.name,
+        "ID": guild.id
+        }
+    defaultsSettings = {
+        "Levels": True,
+        "LvUpReacts": True,
+        "Counting": True,
+        "PublicScripts": False,
+        "GlobalLevel": False,
+        "SomeonePing": False,
+        "CharacterLimit": 4000,
+        "GetUpdates": False,
+        "Prefix": local["prefix"],
+        "AnnounceBirthdays": False,
+        "NewUserRoleID": "None"
+        }
+    defaultsStats = {
+        "Messages Sent": 0,
+        "Counting Done": [0.0, 0],
+        "Acct Creation": ts,
+        "Members": memberParse[0],
+        "Users": memberParse[1],
+        "Bots": memberParse[2],
+        "Last Update": 0,
+        "Activity Board": []
+        }
+    defaultsAdmin = {
+        "Update Channel": None,
+        "Admin Channel": None,
+        "Censored Users": [],
+        "Image Blocked Channels": [],
+        "Link Blocked Channels": [],
+        "Emoji Blocked Channels": [],
+        "Zako Ignored Channels": []
+        }
+
+    preloadFile(path, guild, "profile", defaultsProfile)
+    preloadFile(path, guild, "settings", defaultsSettings)
+    preloadFile(path, guild, "curses", [], True)
+    preloadFile(path, guild, "levels", {}, True)
+    preloadFile(path, guild, "scripts\\onMessageIs", {}, True)
+    preloadFile(path, guild, "scripts\\onMessageHas", {}, True)
+    preloadFile(path, guild, "scripts\\onMemberJoin", {}, True)
+    preloadFile(path, guild, "scripts\\onMemberLeave", {}, True)
+    preloadFile(path, guild, "scripts\\function", {}, True)
+    dataStats = preloadFile(path, guild, "stats", defaultsStats)
+    preloadFile(path, guild, "admin", defaultsAdmin)
+
     if len(dataStats["Activity Board"]) == 0:
         try:
             average = int(getActivity(dataStats)//1)
@@ -91,27 +86,7 @@ def preloadGuilddata(guild):
             dataStats["Last Update"] = getAcctAge(dataStats)
         except ZeroDivisionError:
             dataStats["Activity Board"].append(0)
-    for key in list(dataStats.keys()): #clean up my blunders
-        if key in ["Messages Sent", "Counting Done", "Acct Creation", "Members",
-                   "Users", "Bots", "Activity Board", "Last Update"]: pass
-        else: del dataStats[key]
     GuilddataSetFile(guild, "stats.json", dataStats)
-
-    if not exists(f"{path}admin.json"): dataAdmin = {}
-    else: dataAdmin = GuilddataGetFile(guild, "admin.json")
-    dataAdmin.setdefault("Update Channel", None)
-    dataAdmin.setdefault("Admin Channel", None)
-    dataAdmin.setdefault("Censored Users", [])
-    dataAdmin.setdefault("Image Blocked Channels", [])
-    dataAdmin.setdefault("Link Blocked Channels", [])
-    dataAdmin.setdefault("Emoji Blocked Channels", [])
-    dataAdmin.setdefault("Zako Ignored Channels", [])
-    for key in list(dataAdmin.keys()): #clean up my blunders
-        if key in ["Update Channel", "Admin Channel", "Censored Users",
-                   "Image Blocked Channels", "Link Blocked Channels", 
-                   "Emoji Blocked Channels", "Zako Ignored Channels"]: pass
-        else: del dataAdmin[key]
-    GuilddataSetFile(guild, "admin.json", dataAdmin)
 
 def updateMemberCount(guild):
     dataStats = GuilddataGetFile(guild, "stats.json")

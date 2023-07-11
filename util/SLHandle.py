@@ -59,7 +59,7 @@ def loadJSON(filename: str, path="."):
             with open(path+"\\"+filename,"r") as file:
                 return jload(file)
         except json.decoder.JSONDecodeError:
-            text.warn(f"File {filepath}\\{filename} is corrupted.")
+            text.warn(f"File {path}\\{filename} is corrupted.")
             return
 
 def delete(filename: str, path="."):

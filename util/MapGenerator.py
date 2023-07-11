@@ -48,7 +48,7 @@ System: (x,y) range 0-9
     
     sect = list(map(int.__add__, quadrant, sector))
     #galaxyDensityMap = Image.open(".\\data\\galaxyDensityMap.png")
-    galaxyDensityMap = Image.open("B:\\zako3\\assets\\maps\\galaxyDensityMap.png")
+    galaxyDensityMap = Image.open("B:\\zakobot\\branchDev\\assets\\maps\\galaxyDensityMap.png")
     sectorColor = galaxyDensityMap.getpixel(tuple(sect))
     density = sectorColor[0]//16 #the galaxy map is grayscale, it doesn't matter if the index is 0, 1, or 2.
     
@@ -178,8 +178,8 @@ System: (x,y) range 0-9
         
         worldMap = Image.new(mode="RGB", size=(xpix, ypix))
         worldMapEdit = worldMap.load()
-        try: colorizer = Image.open(f"B:\\zako3\\assets\\maps\\planets\\{planetType}world.png")
-        except Exception: colorizer = Image.open("B:\\zako3\\assets\\maps\\planets\\Cworld.png")
+        try: colorizer = Image.open(f"B:\\zakobot\\branchDev\\assets\\maps\\planets\\{planetType}world.png")
+        except Exception: colorizer = Image.open("B:\\zakobot\\branchDev\\assets\\maps\\planets\\Cworld.png")
 
         for x in range(len(tempMap)):
             for y in range(len(tempMap[x])):

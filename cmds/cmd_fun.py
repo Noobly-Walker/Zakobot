@@ -16,7 +16,7 @@ text = cmdutil()
 PATH = load(".\\locals\\%PATH%")
 
 def commandList():
-    return [count, minesweeper, farkle]
+    return [count, minesweeper]
 
 def categoryDescription():
     return "Games and other fun things."
@@ -67,33 +67,26 @@ Algorithm: increment = 2^count.exponent×(1+(userLevel/4))"""
         await ctx.send(embed=embed)
 
 @commands.command(aliases=['msw'])
-async def minesweeper(ctx, map_size: int, bombchance: int):
+async def minesweeper(ctx, bombchance=10, map_size=6):
     """Generates a minesweeper game!
     map_size 4 <= x <= 12
-    bombchance -30 <= y =< -1 and 1 <= y <= 30 (lower number means more bombs)"""
+    bombchance 5 <= x <= 100 (bomb chance per tile)"""
     if map_size > 12 or map_size < 4:
         await ctx.send("Error: The given map size is too large or small!")
         return
-    if abs(bombchance) > 30 or abs(bombchance) < 1:
+    if bombchance > 100 or bombchance < 5:
         await ctx.send("Error: The given bomb chance is too large or small!")
         return
     grid = []
     drops = []
     numbers = ["", "<:msw1:739810675747979314>", "<:msw2:739810675827933274>", "<:msw3:739810675844448367>", "<:msw4:739810675584663576>", "<:msw5:739810675819413625>", "<:msw6:739810675878264872>", "<:msw7:739810675685064815>", "<:msw8:739810675819413614>"]
     Bombs = 0
-    if bombchance > 0:
-        for i in range(abs(bombchance)):
-            drops.append("None")
-        drops.append("Bomb")
-    elif bombchance < 0:
-        for i in range(abs(bombchance)):
-            drops.append("Bomb")
-        drops.append("None")
     for i in range(map_size): #Generate grid and place bombs!
         grid.append([])
         for j in range(map_size):
-            type = random.choice(drops)
-            grid[i].append(type)
+            roll = random.randrange(100)
+            if roll < bombchance: grid[i].append("Bomb")
+            else: grid[i].append("None")
     for i in range(map_size): #Place numbers!
         for j in range(map_size):
             count = 0

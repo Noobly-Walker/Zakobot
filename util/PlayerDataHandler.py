@@ -1,6 +1,7 @@
 from os.path import splitext
 from sqlite3 import connect as sqlConnect
 from datetime import datetime
+import requests
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
 from util.expol import *
 from util.SLHandle import *
@@ -8,80 +9,80 @@ from util.DataHandlerUtil import *
 from util.cmdutil import cmdutil
 from util.GuildDataHandler import GuilddataGetFile
 text = cmdutil()
+local = loadJSON('.\\locals\\locals.json')
+
+def preloadFile(path, user, file, defaults:dict):
+    if not exists(f"{path}{file}.json"): data = {}
+    else: data = PlayerdataGetFile(user, f"{file}.json")
+    for i in defaults:
+        data.setdefault(i, defaults[i])
+    for key in list(data.keys()): #clean up my blunders
+        if key in defaults.keys(): pass
+        else: del data[key]
+    PlayerdataSetFile(user, f"{file}.json", data)
+    return data
 
 def preloadPlayerdata(user):
     path = f".\\playerdata\\{user.id}\\"
     pathfind(path)
-    
-    if not exists(f"{path}profile.json"): dataProfile = {}
-    else: dataProfile = PlayerdataGetFile(user, "profile.json")
-    dataProfile.setdefault("Name", user.name)
-    dataProfile.setdefault("ID", user.id)
-    dataProfile.setdefault("canDaily", True)
-    for key in list(dataProfile.keys()): #clean up my blunders
-        if key in ["Name", "ID", "canDaily"]: pass
-        else: del dataProfile[key]
-    PlayerdataSetFile(user, "profile.json", dataProfile)
-    
-    if not exists(f"{path}level.json"): dataLevel = {}
-    else: dataLevel = PlayerdataGetFile(user, "level.json")
-    dataLevel.setdefault("Experience", 0)
-    dataLevel.setdefault("Level", 0)
-    for key in list(dataLevel.keys()): #clean up my blunders
-        if key in ["Experience", "Level"]: pass
-        else: del dataLevel[key]
-    PlayerdataSetFile(user, "level.json", dataLevel)
-    
-    if not exists(f"{path}timers.json"): dataTimers = {}
-    else: dataTimers = PlayerdataGetFile(user, "timers.json")
     ts = datetime.timestamp(datetime.now())
-    dataTimers.setdefault("Timestamp", ts)
-    dataTimers.setdefault("BankInterest", ts)
-    dataTimers.setdefault("Daily", ts)
-    dataTimers.setdefault("DayTimer", ts)
-    dataTimers.setdefault("EXPTimer", ts)
-    for key in list(dataTimers.keys()): #clean up my blunders
-        if key in ["Timestamp", "BankInterest", "Daily", "DayTimer",
-                   "EXPTimer"]: pass
-        else: del dataTimers[key]
-    PlayerdataSetFile(user, "timers.json", dataTimers)
 
-    if not exists(f"{path}settings.json"): dataSettings = {}
-    else: dataSettings = PlayerdataGetFile(user, "settings.json")
-    dataSettings.setdefault("LvUpReacts", True)
-    dataSettings.setdefault("Color", "teal")
-    dataSettings.setdefault("Notation", "e")
-    dataSettings.setdefault("Rounding", "5")
-    for key in list(dataSettings.keys()): #clean up my blunders
-        if key in ["LvUpReacts", "Color", "Notation", "Rounding"]: pass
-        else: del dataSettings[key]
-    PlayerdataSetFile(user, "settings.json", dataSettings)
+    defaultsProfile = {
+        "Name": global_name(user),
+        "ID": user.id,
+        "canDaily": True
+        }
+    defaultsLevel = {
+        "Experience": 0,
+        "Level": 0
+        }
+    defaultsTimers = {
+        "Timestamp": ts,
+        "BankInterest": ts,
+        "Daily": ts,
+        "DayTimer": ts,
+        "EXPTimer": ts,
+        "WeatherTimer": ts
+        }
+    defaultsSettings = {
+        "LvUpReacts": True,
+        "Color": "teal",
+        "Notation": "e",
+        "Rounding": "5"
+        }
+    defaultsMultis = {
+        "ShopCountingMulti": 1
+        }
+    defaultsBackpack = {
+        "cards": {}
+        }
+    defaultsStats = {
+        "Messages Sent": 0,
+        "Dailys Claimed": 0,
+        "Counting Done": [0.0, 0],
+        "Acct Creation": ts,
+        "Activity Board": [],
+        "Last Update": 0
+        }
+    defaultsWallet = {
+        "Kups": 0,
+        "Args": 100,
+        "Aurus": 0,
+        "BankKups": 0,
+        "BankArgs": 0,
+        "BankAurus": 0,
+        "BankLedger": {},
+        "Gems": 0
+        }
+    preloadFile(path, user, "profile", defaultsProfile)
+    preloadFile(path, user, "level", defaultsLevel)
+    preloadFile(path, user, "timers", defaultsTimers)
+    preloadFile(path, user, "settings", defaultsSettings)
+    preloadFile(path, user, "multis", defaultsMultis)
+    preloadFile(path, user, "backpack", defaultsBackpack)
+    dataStats = preloadFile(path, user, "stats", defaultsStats)
+    dataWallet = preloadFile(path, user, "wallet", defaultsWallet)
 
-    if not exists(f"{path}multis.json"): dataMultis = {}
-    else: dataMultis = PlayerdataGetFile(user, "multis.json")
-    dataMultis.setdefault("ShopCountingMulti", 1)
-    for key in list(dataMultis.keys()): #clean up my blunders
-        if key in ["ShopCountingMulti"]: pass
-        else: del dataMultis[key]
-    PlayerdataSetFile(user, "multis.json", dataMultis)
-
-    if not exists(f"{path}backpack.json"): dataBackpack = {}
-    else: dataBackpack = PlayerdataGetFile(user, "backpack.json")
-    dataBackpack.setdefault("cards", {})
-    for key in list(dataBackpack.keys()): #clean up my blunders
-        if key in ["cards"]: pass
-        else: del dataBackpack[key]
-    PlayerdataSetFile(user, "backpack.json", dataBackpack)
-
-    if not exists(f"{path}stats.json"): dataStats = {}
-    else: dataStats = PlayerdataGetFile(user, "stats.json")
-    ts = datetime.timestamp(datetime.now())
-    dataStats.setdefault("Messages Sent", 0)
-    dataStats.setdefault("Dailys Claimed", 0)
-    dataStats.setdefault("Counting Done", [0.0, 0])
-    dataStats.setdefault("Acct Creation", ts)
-    dataStats.setdefault("Activity Board", [])
-    dataStats.setdefault("Last Update", 0)
     if len(dataStats["Activity Board"]) == 0:
         try:
             average = int(getActivity(dataStats)//1)
@@ -90,26 +91,10 @@ def preloadPlayerdata(user):
             dataStats["Last Update"] = getAcctAge(dataStats)
         except ZeroDivisionError:
             dataStats["Activity Board"].append(0)
-    for key in list(dataStats.keys()): #clean up my blunders
-        if key in ["Messages Sent", "Dailys Claimed", "Counting Done", "Acct Creation",
-                   "Activity Board", "Last Update"]: pass
-        else: del dataStats[key]
     PlayerdataSetFile(user, "stats.json", dataStats)
     
-    if not exists(f"{path}wallet.json"): dataWallet = {}
-    else: dataWallet = PlayerdataGetFile(user, "wallet.json")
-    dataWallet.setdefault("Kups", 0)
-    dataWallet.setdefault("Args", 100)
-    dataWallet.setdefault("Aurus", 0)
-    dataWallet.setdefault("BankKups", 0)
-    dataWallet.setdefault("BankArgs", 0)
-    dataWallet.setdefault("BankAurus", 0)
-    dataWallet.setdefault("BankLedger", {})
-    dataWallet.setdefault("Gems", 0)
-    for key in list(dataWallet.keys()): #clean up my blunders
-        if key in ["Kups", "Args", "Aurus", "BankKups", "BankArgs", "BankAurus", "BankLedger", "Gems"]: pass
-        else: del dataWallet[key]
-    dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = IntToGSC(GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"]))
+    dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = \
+                             IntToGSC(GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"]))
     PlayerdataSetFile(user, "wallet.json", dataWallet)
 
 def incrementXP(ctx, userLevelFile, experienceGain, globalScope=True):
@@ -133,6 +118,21 @@ def incrementXP(ctx, userLevelFile, experienceGain, globalScope=True):
                 PlayerdataSetFileIndex(author, "wallet.json", "Args", userSilver)
             return userLevelFile, True
         else: return userLevelFile, False
+
+def global_name(user):
+    key = loadJSON(".\\locals\\keys.json")["discord"]
+    headers = {
+        'Authorization': f'Bot {key}',  # Replace with your bot token
+        'User-Agent': f'DiscordBot {local["id"]}',  # Replace with your bot ID
+    }
+    response = requests.get(f'https://discord.com/api/v10/users/{user.id}', headers=headers)
+    if response.status_code == 200:
+        user_data = response.json()
+        global_name = user_data['global_name']
+        if global_name is not None: return global_name
+        else: return user.name
+    else:
+        text.warn(f"[HTTP] Status code: {response.status_code}")
 
 async def reactToLvUp(ctx, integer):
     message = ctx.message
@@ -185,12 +185,13 @@ def GetNotationCode(user):
 def AddCards(user, cards):
     cardbook = PlayerdataGetFileIndex(user, "backpack.json", "cards")
     for card in cards:
-        if card[2] not in cardbook.keys():
-            cardbook[card[2]] = [card[1], 0, 0]
+        # card = [isShiny, rarity, cardID]
+        if str(card[2]) not in list(cardbook.keys()):
+            cardbook[str(card[2])] = [card[1], 0, 0]
         if card[0] == "cardbase":
-            cardbook[card[2]][1] += 1
+            cardbook[str(card[2])][1] += 1
         elif card[0] == "cardbase-shiny":
-            cardbook[card[2]][2] += 1
+            cardbook[str(card[2])][2] += 1
     PlayerdataSetFileIndex(user, "backpack.json", "cards", cardbook)
 
 def PlayerdataGetFile(user, filename):

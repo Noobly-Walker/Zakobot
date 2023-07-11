@@ -37,7 +37,7 @@ async def kick(ctx, user, *, reason=None):
         converter = commands.MemberConverter()
         userobj = await converter.convert(ctx, user)
         await ctx.guild.kick(userobj)
-        out = f"{userobj.name} was kicked from {ctx.guild.name}"
+        out = f"{global_name(userobj)} was kicked from {ctx.guild.name}"
         if reason != None:
             out += f" for: {reason}"
         out += "."
@@ -59,7 +59,7 @@ async def ban(ctx, user, *, reason=None):
         converter = commands.MemberConverter()
         userobj = await converter.convert(ctx, user)
         await ctx.guild.ban(userobj)
-        out = f"{userobj.name} was banned from {ctx.guild.name}"
+        out = f"{global_name(userobj)} was banned from {ctx.guild.name}"
         if reason != None:
             out += f" for: {reason}"
         out += "."
@@ -81,10 +81,10 @@ async def unban(ctx, *, user):
     banlist = await ctx.guild.bans()
     for ban in banlist:
         target = ban.user
-        if user in [target.name, target.name+"#"+target.discriminator, target.id]:
+        if user in [target.name, target.name+"#"+target.discriminator, target.id, global_name(target)]:
             await ctx.guild.unban(target)
             unbanned = target
-    out = f"{unbanned.name} was unbanned from {ctx.guild.name}."
+    out = f"{global_name(unbanned)} was unbanned from {ctx.guild.name}."
     await adminChannel.send(out)
 
 @commands.command()
@@ -152,7 +152,7 @@ async def server(ctx, setting="", newValue=None):
     
     for i in range(len(guildAdmin["Censored Users"])):
         user = await memberConverter.convert(ctx, guildAdmin["Censored Users"][i])
-        guildAdmin["Censored Users"][i] = user.name
+        guildAdmin["Censored Users"][i] = global_name(user)
         
     if len(guildAdmin["Censored Users"]) > 0: censoredUsers = ", ".join(guildAdmin["Censored Users"])
     
@@ -183,7 +183,7 @@ Censored Users: {censoredUsers}"
         modules = ""
         for setn in list(guildSettings.keys()):
             if setn in ["Counting", "Levels", "LvUpReacts", "PublicScripts", "GlobalLevel", "SomeonePing", "CharacterLimit",
-                        "GetUpdates", "Prefix"]: modules += setn.ljust(10) + " = " + str(guildSettings[setn]) + "\n"
+                        "GetUpdates", "Prefix", "NewUserRoleID"]: modules += setn.ljust(10) + " = " + str(guildSettings[setn]) + "\n"
         embed = discord.Embed(title = f"__{ctx.guild.name} ({ctx.guild.id})__", color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
         embed.add_field(name=f"*=== Basic Info ===*", value=basic, inline=False)
         embed.add_field(name=f"*=== Admin Info ===*", value=admin, inline=False)
@@ -277,10 +277,10 @@ People with Manage Messages are immune. Requires Manage Messages permission."""
     user = await converter.convert(ctx, user)
     if str(user.id) in admin["Censored Users"]:
         admin["Censored Users"].remove(str(user.id))
-        await ctx.send(f"**{user.name}** is no longer getting censored. :thumbsup:")
+        await ctx.send(f"**{global_name(user)}** is no longer getting censored. :thumbsup:")
     else:
         admin["Censored Users"].append(str(user.id))
-        await ctx.send(f"**{user.name}** will be censored. :thumbsup:")
+        await ctx.send(f"**{global_name(user)}** will be censored. :thumbsup:")
     GuilddataSetFile(ctx.guild, "admin.json", admin)
 
 @commands.command(aliases=["togimg", "togimage", "togimages", "toggleimage", "toggleimg", "toggleimgs"])
@@ -433,6 +433,7 @@ Global Variables:
   printChannel             - Returns the ID of the channel that print prints to. Same as channelID by default.
 
 Each output must be on a new line."""
+    _input = _input.lower()
     if not (GuilddataGetFileIndex(ctx.guild, "settings.json", "PublicScripts") or ctx.message.author.guild_permissions.manage_messages):
         out = "You do not have permission to perform this action."
         return

@@ -158,7 +158,7 @@ Each coin flip costs 6SP. Winnings are potentially infinite, though the house wi
         elif wins < 20: flash = '***JACKPOT!!!***'
         elif wins >= 20: flash = '__***SUPER JACKPOT!!!***__'
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} flipped heads {wins} times, {net} {silver:,}SP.")
+    await ctx.send(f"{flash} {global_name(author)} flipped heads {wins} times, {net} {silver:,}SP.")
 
 @commands.command(aliases=['dn', 'doublenothing']) # Double or nothing.
 async def doubleornothing(ctx, wager: int):
@@ -177,7 +177,7 @@ async def doubleornothing(ctx, wager: int):
         net = f'won an additional {wager}SP!!!'
         silver = wager
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} {net}")
+    await ctx.send(f"{flash} {global_name(author)} {net}")
 
 @commands.command(aliases=['cg3']) # Gain or lose silver based on how many heads or tails are flipped
 async def coingame(ctx):
@@ -217,4 +217,4 @@ async def coingame(ctx):
         elif loops >= 20: flash = '__***SUPER BANKRUPCY!!!***__'
     silver += change
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {ctx.author.name} flipped {coinside} {loops} times, {net} {silver:,}SP.")
+    await ctx.send(f"{flash} {global_name(author)} flipped {coinside} {loops} times, {net} {silver:,}SP.")
