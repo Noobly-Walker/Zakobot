@@ -45,16 +45,25 @@ def getAcctAgeYMDAsStr(dataStats):
     return string
     
 
-def GSCToInt(gold, silver, copper):
-    return gold*1000000 + silver*1000 + copper
+def GSCToInt(plutonium, gold, silver, copper):
+    return plutonium*1000000000 + gold*1000000 + silver*1000 + copper
 
 def IntToGSC(integer):
-    return(int(integer // 1000000),
+    return(int(integer // 1000000000),
+           int(integer % 1000000000 // 1000000),
            int(integer % 1000000 // 1000),
            int(integer % 1000))
 
-def regularizeGSC(gold, silver, copper):
-    return IntToGSC(GSCToInt(gold, silver, copper))
+def regularizeGSC(plutonium, gold, silver, copper):
+    return IntToGSC(GSCToInt(plutonium, gold, silver, copper))
+
+def argsAsString(amount):
+    pluots, aurus, args, kups = IntToGSC(amount)
+    if pluots > 0: out = f"{pluots}PP {aurus}GP {args}SP {kups}CP"
+    elif aurus > 0: out = f"{aurus}GP {args}SP {kups}CP"
+    elif args > 0: out = f"{args}SP {kups}CP"
+    else: out = f"{kups}CP"
+    return out
 
 def levelToExp(level:int):
     level -= 1

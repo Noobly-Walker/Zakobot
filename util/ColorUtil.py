@@ -3,7 +3,7 @@ from random import randrange
 from util.cmdutil import cmdutil
 text = cmdutil()
 
-def rectColor(color):
+def rectColor(color, splitValues=False):
     if set(color) <= set("0123456789"): #Stringified color integer
         return int(color)
     if set(color) <= set("0123456789,"): #Stringified RGB decimal
@@ -70,4 +70,5 @@ def rectColor(color):
         if color in ["darkmode", "invisible"]: color = (44,47,51)
         if color == "darkdarkmode": color = (35,39,42)
         if color == "random": color = (randrange(256),randrange(256),randrange(256))
-    return color[0]*256*256+color[1]*256+color[2]
+    if not splitValues: return color[0]*256*256+color[1]*256+color[2]
+    else: return color

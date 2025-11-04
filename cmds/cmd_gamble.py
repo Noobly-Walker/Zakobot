@@ -37,7 +37,7 @@ Winnings per bet:
 
 If two bets are taken, the wager is divided in half between the two.
 Wagers are in Silver Pieces.
-Max wager is 100000 SP."""
+Max wager is 100GP."""
     pockets = {
         "0": ["row", "row"],
         "2": ["even", "black"],
@@ -85,11 +85,11 @@ Max wager is 100000 SP."""
     if balance < wager:
         await ctx.send("You've wagered more than you can afford.")
         return
-    if balance > 100000:
+    if wager > 100000:
         await ctx.send("You've wagered more than the max wager.")
         return
 
-    balance -= wager
+    balance -= wager*1000
     if len(bet2) == 1:
         bet2 = bet2[0].lower()
         wager, wager2 = wager//2, wager//2
@@ -100,14 +100,14 @@ Max wager is 100000 SP."""
 
     if bet == ball:
         payout += 28*wager
-        out += f"**Won Straight Up!!!** Payout: {25*wager}SP"
+        out += f"**Won Straight Up!!!** Payout: {argsAsString(25*wager*1000)}"
     elif bet in pockets[ball]:
         if bet == "row":
             payout += 10*wager
-            out += f"**Won Row!!** Payout: {10*wager}SP"
+            out += f"**Won Row!!** Payout: {argsAsString(10*wager*1000)}"
         else:
-            payout += int(1.5*wager)
-            out += f"Won {str.capitalize(bet)}! Payout: {int(1.5*wager)}SP"
+            payout += 1.5*wager
+            out += f"Won {str.capitalize(bet)}! Payout: {argsAsString(int(1.5*wager*1000))}"
     else:
         out += f"No win..."
 
@@ -115,20 +115,20 @@ Max wager is 100000 SP."""
         out += "\nBet 2: "
         if bet2 == ball:
             payout += 25*wager2
-            out += f"**Won Straight Up!!!** Payout: {25*wager2}SP"
+            out += f"**Won Straight Up!!!** Payout: {argsAsString(25*wager2*1000)}"
         elif bet2 in pockets[ball]:
             if bet2 == "row":
                 payout += 10*wager2
-                out += f"**Won Row!!** Payout: {10*wager2}SP"
+                out += f"**Won Row!!** Payout: {argsAsString(10*wager2*1000)}"
             else:
-                payout += int(1.5*wager2)
-                out += f"Won {str.capitalize(bet2)}! Payout: {int(1.5*wager2)}SP"
+                payout += 1.5*wager2
+                out += f"Won {str.capitalize(bet2)}! Payout: {argsAsString(int(1.5*wager2*1000))}"
         else:
             out += f"No win..."
-        out += f"\n\nTotal winnings: {payout}SP"
+        out += f"\n\nTotal winnings: {argsAsString(payout*1000)}"
 
     await ctx.send(out)
-    balance += payout
+    balance += int(payout*1000)
     PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", balance)
 
 @commands.command(aliases=['heads', 'hGame', 'hgame']) # Gain silver based on how many heads are flipped
@@ -136,14 +136,14 @@ async def headsgame(ctx):
     """A coin will be flipped until it lands on tails. Each time it lands on heads, the money doubles!
 Each coin flip costs 6SP. Winnings are potentially infinite, though the house wins more than loses."""
     wallet = PlayerdataGetFileIndex(ctx.author, "wallet.json", "Args")
-    if wallet < 6: await ctx.send('You cannot afford to gamble!'); return
+    if wallet < 6000: await ctx.send('You cannot afford to gamble!'); return
     coin = randrange(2)
     winnings = 0
     wins = 0
     silver = -6
     while coin == 1:
         wins += 1
-        winnings = 2**wins*5
+        winnings = 1.8**wins*5
         silver -= 6
         coin = randrange(2)
     silver += winnings
@@ -157,16 +157,16 @@ Each coin flip costs 6SP. Winnings are potentially infinite, though the house wi
         elif wins < 15: flash = '***Huge Win!***'
         elif wins < 20: flash = '***JACKPOT!!!***'
         elif wins >= 20: flash = '__***SUPER JACKPOT!!!***__'
-    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {global_name(author)} flipped heads {wins} times, {net} {silver:,}SP.")
+    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver*1000)
+    await ctx.send(f"{flash} {global_name(ctx.author)} flipped heads {wins} times, {net} {argsAsString(abs(silver*1000))}.")
 
 @commands.command(aliases=['dn', 'doublenothing']) # Double or nothing.
 async def doubleornothing(ctx, wager: int):
-    """Double or nothing! Place your bets and flip the coin! Max bet is 500,000SP"""
+    """Double or nothing! Place your bets and flip the coin! Max bet is 500GP"""
     wallet = PlayerdataGetFileIndex(ctx.author, "wallet.json", "Args")
     if wager < 1: await ctx.send('You cannot wager less than one silver!'); return
     if wallet < wager: await ctx.send('You cannot afford to wager this much!'); return
-    if 500000 < wager: await ctx.send('This is over the maximum wager! You can only bet 500kSP or less!'); return
+    if 500000000 < wager: await ctx.send('This is over the maximum wager! You can only bet 500GP or less!'); return
     coin = randrange(2)
     if coin == 0:
         flash = '**Loss!**'
@@ -174,16 +174,16 @@ async def doubleornothing(ctx, wager: int):
         silver = -wager
     if coin == 1:
         flash = '**Win!**'
-        net = f'won an additional {wager}SP!!!'
+        net = f'won an additional {argsAsString(wager*1000)}!!!'
         silver = wager
-    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {global_name(author)} {net}")
+    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver*1000)
+    await ctx.send(f"{flash} {global_name(ctx.author)} {net}")
 
 @commands.command(aliases=['cg3']) # Gain or lose silver based on how many heads or tails are flipped
 async def coingame(ctx):
     """A coin will be flipped until the state changes. Each heads means greater winnings, and each tails means greater losses! Debt is possible, too."""
     wallet = PlayerdataGetFileIndex(ctx.author, "wallet.json", "Args")
-    if wallet < 6: await ctx.send('You cannot afford to gamble!'); return
+    if wallet < 6000: await ctx.send('You cannot afford to gamble!'); return
     coin = randrange(2)
     state = coin
     change = 0
@@ -197,10 +197,10 @@ async def coingame(ctx):
         if loops < 1:
             flash = '**Loss!** '
             net = 'losing'
-            change = -2**loops*5
+            change = -1.8**loops*5
         if loops >= 1:
             net = 'winning'
-            change = 3**loops*5
+            change = 1.8**loops*5
             if loops < 5: flash = '**Win!**'
             elif loops < 10: flash = '**Big Win!**'
             elif loops < 15: flash = '***Huge Win!***'
@@ -216,5 +216,5 @@ async def coingame(ctx):
         elif loops < 20: flash = '***BANKRUPCY!!!***'
         elif loops >= 20: flash = '__***SUPER BANKRUPCY!!!***__'
     silver += change
-    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver)
-    await ctx.send(f"{flash} {global_name(author)} flipped {coinside} {loops} times, {net} {silver:,}SP.")
+    PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", wallet+silver*1000)
+    await ctx.send(f"{flash} {global_name(ctx.author)} flipped {coinside} {loops} times, {net} {argsAsString(abs(silver*1000))}.")

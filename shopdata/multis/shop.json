@@ -1,6 +1,6 @@
 {
 	"countingMulti": {
-		"price": 100,
+		"price": 100000,
 		"currency": "Args",
 		"description": "Increases counting multi",
 		"payload": "PlayerdataSetFileIndex(author, 'multis.json', 'ShopCountingMulti', PlayerdataGetFileIndex(author, 'multis.json', 'ShopCountingMulti')+quantity)"

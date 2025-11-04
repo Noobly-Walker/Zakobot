@@ -1,6 +1,6 @@
 {
 	"packS1": {
-		"price": 500,
+		"price": 500000,
 		"currency": "Args",
 		"description": "10 element-themed cards",
 		"payload": "global outFile, outText;pack = generatePack(quantity*10);cards = AddCards(author, pack);getPack(pack);outText = f'Here\u005C's your cards! They went into your {local[\"prefix\"]}backpack.';outFile = '.\u005C\u005Ctemp\\pack.png'"

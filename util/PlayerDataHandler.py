@@ -16,6 +16,12 @@ def preloadFile(path, user, file, defaults:dict):
     else: data = PlayerdataGetFile(user, f"{file}.json")
     for i in defaults:
         data.setdefault(i, defaults[i])
+    if file == "wallet":
+        # a3.1_s42 patch to ensure everyone's balance is fixed
+        if "BankKups" in data.keys():
+            BankArgs = data["BankKups"] + data["BankArgs"]*1000 + data["BankAurus"]*1000000 + data["BankPluots"]*1000000
+            data["BankArgs"] = BankArgs
+            data["Args"] *= 1000
     for key in list(data.keys()): #clean up my blunders
         if key in defaults.keys(): pass
         else: del data[key]
@@ -65,12 +71,23 @@ def preloadPlayerdata(user):
         "Last Update": 0
         }
     defaultsWallet = {
-        "Kups": 0,
-        "Args": 100,
-        "Aurus": 0,
-        "BankKups": 0,
-        "BankArgs": 0,
-        "BankAurus": 0,
+        "Args": 100000, #PKA, ÷1000 (kup subunit)
+        "BankArgs": 0, #Bank balance, in PKA
+        "eUSD": 0, #United States Dollar, ÷100 (cent subunit)
+        "eEUR": 0, #European Euro, ÷100 (cent subunit)
+        "eCNY": 0, #Chinese Yuan
+        "eJPY": 0, #Japanese Yen
+        "eGBP": 0, #British Pound Stirling, ÷100 (cent subunit)
+        "eCHF": 0, #Swiss Frank, ÷100 (cent subunit)
+        "eAUD": 0, #Australian Dollar, ÷100 (cent subunit)
+        "eCAD": 0, #Canadian Dollar, ÷100 (cent subunit)
+        "eHKD": 0, #Hong Kong Dollar, ÷100 (cent subunit)
+        "eSGD": 0, #Singapore Dollar, ÷100 (cent subunit)
+        "eBTC": 0, #Bitcoin, ÷100M (satoshi subunit)
+        "eETH": 0, #Ethereum, ÷1Qi (wei subunit)
+        "eUST": 0, #Tether, ÷1M
+        "eXRP": 0, #XRP, ÷1M (drop subunit)
+        "eBNB": 0, #Binance Coin, ÷100M (jager subunit)
         "BankLedger": {},
         "Gems": 0
         }
@@ -92,9 +109,6 @@ def preloadPlayerdata(user):
         except ZeroDivisionError:
             dataStats["Activity Board"].append(0)
     PlayerdataSetFile(user, "stats.json", dataStats)
-    
-    dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = \
-                             IntToGSC(GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"]))
     PlayerdataSetFile(user, "wallet.json", dataWallet)
 
 def incrementXP(ctx, userLevelFile, experienceGain, globalScope=True):
@@ -114,7 +128,7 @@ def incrementXP(ctx, userLevelFile, experienceGain, globalScope=True):
 
             if globalScope:
                 userSilver = PlayerdataGetFileIndex(author, "wallet.json", "Args")
-                userSilver += 10*userLevelFile["Level"]
+                userSilver += 10000*userLevelFile["Level"]
                 PlayerdataSetFileIndex(author, "wallet.json", "Args", userSilver)
             return userLevelFile, True
         else: return userLevelFile, False
@@ -159,14 +173,13 @@ def UpdateTimers(user):
     dataTimers = PlayerdataGetFile(user, "timers.json")
     elapses = (dataTimers["Timestamp"] - dataTimers["DayTimer"]) // 86400
     bankElapses = (dataTimers["Timestamp"] - dataTimers["BankInterest"]) // 86400
-    if dataTimers["Timestamp"] > dataTimers["BankInterest"]+86400:
+    if dataTimers["Timestamp"] > dataTimers["BankInterest"]+2629744:
         dataWallet = PlayerdataGetFile(user, "wallet.json")
-        balance = GSCToInt(dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"])
-        if balance >= 1000000:
-            interest = balance * (1 + 0.0025/bankElapses)**bankElapses - balance
-            dataTimers["BankInterest"] += 86400 * bankElapses
+        if dataWallet["BankArgs"] >= 1000000:
+            interest = balance * (1 + 0.01/bankElapses)**bankElapses - balance
+            dataTimers["BankInterest"] += 2629744 * bankElapses
             dataWallet["BankLedger"][dataTimers["BankInterest"]] = ["INT", round(interest/1000,3)]
-            dataWallet["BankAurus"], dataWallet["BankArgs"], dataWallet["BankKups"] = IntToGSC(balance + int(interest))
+            dataWallet["BankArgs"] += int(interest)
             PlayerdataSetFile(user, "wallet.json", dataWallet)
     if dataTimers["Timestamp"] > dataTimers["Daily"]+86400:
         PlayerdataSetFileIndex(user, "profile.json", "canDaily", True)
@@ -225,3 +238,12 @@ def PlayerdataSetFileIndex(user, filename, key, value):
     if key in file: file[key] = value
     else: raise KeyError("The key you're trying to raise doesn't exist.")
     saveJSON(file, filename, path)
+
+def PayOtherPlayer(user, recipiant, value, coinType="Args"):
+    donorBal = PlayerdataGetFileIndex(user, "wallet.json", coinType)
+    if value <= donorBal: # Check if donor can afford it
+        PlayerdataSetFileIndex(user, "wallet.json", coinType, donorBal-value)
+        recipiantBal = PlayerdataGetFileIndex(recipiant, "wallet.json", coinType)
+        PlayerdataSetFileIndex(recipiant, "wallet.json", coinType, recipiantBal+value)
+        return True
+    else: return False

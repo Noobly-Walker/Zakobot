@@ -9,7 +9,7 @@ REAL = 0
 IMAGINARY = 1
 EMAX = 1000000
 
-custom_context = Context(prec=15, rounding=ROUND_HALF_UP)
+custom_context = Context(prec=100, rounding=ROUND_HALF_UP)
 setcontext(custom_context)
 
 class MemoryOverflowSafeguard(Exception):
@@ -153,9 +153,8 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
         return variable
 
     def getSign(self, var): # Splits the sign from the number.
-        if not var.isNaN:
-            if var < 0: return var*-1, -1
-            else: return var, 1
+        if var < 0: return var*-1, -1
+        else: return var, 1
 
     def format_float(self, f):
         d = Decimal(str(f));
@@ -212,10 +211,11 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
         #if d > EMAX: raise MemoryOverflowSafeguard(d)
         if d > EMAX: j = expol(10)**expol(d)
         else: j = Decimal(10**d)
+        a, aSign = self.getSign(a)
         n = int((j*c*(b+Decimal(log(a, 10))))*10**30)
         if n >= 0: expOut = abs(n) // 10**30
         else: expOut = abs(n) // 10**30 * -1
-        mantOut = round(10**(n % 10**30 / 10**30),10)
+        mantOut = round(10**(n % 10**30 / 10**30),10)*aSign
         # Thanks to Dorijanko, Feodoric, and mustache for help figuring out this nightmare.
         return expol(self.expFixVar([mantOut, expOut]))
 
@@ -279,21 +279,54 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
     def deg(self): #Radians to degrees
         return self * expol(180)/self.pi
 
-    def fact(self): #Factorial
-        if self < 1000: #Bruteforce is more precise
-            reps = self-1
-            newVal = expol(self)
-            while reps > 0:
-                newVal *= reps
-                reps -= 1
-            return newVal
-        else: #Stirling's approximation is faster
-            sqrt_2pi_n = expol.root(expol(self.pi) * 2 * self, expol(2))
-            power_term = (self / expol(self.e)) ** self
-            correction_terms = expol(1)
-            for i in range(1, 5):
-                correction_terms += expol((-1) ** i) * (expol(2 * i - 1) / (self * 2 * 12)) * (expol(1) / self) ** i
-            return sqrt_2pi_n * power_term * correction_terms
+    def fact(self): #Factorial function
+            if self < 1000:
+                v = self + 1000
+                out = v.e ** (v * v.log(v.e) - v + expol(1/2) * (v.pi*v*2).log(v.e) + expol(1)/(expol(12)*v))
+                string = "(self+1000)"
+                iteration = 999
+                while iteration > 0:
+                    string += f"*(self+{iteration})"
+                    iteration -= 1
+                return out / eval(string)
+            else:
+                return self.e ** (self * self.log(self.e) - self + expol(1/2) * (self.pi*self*2).log(self.e) + expol(1)/(expol(12)*self))
+
+    def summation(self, function, lowerLimit=0, upperLimit=10000):
+        """Summation function, Σ
+Calculates an infinite sum. If the absolute value of the result's exponent is roughly
+equal to the log_10 of the upperLimit (default 10000), then it often means that the
+summation's result would trend off towards infinity.
+Any function passed into this must take the variable this function is applied to,
+as well as an iterating variable (usually called n), in that order."""
+        bigSigma = expol(0)
+        for n in range(lowerLimit, upperLimit):
+            bigSigma += expol(function(self, expol(n)))
+        return bigSigma
+
+    def product(self, function, lowerLimit=0, upperLimit=10000):
+        """Product function, Π
+Calculates an infinite product. If the result's exponent is roughly equal to the
+upperLimit (default 10000), then it often means that the product's result
+would trend off towards infinity. If the result's exponent is roughly equal to
+-upperLimit, then it often means that the product's result would trend towards 0.
+Any function passed into this must take the variable this function is applied to,
+as well as an iterating variable (usually called n), in that order."""
+        bigPi = expol(1)
+        for n in range(lowerLimit, upperLimit):
+            bigPi *= expol(function(self, expol(n)))
+        return bigPi
+
+    def exponential(self, function, lowerLimit=0, upperLimit=10000):
+        """Exponentiation function, Ε
+Calculates an infinite exponential. If you get a decimal.Overflow error thrown, then
+it often means that the exponential's result would trend off towards infinity.
+Any function passed into this must take the variable this function is applied to,
+as well as an iterating variable (usually called n), in that order."""
+        bigEpsilon = expol(function(self, expol(n)))
+        for n in range(lowerLimit+1, upperLimit):
+            bigEpsilon = expol(function(self, expol(n))) ** bigEpsilon
+        return bigEpsilon
 
     def __neg__(self): #Negate operation -expol
         return expol([self.value[MANTISSA]*-1,self.value[EXPONENT]])
@@ -363,15 +396,15 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
                 ["","Ct","Dt","Tt","Qat","Qit","Sct","Spt","Ot","Nt"]
             ],
             [
-                ["","Ml","Mc","Na","Pc","Fm","At","Zp","Yc","Xn"],
+                ["","Ml","Mc","Na","Pc","Fm","At","Zp","Yc","Rn"],
                 ["","M","D","Tr","Te","P","Hx","Hp","O","E"],
-                ["","Vc","Ic","Trc","Tec","Pc","Hxc","Hpc","Oc","Ec"],
+                ["","Qc","Ic","Trc","Tec","Pc","Hxc","Hpc","Oc","Ec"],
                 ["","Hct","Dct","Trct","Tect","Pct","Hxct","Hpct","Oct","Ect"]
             ],
             [
-                ["","Kl","Mg","Gg","Tr","P","E","Z","Y","X"],
+                ["","Kl","Mg","Gg","Tr","P","E","Z","Y","R"],
                 ["","H","D","Tr","Te","P","E","Z","Y","N"],
-                ["","Dk","Ik","Trk","Tek","Pk","Ek","Zk","Yk","Nk"],
+                ["","Qt","Ik","Trk","Tek","Pk","Ek","Zk","Yk","Nk"],
                 ["","Hot","Bot","Trot","Tot","Pot","Eot","Zot","Yot","Not"]
             ]
         ]
@@ -384,15 +417,15 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
                 ["","Cent","Ducent","Trecent","Quadringent","Quincent","Sescent","Septingent","Octingent","Nongent"]
             ],
             [
-                ["","Mill","Micr","Nan","Pic","Femt","Att","Zept","Yoct","Xon"],
+                ["","Mill","Micr","Nan","Pic","Femt","Att","Zept","Yoct","Ront"],
                 ["","Me","Due","Trio","Tetre","Pente","Hexe","Hepte","Octe","Enne"],
-                ["","Vec","Icos","Triacont","Tetracont","Pentacont","Hexacont","Heptacont","Octacont","Ennacont"],
+                ["","Quect","Icos","Triacont","Tetracont","Pentacont","Hexacont","Heptacont","Octacont","Ennacont"],
                 ["","Hect","Duehect","Triahect","Tetrahect","Pentahect","Hexahect","Heptahect","Octahect","Ennahect"]
             ],
             [
-                ["","Kill","Meg","Gig","Ter","Pet","Ex","Zett","Yott","Xenn"],
+                ["","Kill","Meg","Gig","Ter","Pet","Ex","Zett","Yott","Ronn"],
                 ["","Hen","Do","Tra","Te","Pe","Ex","Ze","Yo","Ne"],
-                ["","Dak","Ik","Trak","Tek","Pek","Exac","Zak","Yok","Nek"],
+                ["","Quett","Ik","Trak","Tek","Pek","Exac","Zak","Yok","Nek"],
                 ["","Hot","Bot","Trot","Tot","Pot","Exot","Zot","Yoot","Not"]
             ]
         ]
@@ -456,13 +489,13 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
                 sections = []
                 for workingTierValue in range(exponentAtWorkingTier, -1, -1): # workingTierValue is the number of this tier. 7 in tier 2 is zetillion.
                     if workingTierValue == exponentAtWorkingTier:
-                        if exponentGroupsAtLastTier[-(workingTierValue)+1] == 1: # if theres only one, then theres no need to bother with numbers before. It's millillion, not memillillion.
+                        if exponentGroupsAtLastTier[-(workingTierValue)-1] == 1: # if theres only one digit in this exponent group, then theres no need to bother with numbers before. It's millillion, not memillillion.
                             sections.insert(0, parseNotationList(_list, workingTier, workingTierValue))
-                        else: #if there is more than one, then we do need to specify the quantity of that place.
-                            sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)+1], False) +
+                        else: #if there is more than one digit in this exponent group, then we do need to specify the quantity of the ones place.
+                            sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)-1], False) +
                                             parseNotationList(_list, workingTier, workingTierValue))
                     elif exponentGroupsAtLastTier[-(workingTierValue)] != 0:
-                        sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)+1], False) +
+                        sections.insert(0, parseNotationList(_list, workingTier-1, exponentGroupsAtLastTier[-(workingTierValue)-1], False) +
                                         parseNotationList(_list, workingTier, workingTierValue))
                     if sections[0] == "": sections.pop(0)
                 if len(sections) > 1: name = "-".join(sections)
@@ -512,7 +545,7 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
                 notmap = {"0":"",
                           "1":notationstr[power*2],
                           "2":notationstr[power*2]*2,
-                          "3":notationstr[power*2]*3,
+                          "3":notationstr[power*2]*2+notationstr[power*2+1],
                           "4":notationstr[power*2]+notationstr[power*2+1],
                           "5":notationstr[power*2+1],
                           "6":notationstr[power*2+1]+notationstr[power*2],
@@ -527,7 +560,8 @@ r   - Roman Numerals            CXXIIIˣᵛ⚂^ᶦ
         if "." in fmt: #rounding
             fmtChunks = fmt.split(".")
             try:
-                if fmtChunks[1][0] in "0123456789" : MANTISSA_ROUND = int(fmtChunks[1][0])
+                if fmtChunks[1][:2].isnumeric(): MANTISSA_ROUND = int(fmtChunks[1][:2])
+                elif fmtChunks[1][:1].isnumeric(): MANTISSA_ROUND = int(fmtChunks[1][:1])
                 else: MANTISSA_ROUND = 0
             except IndexError: #clearly, there wasn't another character after the period.
                 MANTISSA_ROUND = 0
@@ -820,3 +854,14 @@ class expolComplex:
     def tet(self, tetraponent): #Rough tetration operation
         if type(addend) in self.validReal:
             self.value[REAL]
+
+def test():
+    if expol(2.1) + expol(3.8) != 5.9: raise Exception(f"Addition function failed: 2.1 + 3.8 = {expol(2.1) + expol(3.8)}")
+    if expol(-2.1) + expol(3.8) != 1.7: raise Exception(f"Addition function failed")
+    if expol(-2.1) + expol(-3.8) != -5.9: raise Exception(f"Addition function failed")
+    if expol(946413) + expol(9.625) != 946422.625: raise Exception(f"Addition function failed")
+    
+    if expol(2.1) - expol(3.8) != -1.7: raise Exception(f"Subtraction function failed")
+    if expol(-2.1) - expol(3.8) != -5.9: raise Exception(f"Subtraction function failed")
+    if expol(-2.1) - expol(-3.8) != 1.7: raise Exception(f"Subtraction function failed")
+    if expol(946413) - expol(9.625) != 946403.375: raise Exception(f"Subtraction function failed")

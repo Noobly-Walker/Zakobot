@@ -17,7 +17,7 @@ PATH = load(".\\locals\\%PATH%")
 
 def commandList():
     return [source, zblacklist, zwhitelist, linkacct, resetval,
-            lvtoexp, reloadall, raiseerror, getcard]
+            lvtoexp, reloadall, raiseerror, getcard, dnd_gemcalc]
 
 def categoryDescription():
     return "Debug commands."
@@ -139,6 +139,54 @@ async def resetval(ctx, table, value):
         saveJSON(file, f"{table}.json", path)
         affected += 1
     await ctx.send(f"Reset {value} in {table} in {affected} players.")
+
+@commands.command(aliases=["d&d_gemcalc"])
+async def dnd_gemcalc(ctx, attribute, attrValue:float, *, gemType):
+    """Convert gem weight to value. Homebrew stuff.
+[PREFIX]dnd_gemcalc weight <value_GP> <gemType>
+    Converts weight to value
+[PREFIX]dnd_gemcalc value <weight_lbs> <gemType>
+    Converts value to weight
+Color and description of a gem may be very important. A sapphire and a black sapphire are very different."""
+    gems = {"azurite": 10, "banded agate": 10, "brown banded bgate": 10,
+            "blue banded bgate": 10, "white banded agate": 10, "red banded agate": 10,
+            "blue quartz": 10, "eye agate": 10, "gray eye agate": 10,
+            "grey eye agate": 10, "white eye agate": 10, "brown eye agate": 10,
+            "blue eye agate": 10, "green eye agate": 10, "hematite": 10,
+            "lapis lazuli": 10, "malachite": 10, "moss agate": 10,
+            "obsidian": 10, "rhodochrosite": 10, "tiger eye": 10,
+            "turquoise": 10, "agate": 10, "bloodstone": 50,
+            "carnelian": 50, "chalcedony": 50, "chrysoprase": 50,
+            "citrine": 50, "jasper": 50, "blue jasper": 50,
+            "black jasper": 50, "brown jasper": 50, "moonstone": 50,
+            "onyx": 50, "quartz": 50, "clear quartz": 50,
+            "smoky quartz": 50, "yellow quartz": 50, "sardonyx": 50,
+            "star rose quartz": 50, "zircon": 50, "amber": 100,
+            "amethyst": 100, "chrysoberyl": 100, "coral": 100,
+            "garnet": 100, "red garnet": 100, "brown-green garnet": 100,
+            "violet garnet": 100, "jade": 100, "light green jade": 100,
+            "deep green jade": 100, "white jade": 100, "jet": 100,
+            "pearl": 100, "white pearl": 100, "yellow pearl": 100,
+            "pink pearl": 100, "spinel": 100, "red spinel": 100,
+            "red-brown spinel": 100, "deep green spinel": 100, "tourmaline": 100,
+            "pale green tourmaline": 100, "blue tourmaline": 100, "brown tourmaline": 100,
+            "red tourmaline": 100, "alexandrite": 500, "aquamarine": 500,
+            "black pearl": 500, "blue spinel": 500, "peridot": 500,
+            "topaz": 500, "black opal": 1000, "blue sapphire": 1000,
+            "emerald": 1000, "fire opal": 1000, "opal": 1000,
+            "star ruby": 1000, "star sapphire": 1000, "sapphire": 1000,
+            "yellow sapphire": 1000, "yellow-green sapphire": 1000, "black sapphire": 5000,
+            "diamond": 5000, "blue-white diamond": 5000, "canary diamond": 5000,
+            "pink diamond": 5000, "brown diamond": 5000, "blue diamond": 5000,
+            "jacinth": 5000, "ruby": 5000, "red ruby": 5000,
+            "deep crimson ruby": 5000}
+    unitValue = gems[gemType.lower()]
+    if attribute.lower() == "weight": #default weight is 0.1
+        await ctx.send(f"This {gemType} is worth {unitValue*attrValue*10} GP")
+    elif attribute.lower() == "value":
+        await ctx.send(f"This {gemType} weighs {attrValue/(unitValue*10)} lbs")
+    
+    
 
 @commands.command()
 async def raiseerror(ctx, *, errortext):

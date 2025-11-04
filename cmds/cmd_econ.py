@@ -20,13 +20,13 @@ text = cmdutil()
 local = loadJSON('.\\locals\\locals.json')
 
 def commandList():
-    return [bank, daily, shop]
+    return [bank, daily, shop, pay]
 
 def categoryDescription():
     return "Economy commands."
 
 @commands.command(aliases=["bal"])
-async def bank(ctx, action="", *amount):
+async def bank(ctx, action="", amount:float=0):
     """Access your bank account.
 
 bank deposit <quantity>
@@ -37,44 +37,46 @@ bank withdraw <quantity>
   minimum withdrawal is 20SP
   account will not accrue interest if balance is less than 1GP
 bank balance
-  1000CP = 1SP
-  1000SP = 1GP
+  CP: Copper Pieces (Kup)
+      Billon Pieces (Argikup)       =   50CP
+  SP: Silver Pieces (Arg)           = 1000CP
+      Electrum Pieces (Auriarg)     =   50SP
+  GP: Gold Pieces (Auru)            = 1000SP
+      Plutaurum Pieces (Pluotauri)  =   50GP
+  PP: Plutonium Pieces (Pluot)      = 1000GP
   gains 0.25% interest per day if there is a balance of at least 1GP"""
+    
     if action in ["withdraw", "with", "w", "deposit", "dep", "d"]:
-        if len(amount) == 0: await ctx.send("You must specify an amount for this action."); return
+        if amount == 0: await ctx.send("You must specify an amount for this action."); return
         else:
-            try: amount = int(amount[0])
-            except Exception: await ctx.send(f"Improper argument {amount[0]}. Argument must be a number."); return
+            try: amount = int(1000*amount)
+            except Exception: await ctx.send(f"Improper argument {amount}. Argument must be a number."); return
     wallet = PlayerdataGetFile(ctx.author, "wallet.json")
     ts = datetime.timestamp(datetime.now())
             
     if action in ["deposit", "dep", "d"]:
-        if amount > wallet["Args"]: await ctx.send(f"You cannot afford to deposit **{wallet['Args']}SP**."); return
-        elif amount < 100: await ctx.send(f"You must deposit a minimum of **100SP**."); return
+        if amount > wallet["Args"]: await ctx.send(f"You cannot afford to deposit **{argsAsString(amount)}**."); return
+        elif amount < 100000: await ctx.send(f"You must deposit a minimum of **100SP**."); return
         wallet["Args"] -= amount
         wallet["BankArgs"] += amount
         wallet["BankLedger"][ts] = ["DEP", amount]
-        bankAurusPrint, bankArgsPrint, bankKupsPrint = regularizeGSC(wallet['BankAurus'], wallet['BankArgs'], wallet['BankKups'])
-        out = f"You've deposited **{amount}SP** into your account.\n\
-Your wallet balance is now **{wallet['Aurus']}GP {wallet['Args']}SP {wallet['Kups']}CP**.\n\
-Your account balance is now **{bankAurusPrint}GP {bankArgsPrint}SP {bankKupsPrint}CP**."
+        out = f"You've deposited **{argsAsString(amount)}** into your account.\n\
+Your wallet balance is now **{argsAsString(wallet['Args'])}**.\n\
+Your account balance is now **{argsAsString(wallet['BankArgs'])}**."
         embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
         embed.add_field(name=f"**First Pikatonian Bank**", value=out)
         await ctx.send(embed=embed)
     if action in ["withdraw", "with", "w"]:
-        if amount > wallet["BankArgs"] + wallet["BankAurus"]*1000: await ctx.send(f"You cannot afford to withdraw **{wallet['Args']}SP**."); return
-        elif amount*1.05 > wallet["BankArgs"] + wallet["BankAurus"]*1000: await ctx.send(f"You cannot afford the 5% processing fee to withdraw **{wallet['Args']}SP**."); return
-        elif amount < 20: await ctx.send(f"You must withdraw a minimum of **20SP**."); return
-        bankBal = wallet["BankArgs"] + wallet["BankAurus"]*1000
+        if amount > wallet["BankArgs"]: await ctx.send(f"You cannot afford to withdraw **{argsAsString(amount)}**."); return
+        elif amount*1.05 > wallet["BankArgs"]: await ctx.send(f"You cannot afford the 5% processing fee to withdraw **{argsAsString(amount)}**."); return
+        elif amount < 20: await ctx.send(f"You must withdraw a minimum of **20CP**."); return
         wallet["Args"] += amount
-        bankBal -= int(amount*1.05)
-        wallet["BankAurus"] = int(bankBal // 1000)
-        wallet["BankArgs"] = int(bankBal % 1000)
-        wallet["BankLedger"][ts] = ["WITH", int(amount*1.05)]
-        out = f"You've withdrawn **{int(amount)}SP** from your account.\n\
-A 5% processing fee (**{round(amount*0.05,3)}SP**) has automatically been deducted.\n\
-Your wallet balance is now **{wallet['Aurus']}GP {wallet['Args']}SP {wallet['Kups']}CP**.\n\
-Your account balance is now **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wallet['BankKups']}CP**."
+        wallet["BankArgs"] -= int(amount*1.05)
+        wallet["BankLedger"][ts] = ["WITH", int(amount*1.05)/1000]
+        out = f"You've withdrawn **{argsAsString(amount)}** from your account.\n\
+A 5% processing fee (**{argsAsString(round(amount*0.05,3))}**) has automatically been deducted.\n\
+Your wallet balance is now **{argsAsString(wallet['Args'])}**.\n\
+Your account balance is now **{argsAsString(wallet['BankArgs'])}**."
         embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
         embed.add_field(name=f"**First Pikatonian Bank**", value=out)
         await ctx.send(embed=embed)
@@ -85,8 +87,8 @@ Your account balance is now **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wa
         inverseIndex = -1
         while inverseIndex >= -10:
             try:
-                convertedTimestamp = datetime.fromtimestamp(float(ledgerDates[inverseIndex]), tz=None)
-                ledger = f"{convertedTimestamp} UTC: **{wallet['BankLedger'][ledgerDates[inverseIndex]][0]} {wallet['BankLedger'][ledgerDates[inverseIndex]][1]}SP**\n" + ledger
+                convertedTimestamp = datetime.fromtimestamp(int(float(ledgerDates[inverseIndex])), tz=None)
+                ledger = f"{convertedTimestamp} UTC: **{wallet['BankLedger'][ledgerDates[inverseIndex]][0]} {argsAsString(wallet['BankLedger'][ledgerDates[inverseIndex]][1])}**\n" + ledger
                 inverseIndex -= 1
             except Exception: break #reached top of ledger
         if ledger == "": ledger = "No transactions to show."
@@ -94,21 +96,22 @@ Your account balance is now **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wa
         #generate coinpile
         coinPile = None
         coinColors = {
-            1: (200, 100, 64),
-            50: (164, 114, 96),
-            1000: (128, 128, 128),
-            50000: (164, 164, 96),
-            1000000: (200, 200, 64)
+            1: (184, 115, 51),
+            50: (188, 154, 121),
+            1000: (192, 192, 192),
+            50000: (221, 196, 111),
+            1000000: (250, 201, 31),
+            50000000: (205, 178, 93),
+            1000000000: (155, 155, 155)
             }
         coinRender = coinStacker(coinColors)
-        if wallet['BankKups'] + wallet['BankArgs']*1000 + wallet['BankAurus']*1000000 > 0:
-            coinPile = coinRender.createPile(wallet['BankKups'] + wallet['BankArgs']*1000 + wallet['BankAurus']*1000000)
+        if wallet['BankArgs'] > 0:
+            coinPile = coinRender.createPile(wallet['BankArgs'])
             coinPile = discord.File(coinPile, filename="coinpile.png")
-        
-        netWorthAuru, netWorthArg, netWorthKup = regularizeGSC(wallet['Aurus']+wallet['BankAurus'], wallet['Args']+wallet['BankArgs'], wallet['Kups']+wallet['BankKups'])
-        out = f"Your wallet balance is **{wallet['Aurus']}GP {wallet['Args']}SP {wallet['Kups']}CP**.\n\
-Your account balance is **{wallet['BankAurus']}GP {wallet['BankArgs']}SP {wallet['BankKups']}CP**.\n\n\
-Your net worth is **{netWorthAuru}GP {netWorthArg}SP {netWorthKup}CP**."
+
+        out = f"Your wallet balance is **{argsAsString(wallet['Args'])}**.\n\
+Your account balance is **{argsAsString(wallet['BankArgs'])}**.\n\n\
+Your net worth is **{argsAsString(wallet['Args']+wallet['BankArgs'])}**."
         embed = discord.Embed(color=rectColor(PlayerdataGetFileIndex(ctx.author, "settings.json", "Color")))
         embed.add_field(name=f"**First Pikatonian Bank**", value=out, inline=False)
         embed.add_field(name=f"Ledger", value=ledger, inline=False)
@@ -129,8 +132,8 @@ async def daily(ctx):
     if userProfile["canDaily"]:
         userWallet = PlayerdataGetFile(ctx.author, "wallet.json")
         userLevel = PlayerdataGetFile(ctx.author, "level.json")
-        userWallet["Args"] += 10*userLevel["Level"]
-        await ctx.send(f"Thanks for checking in, {global_name(member)}! Here's your **{10*userLevel['Level']}SP**.")
+        userWallet["Args"] += 10000*userLevel["Level"]
+        await ctx.send(f"Thanks for checking in, {global_name(ctx.author)}! Here's your **{argsAsString(10*userLevel['Level'])}**.")
         userProfile["canDaily"] = False
         PlayerdataSetFile(ctx.author, "wallet.json", userWallet)
         PlayerdataSetFile(ctx.author, "profile.json", userProfile)
@@ -139,6 +142,21 @@ async def daily(ctx):
             PlayerdataGetFileIndex(ctx.author, "stats.json", "Dailys Claimed") + 1)
     else: await ctx.send("It appears you've already claimed this. Try again later.")
 
+@commands.command()
+async def pay(ctx, recipiant, value:float):
+    """Give other players money."""
+    if value < 0:
+        await ctx.send("Don't be a thief!")
+        return
+    converter = commands.MemberConverter()
+    recipUser = await converter.convert(ctx, recipiant)
+    value = int(value*1000)
+    status = PayOtherPlayer(ctx.author, recipUser, value)
+
+    donorProfile = PlayerdataGetFile(ctx.author, "profile.json")
+    recipProfile = PlayerdataGetFile(recipUser, "profile.json")
+    if status: await ctx.send(f"{donorProfile['Name']} paid {recipProfile['Name']} **{argsAsString(value)}**.")
+    else: await ctx.send(f"You can't afford this transaction!")
 
 outText = None
 outFile = None
@@ -175,9 +193,7 @@ Actions:
         prices = []
         descs = []
         for item in shop:
-            if shop[item]['currency'] == "Kups": prices.append(f"{shop[item]['price']}CP")
-            elif shop[item]['currency'] == "Args": prices.append(f"{shop[item]['price']}SP")
-            elif shop[item]['currency'] == "Aurus": prices.append(f"{shop[item]['price']}GP")
+            if shop[item]['currency'] == "Args": prices.append(f"{argsAsString(shop[item]['price'])}")
             elif shop[item]['currency'] == "Gems": prices.append(f":gem:{shop[item]['price']}")
             else: prices.append(f"{shop[item]['price']}")
             descs.append(shop[item]['description'])
@@ -198,7 +214,7 @@ Actions:
         author=ctx.author
         _locals = locals()
         exec(payload, globals(), _locals)
-        currencyNameConversion = {"Kups":"CP", "Args":"SP", "Aurus":"GP"}
+        currencyNameConversion = {"Kups":"CP", "Args":"SP", "Aurus":"GP", "Pluots":"PP"}
         await ctx.send(f"{quantity}×{selection} purchased successfully for {item['price']*quantity}{currencyNameConversion[item['currency']]}!")
         if outText not in [None, "", " ", "\n"]: await ctx.send(outText)
         if outFile != None: await ctx.send(file=discord.File(outFile))

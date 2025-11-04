@@ -64,7 +64,7 @@ async def profile(ctx, *userIn):
                         value=f"{guildLevelFile['Experience']}/{gExpCap} Exp to Lv{guildLevelFile['Level']+1} ({guildLevelFile['Experience']/gExpCap*100:.1f}%)", inline=False)
         except Exception: # player may not exist here
             pass
-        embed.add_field(name=f"Wallet", value=f"{userWalletFile['Aurus']}GP {userWalletFile['Args']}SP {userWalletFile['Kups']}CP", inline=False)
+        embed.add_field(name=f"Wallet", value=f"{argsAsString(userWalletFile['Args'])}", inline=False)
         await ctx.send(embed=embed)
     except Exception:
         await ctx.send("The requested user does not have a profile set up yet, or does not exist. Or something's broken.")
@@ -307,9 +307,7 @@ Sources:
                 value = [LvData["Level"],LvData["Experience"]]
             elif board == 'value':
                 WalletData = loadJSON("wallet.json", path)
-                value = [GSCToInt(WalletData["BankAurus"]+WalletData["Aurus"],
-                                 WalletData["BankArgs"]+WalletData["Args"],
-                                 WalletData["BankKups"]+WalletData["Kups"])]
+                value = [WalletData["BankArgs"]+WalletData["Args"]]
             elif board in ["activity", "msgs", "count", "members", "users", "user%"]:
                 StatData = loadJSON("stats.json", path)
                 ts = datetime.timestamp(datetime.now())
@@ -343,18 +341,13 @@ Sources:
     valueList = ""
     index = 1
     foundAuthor = False
-    auth = ""
-    if source == "player": auth = ctx.author.name
-    if source == "guild": auth = ctx.guild.name
-    print(leaderboard)
+    auth = PlayerdataGetFile(ctx.author, "profile.json")['Name']
     for x in list(leaderboard)[0:20]:
-        print(x)
         indexList += f"#{index}: {x}\n"
         if board == "level":
             valueList += f"Lv{leaderboard[x][0]}, {leaderboard[x][1]}Exp\n"
         elif board == "value":
-            gold, silver, copper = IntToGSC(leaderboard[x][0])
-            valueList += f"{gold}GP {silver}SP {copper}CP\n"
+            valueList += f"{argsAsString(leaderboard[x][0])}\n"
         elif board == "activity":
             if source == "guild": valueList += f"{leaderboard[x][0]:.3f} ({leaderboard[x][1]})\n"
             else: valueList += f"{leaderboard[x][0]:.3f}\n"
@@ -374,8 +367,8 @@ Sources:
                 if board == "level":
                     authorRank += f"#{index}: {x} - Lv{leaderboard[x][0]}, {leaderboard[x][1]}Exp"
                 elif board == "value":
-                    gold, silver, copper = IntToGSC(leaderboard[x][0])
-                    authorRank += f"#{index}: {x} - {gold}GP {silver}SP {copper}CP"
+                    plutonium, gold, silver, copper = IntToGSC(leaderboard[x][0])
+                    authorRank += f"#{index}: {x} - {plutonium}PP {gold}GP {silver}SP {copper}CP"
                 elif board in ["user%", "activity"]:
                     authorRank += f"#{index}: {x} - {leaderboard[x][0]:.3f}"
                 elif board in ["msgs", "members", "users", "count"]:

@@ -7,6 +7,8 @@ from os import walk
 from os.path import isdir,exists
 from datetime import *
 from time import time as timetime
+from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
 from util.expol import expol
 from util.TimeUtil import *
@@ -22,7 +24,7 @@ local = loadJSON('.\\locals\\locals.json')
 PATH = load(".\\locals\\%PATH%")
 
 def commandList():
-    return [ping, echo, emoji, joined, now, invite,
+    return [ping, echo, emoji, joined, now, invite, echocolor,
             echoformat, changelog, embed, report, webhook]
 
 def categoryDescription():
@@ -64,6 +66,62 @@ e[string] - Emojifies part of string.
 <t> - Inserts timestamp."""
     await ctx.send(formatText(string))
 
+@commands.command(aliases=["echoc"])
+async def echocolor(ctx, color, *, string):
+    """I will repeat whatever text is put into this command!
+Colorize text! Slower.
+
+Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
+Color can be defined as three numbers in the format 0xRR,0xGG,0xBB, where RGB is hexadecimal
+Color can also be named using the table found using this command.
+  [PREFIX]file read colors
+"""
+    color = (*rectColor(color, splitValues=True),255)
+
+    string = string.replace("\n", " [NEWLINE] ")
+    textPile = string.split()
+    col = 0
+    wrapped = ""
+    for word in textPile:
+        if word == "[NEWLINE]":
+            wrapped += "\n"
+            col = 0
+        elif col+len(word) < 72:
+            wrapped += word + " "
+            col += len(word) + 1
+        else:
+            wrapped += "\n" + word + " "
+            col = len(word) + 1
+    string = wrapped
+    
+    img = Image.new('RGBA', (1600, 4000), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype('arial.ttf', 24)
+    bbox = draw.textbbox((0,0), string, font=font, stroke_width=1)
+    padding = 2
+    crop_box = (bbox[0] - padding, bbox[1] - padding, bbox[2] + padding, bbox[3] + padding)
+
+    draw.text(
+        (0,0),
+        string,
+        fill=color,
+        font=font,
+        stroke_width=1,
+        stroke_fill='black'
+    )
+    cropped_img = img.crop(crop_box)
+    
+    # Create in-memory buffer (no disk save!)
+    buffer = BytesIO()
+    cropped_img.save(buffer, format='PNG')
+    buffer.seek(0)  # Reset to start
+
+    # Create discord.File from buffer
+    file = discord.File(fp=buffer, filename='cropped_text.png')
+
+    # Send the file
+    await ctx.send(file=file)
+
 @commands.command()
 async def webhook(ctx):
     """Forces your message to be turned into a webhook!
@@ -83,7 +141,7 @@ Separate fields into <1024 character chunks using <field>.
 Maximum 1024 characters per field, 6 fields per embed.
 
 Color can be defined as three numbers in the format RRR,GGG,BBB, where RGB is decimal
-Color can be defined as three numbers in the format 0xxRR,0xGG,0xBB, where RGB is hexadecimal
+Color can be defined as three numbers in the format 0xRR,0xGG,0xBB, where RGB is hexadecimal
 Color can also be named using the table found using this command.
   [PREFIX]file read colors
 """

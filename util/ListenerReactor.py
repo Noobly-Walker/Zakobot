@@ -138,8 +138,8 @@ async def preprocessMessage(ctx):
     #Images in an image blocked channel
     if str(message.channel.id) in admin["Image Blocked Channels"]:
         if not author.guild_permissions.manage_messages:
-            for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
-                if message.content.endswith(ext): #Image links
+            for ext in [".jpg", ".png", ".jpeg", ".gif", "https://tenor.com/view/"]: 
+                if ext in message.content: #Image links
                     await message.delete()
                     text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                     if adminChannel is not None:
@@ -149,7 +149,7 @@ async def preprocessMessage(ctx):
                     return False
                 else: #Attached image
                     for attachment in message.attachments:
-                        if attachment.url.endswith(ext):
+                        if ext in message.content:
                             await message.delete()
                             text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
                             if adminChannel is not None:
@@ -172,27 +172,35 @@ async def preprocessMessage(ctx):
         if not author.guild_permissions.manage_messages:
             for hyper in ["http://", "https://"]:
                 if hyper in message.content:
-                    for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
-                        if not message.content.endswith(ext): #Filter out image links
-                            await message.delete()
-                            text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
-                            if adminChannel is not None:
-                                await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
-                                for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
-                                    await adminChannel.send(i)
-                            return False
+                    isImage = False
+                    for ext in [".jpg", ".png", ".jpeg", ".gif", "https://tenor.com/view/"]: 
+                        if ext in message.content: #Filter out image links
+                            isImage = True
+                            break
+                    if not isImage:
+                        await message.delete()
+                        text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
+                        if adminChannel is not None:
+                            await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
+                            for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
+                                await adminChannel.send(i)
+                        return False
                 else:
                     for attachment in message.attachments:
                         if hyper in attachment.url:
-                            for ext in [".jpg", ".png", ".jpeg", ".gif"]: 
-                                if not message.content.endswith(ext): #Filter out image links
-                                    await message.delete()
-                                    text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
-                                    if adminChannel is not None:
-                                        await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
-                                        for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
-                                            await adminChannel.send(i)
-                                    return False
+                            isImage = False
+                            for ext in [".jpg", ".png", ".jpeg", ".gif", "https://tenor.com/view/"]: 
+                                if ext in message.content: #Filter out image links
+                                    isImage = True
+                                    break
+                            if not isImage:
+                                await message.delete()
+                                text.log(f"{global_name(author)} said something in {guild.name}, but it contained blocked content.")
+                                if adminChannel is not None:
+                                    await adminChannel.send(f"{global_name(author)} ({author.id}) sent a message in <#{message.channel.id}> that contained a link:")
+                                    for i in [message.content[start:start+2000] for start in range(0, len(message.content), 2000)]:
+                                        await adminChannel.send(i)
+                                return False
 
     #Emojis in an emoji blocked channel
     if str(message.channel.id) in admin["Emoji Blocked Channels"]:

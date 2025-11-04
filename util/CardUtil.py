@@ -3,7 +3,7 @@ from random import randrange, choice
 # Zako source code ©2022 Noobly Walker, ©2022 OmniCoreStudios
 
 cards = {
-     0: [(0,0), "testImg", "This is test text."],
+     0: [(1,0), "Neutronium", "A colorless gas.#Neutrons decay into protons, with a half-life of minutes."],
      1: [(1,1), "Hydrogen", "A colorless gas.#Could be considered alkali or halogen.#Hydrogen ice is pale yellow."],
      2: [(1,2), "Helium", "A colorless noble gas.#Was discovered on Sol before it was found on Terra.#It cannot freeze at standard pressure, even at 0 kelvin.#Natural helium on Terra is generated from radioactive decay."],
      3: [(1,3), "Lithium", "A silvery alkali metal.#Can be cut with a butter knife.#Explodes in contact with water, creating a shower of red sparks and lithium hydride gas."],
@@ -91,7 +91,7 @@ cards = {
     85: [(1,85), "Astatine", "A dark purple halogen crystal.#The rarest element on Terra.#While solid at room temperature, it wouldn't stay at room temperature, quickly boiling off due to the heat produced from radioactivity."],
     86: [(1,86), "Radon", "A colorless noble gas.#Houses built over actinide deposits may have this leak into their basement. If not dealt with, could cause radiation poisoning."],
     87: [(1,87), "Francium", "A golden alkali metal.#One of the rarest elements on Terra. Only a few atoms exist at any one time.#Would melt in your hand, if it didn't explode first."],
-    88: [(1,88), "Radium", "A silvery alkali earth metal.#It glows green.#People used to put radium compound on watch faces to get them to glow."],
+    88: [(1,88), "Radium", "A silvery alkali earth metal.#People used to put radium compound on watch faces to get them to glow green."],
     89: [(1,89), "Actinium", "A silvery rare earth metal.#The first of the Actinide series of rare earth metals.#Glows in the dark!"],
     90: [(1,90), "Thorium", "A silvery rare earth metal.#Named after Thor, Norse god of thunder.#Being explored as a possible replacement for uranium in fission plants."],
     91: [(1,91), "Protactinium", "A dull silvery rare earth metal.#Nuclear waste. Useless!"],
@@ -133,7 +133,7 @@ uncommonCards = [1, 9, 6, 15, 16, 17, 22, 23, 24, 25, 38, 40, 50, 55, 56] #9999p
 rareCards = [3, 4, 5, 7, 18, 21, 27, 28, 29, 30, 31, 32, 33, 35, 37, 39, 41, 42, 57, 58, 59, 60, 62, 63, 64, 65, 66, 67, 68, 70, 72, 73, 74, 82, 90, 92] #99ppm - 1ppm
 epicCards = [2, 10, 34, 44, 45, 46, 47, 48, 49, 51, 52, 53, 69, 71, 76, 77, 78, 79, 80, 81, 83] #999ppb - 1ppb
 legendaryCards = [36, 54, 75, 88, 91, 43, 61, 84, 85, 86, 87, 89, 93, 94] #<999ppt
-mythicalCards = [95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122] #synthetic
+mythicalCards = [0, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122] #synthetic
 
 def generateCard(ID=None):
     shinyDice = randrange(100)

@@ -60,9 +60,9 @@ Algorithm: increment = 2^count.exponent×(1+(userLevel/4))"""
         embed.add_field(name=f"{ctx.author.name} - Personal Count", value=f"{personalCount:{notation}} + {globalIncrement:{notation}} = **{newPersonalCount:{notation}}**", inline=False)
 
         if globalCount.exponent < newGlobalCount.exponent:
-            reward = 5**newGlobalCount.exponent #SP
+            reward = 5**newGlobalCount.exponent*1000 #SP
             PlayerdataSetFileIndex(ctx.author, "wallet.json", "Args", PlayerdataGetFileIndex(ctx.author, "wallet.json", "Args")+reward)
-            embed.add_field(name=f"Reward for reaching {expol([1,newGlobalCount.exponent]):{notation}}", value=f"{ctx.author.name} gained **{reward}SP**!", inline=False)
+            embed.add_field(name=f"Reward for reaching {expol([1,newGlobalCount.exponent]):{notation}}", value=f"{ctx.author.name} gained **{argsAsString(reward)}**!", inline=False)
         
         await ctx.send(embed=embed)
 

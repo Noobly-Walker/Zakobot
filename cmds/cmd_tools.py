@@ -40,6 +40,7 @@ Operations:
     Log to arbitrary base: log(base)
     Natural Log: ln
     Log10: ld
+    Factorial: !
     Multiplication by ten raised to a power: E, ×10^
     Multiplication by one thousand raised to a power: K, ×1000^
     Tetration: ^^, ***, tet

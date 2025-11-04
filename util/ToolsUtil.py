@@ -84,10 +84,10 @@ def calculatorFunct(user, funct:str):
                 if derivedFunct[-1] in ["floor","fdiv"]: derivedFunct[-1] = "//"
                 if derivedFunct[-1] == "mod": derivedFunct[-1] = "%"
                 #filtering out constants
-                if derivedFunct[-1] in ["phi","φ","ϕ","Φ"]: derivedFunct[-1] = "expol(1.61803399)"
-                if derivedFunct[-1] in ["pi","π","Π"]: derivedFunct[-1] = "expol(3.14159265)"
-                if derivedFunct[-1] in ["tau","τ","Τ","T"]: derivedFunct[-1] = "expol(6.28318530)"
-                if derivedFunct[-1] == "e": derivedFunct[-1] = "expol(2.71828183)"
+                if derivedFunct[-1] in ["phi","φ","ϕ","Φ"]: derivedFunct[-1] = "expol(0).phi"
+                if derivedFunct[-1] in ["pi","π","Π"]: derivedFunct[-1] = "expol(0).pi"
+                if derivedFunct[-1] in ["tau","τ","Τ","T"]: derivedFunct[-1] = "expol(0).tau"
+                if derivedFunct[-1] == "e": derivedFunct[-1] = "expol(0).e"
                 if derivedFunct[-1] == "⅒": derivedFunct[-1] = "expol(0.1)"
                 if derivedFunct[-1] == "⅑": derivedFunct[-1] = f"expol({1/9})"
                 if derivedFunct[-1] == "⅛": derivedFunct[-1] = "expol(0.125)"
@@ -106,6 +106,7 @@ def calculatorFunct(user, funct:str):
                 if derivedFunct[-1] == "⅘": derivedFunct[-1] = "expol(0.8)"
                 if derivedFunct[-1] == "⅚": derivedFunct[-1] = f"expol({5/6})"
                 if derivedFunct[-1] == "⅞": derivedFunct[-1] = "expol(0.875)"
+                if derivedFunct[-1] == "!": derivedFunct[-1] = ".fact()"
         except IndexError: break #reached end of list before expected
     for index in range(len(derivedFunct), -1, -1): #second pass, to apply functions that must look ahead
         try:
